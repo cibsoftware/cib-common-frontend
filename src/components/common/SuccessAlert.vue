@@ -18,7 +18,7 @@
 -->
 <template>
   <b-alert dismissible fade variant="success" :show="countdown" @dismissed="countdown = 0" class="d-flex"
-    style="position: fixed; z-index: 1021; left: 50%; transform: translate(-50%, 0)" :style="'top: ' + top">
+           style="position: fixed; z-index: 1021; left: 50%; transform: translate(-50%, 0)" :style="'top: ' + top">
     <!-- .input-group-append .btn, .input-group-prepend .btn has z-index: 2 -->
 
     <div class="container-fluid">

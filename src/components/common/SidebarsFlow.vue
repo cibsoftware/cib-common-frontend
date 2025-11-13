@@ -24,7 +24,7 @@
           <slot name="leftIcon">
             <span class="mdi mdi-18px mdi-chevron-left float-end"></span>
           </slot>
-          <h5 class="m-0 w-75" style="word-wrap: break-word">{{ leftCaption }}<span v-if="number" class="h5 ps-2"><b-badge pill variant="light">{{ number }}</b-badge></span></h5>
+          <h5 class="m-0 w-75" style="word-wrap: break-word">{{ leftCaption }}<span v-if="number != null" class="h5 ps-2"><b-badge pill variant="light" :title="numberTooltip">{{ number }}</b-badge></span></h5>
         </b-button>
         <div :style="{ height: leftCaption ? 'calc(100% - ' + headerCalc + ')' : '100%' }">
           <slot name="left"></slot>
@@ -33,14 +33,14 @@
     </transition>
 
     <div class="sidebars-middle h-100 position-relative" :class="middleClasses"
-      :style="{ 'padding-left': leftCaption && !leftOpen ? '40px' : '0', 'padding-right': rightCaption && !rightOpen ? '40px' : '0' }">
+         :style="{ 'padding-left': leftCaption && !leftOpen ? '40px' : '0', 'padding-right': rightCaption && !rightOpen ? '40px' : '0' }">
       <slot></slot>
     </div>
     <transition name="fade"> <!-- In a fixed component the margin-top must be applied right in the component -->
       <slot name="filter">
-        <b-button v-if="!leftOpen && leftCaption" variant="light" class="rounded-0 border border-end-0 text-nowrap position-absolute w-auto" @click="$emit('update:leftOpen', true)"
-          style="right: 100%; transform: rotate(-90deg); transform-origin: right top">
-          {{ leftCaption }} <span v-if="number"><b-badge pill variant="light">{{ number }}</b-badge></span>
+        <b-button v-if="!leftOpen && leftCaption" variant="light" class="rounded-0 border-end-0 text-nowrap position-absolute w-auto" @click="$emit('update:leftOpen', true)"
+                  style="right: 100%; transform: rotate(-90deg); transform-origin: right top">
+          {{ leftCaption }} <span v-if="number != null"><b-badge pill variant="light">{{ number }}</b-badge></span>
           <i class="mdi mdi-18px mdi-chevron-down"></i>
         </b-button>
       </slot>
@@ -58,8 +58,8 @@
       </div>
     </transition>
     <transition name="fade"> <!-- In a fixed component the margin-top must be applied right in the component -->
-      <b-button v-if="!rightOpen && rightCaption" variant="light" class="rounded-0 border border-start-0 text-nowrap position-absolute w-auto" @click="$emit('update:rightOpen', true)"
-        style="left: 100%; transform: rotate(90deg); transform-origin: left top">
+      <b-button v-if="!rightOpen && rightCaption" variant="light" class="rounded-0 border-start-0 text-nowrap position-absolute w-auto" @click="$emit('update:rightOpen', true)"
+                style="left: 100%; transform: rotate(90deg); transform-origin: left top">
         <i class="mdi mdi-18px mdi-chevron-down"></i>
         {{ rightCaption }}
       </b-button>
@@ -70,11 +70,18 @@
 <script>
 export default {
   name: 'SidebarsFlow',
-  props: { leftOpen: Boolean, rightOpen: Boolean, leftCaption: String, rightCaption: String,
+  props: {
+    leftOpen: Boolean,
+    rightOpen: Boolean,
+    leftCaption: String,
+    rightCaption: String,
     leftSize: { type: Array, default: function() { return [12, 6, 4, 3, 3] } },
     rightSize: { type: Array, default: function() { return [12, 6, 4, 2, 2] } },
-    number: Number, headerCalc: { type: String, default: '40px' }
+    number: Number,
+    numberTooltip: String,
+    headerCalc: { type: String, default: '40px' }
   },
+  emits: ['update:rightOpen', 'update:leftOpen'],
   computed: {
     middleClasses: function() {
       if (this.leftOpen) {

@@ -17,7 +17,7 @@
 
 -->
 <template>
-  <BModal ref="modal" :title="$t('confirm.title')" @hide="onModalHide">
+  <b-modal ref='modal' :title="$t('confirm.title')">
     <div class="row">
       <div class="col-2 d-flex justify-content-center">
         <span class="mdi-36px mdi mdi-alert-outline text-warning"></span>
@@ -28,34 +28,25 @@
         </div>
       </div>
     </div>
-    <template #modal-footer="{ cancel }">
-      <BButton variant="link" @click="cancel">{{ $t('confirm.cancel') }}</BButton>
-      <BButton variant="primary" @click="confirmAction">{{ okTitle || $t('confirm.ok') }}</BButton>
+    <template v-slot:modal-footer>
+      <b-button @click="$refs.modal.hide('cancel')" variant="light">{{ $t('confirm.cancel') }}</b-button>
+      <b-button @click="$emit('ok', param); $refs.modal.hide('ok')" variant="primary">{{ okTitle || $t('confirm.ok') }}</b-button>
     </template>
-  </BModal>
+  </b-modal>
 </template>
 
 <script>
-import { BModal, BButton } from 'cib-common-components'
-
 export default {
   name: 'ConfirmDialog',
-  components: {
-    BModal,
-    BButton
-  },
   props: {
     okTitle: String
   },
+  emits: ['ok'],
   data: function() { return { param: null } },
   methods: {
     show: function(param) {
       this.param = param
       this.$refs.modal.show()
-    },
-    confirmAction: function() {
-      this.$emit('ok', this.param)
-      this.$refs.modal.hide('ok')
     }
   }
 }

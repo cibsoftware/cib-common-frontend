@@ -18,21 +18,21 @@
 -->
 <template>
   <component
-    v-if="valueToCopy"
-    :is="componentType"
-    v-bind="bindAttrs"
-    :class="containerClasses"
-    :title="title || displayValue"
-    @mouseenter="isHovered = true"
-    @mouseleave="isHovered = false"
-    @click="handleClick"
+      v-if="valueToCopy"
+      :is="componentType"
+      v-bind="bindAttrs"
+      :class="containerClasses"
+      :title="title || displayValue"
+      @mouseenter="isHovered = true"
+      @mouseleave="isHovered = false"
+      @click="handleClick"
   >
     {{ displayValue }}
     <span
-      v-if="isHovered"
-      @click.stop.prevent="handleCopy"
-      :title="$t('commons.copyValue') + ':\n' + valueToCopy"
-      class="mdi mdi-18px mdi-content-copy position-absolute end-0 text-secondary lh-sm"
+        v-if="isHovered"
+        @click.stop.prevent="handleCopy"
+        :title="$t('commons.copyValue') + ':\n' + valueToCopy"
+        class="mdi mdi-18px mdi-content-copy position-absolute end-0 text-secondary lh-sm"
     ></span>
   </component>
 </template>
@@ -147,7 +147,9 @@ export default {
           href = this.routerTo.startsWith('http') ? this.routerTo : `#${this.routerTo}`
         } else if (this.$router && this.routerTo) {
           const resolved = this.$router.resolve(this.routerTo)
-          href = new URL(resolved.href, window.location.origin).href
+          // Get the base URL from current location, ensuring we include the context path
+          const baseUrl = window.location.origin + window.location.pathname.split('#')[0]
+          href = baseUrl + '#' + resolved.path + (resolved.query ? '?' + new URLSearchParams(resolved.query).toString() : '')
         }
         return {
           href,
@@ -164,12 +166,12 @@ export default {
       if (event) {
         event.stopPropagation()
       }
-      
+
       // For router links and anchor tags, let the browser handle the navigation
       if (this.to) {
         return // Let the default behavior happen
       }
-      
+
       // Only emit click event for buttons or non-router links
       if (this.clickable) {
         this.$emit('click', event)

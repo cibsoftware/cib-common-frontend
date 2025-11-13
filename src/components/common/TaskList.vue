@@ -21,8 +21,8 @@
     <div class="row flex-nowrap" v-for="(task, index) in tasks" :key="index">
       <div class="col-10">
         <b-progress
-          :variant="task.state == null ? 'info' : (task.state ? 'success' : 'danger')"
-          :animated="task.progress === (almost || 100) && task.state == null">
+            :variant="task.state == null ? 'info' : (task.state ? 'success' : 'danger')"
+            :animated="task.progress === (almost || 100) && task.state == null">
           <b-progress-bar :value="task.progress" :label="task.name"></b-progress-bar>
         </b-progress>
       </div>
