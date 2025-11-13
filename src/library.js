@@ -14,6 +14,7 @@ import SidebarsDataFlow from './components/common/SidebarsDataFlow.vue';
 import SidebarsFlow from './components/common/SidebarsFlow.vue';
 import SuccessAlert from './components/common/SuccessAlert.vue';
 import TranslationsDownload from './components/common/TranslationsDownload.vue';
+import TaskPopper from './components/common/TaskPopper.vue';
 
 // Import directives
 import { HoverStyle } from './components/common/directives.js';
@@ -97,6 +98,7 @@ export {
   SuccessAlert,
   TranslationsDownload,
   HoverStyle,
+  TaskPopper,
   
   // cib-common-components
   BAlert,
@@ -177,6 +179,7 @@ export function install(app) {
   app.component('SidebarsDataFlow', SidebarsDataFlow);
   app.component('SidebarsFlow', SidebarsFlow);
   app.component('SuccessAlert', SuccessAlert);
+  app.component('TaskPopper', TaskPopper);
   app.component('TranslationsDownload', TranslationsDownload);
   
   // Register local directives

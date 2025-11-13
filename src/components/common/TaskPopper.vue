@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import TaskList from '../../components/common-components/TaskList.vue'
 
 function repeatWithTimeout(interval, fun) {
   setTimeout(function() {	if (fun()) repeatWithTimeout(interval, fun)	}, interval)
