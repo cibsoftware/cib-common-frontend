@@ -95,8 +95,6 @@ export {
   SidebarsDataFlow,
   SidebarsFlow,
   SuccessAlert,
-  TaskList,
-  TaskPopper,
   TranslationsDownload,
   HoverStyle,
   
@@ -179,8 +177,6 @@ export function install(app) {
   app.component('SidebarsDataFlow', SidebarsDataFlow);
   app.component('SidebarsFlow', SidebarsFlow);
   app.component('SuccessAlert', SuccessAlert);
-  app.component('TaskList', TaskList);
-  app.component('TaskPopper', TaskPopper);
   app.component('TranslationsDownload', TranslationsDownload);
   
   // Register local directives
