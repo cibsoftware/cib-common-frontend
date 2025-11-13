@@ -83,62 +83,61 @@
 </template>
 
 <script>
-import { EngineService } from '@/services.js'
-import { ENGINE_STORAGE_KEY } from '@/constants.js'
-
 export default {
   name: 'CIBHeaderFlow',
   inject: ['currentLanguage'],
-  props: { languages: Array, user: Object },
-  emits: ['logout'],
+  props: {
+    languages: Array,
+    user: Object,
+    engines: { type: Array, default: () => [] },
+    initialSelectedEngine: { type: String, default: null }
+  },
+  emits: ['logout', 'engine-selected'],
   data() {
     return {
-      engines: [],
-      selectedEngine: null
+      selectedEngine: this.initialSelectedEngine
     }
   },
   mounted() {
-    this.loadEngines()
+    this.initializeSelectedEngine()
+  },
+  watch: {
+    engines(newEngines) {
+      if (!newEngines || newEngines.length === 0) {
+        this.selectedEngine = null
+        return
+      }
+      if (!this.selectedEngine || !newEngines.some(e => e.name === this.selectedEngine)) {
+        this.initializeSelectedEngine()
+      }
+    }
   },
   methods: {
-    logout: function() {
+    logout() {
       sessionStorage.getItem('token') ? sessionStorage.removeItem('token') : localStorage.removeItem('token')
       this.$emit('logout')
     },
-    loadEngines() {
-      EngineService.getEngines()
-          .then(response => {
-            this.engines = response
-            this.initializeSelectedEngine()
-          })
-    },
     initializeSelectedEngine() {
-      // Check if an engine is already selected in localStorage
-      const storedEngine = localStorage.getItem(ENGINE_STORAGE_KEY)
+      const list = this.engines || []
+      let selected = this.initialSelectedEngine
 
-      if (storedEngine && this.engines.some(e => e.name === storedEngine)) {
-        this.selectedEngine = storedEngine
+      if (selected && list.some(e => e.name === selected)) {
+        this.selectedEngine = selected
+        return
+      }
+
+      const defaultEngine = list.find(e => e.name === 'default')
+      if (defaultEngine) {
+        this.selectedEngine = defaultEngine.name
+      } else if (list.length > 0) {
+        this.selectedEngine = list[0].name
       } else {
-        // No stored engine or stored engine not found in list
-        // Try to find 'default' engine
-        const defaultEngine = this.engines.find(e => e.name === 'default')
-        if (defaultEngine) {
-          this.selectedEngine = defaultEngine.name
-        } else if (this.engines.length > 0) {
-          // Take the first engine
-          this.selectedEngine = this.engines[0].name
-        }
-
-        // Store the selected engine
-        if (this.selectedEngine) {
-          localStorage.setItem(ENGINE_STORAGE_KEY, this.selectedEngine)
-        }
+        this.selectedEngine = null
       }
     },
     selectEngine(engineName) {
       this.selectedEngine = engineName
-      localStorage.setItem(ENGINE_STORAGE_KEY, engineName)
-      this.logout()
+      this.$emit('engine-selected', engineName)
     }
   }
 }

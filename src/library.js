@@ -13,8 +13,6 @@ import PaginationControl from './components/common/PaginationControl.vue';
 import SidebarsDataFlow from './components/common/SidebarsDataFlow.vue';
 import SidebarsFlow from './components/common/SidebarsFlow.vue';
 import SuccessAlert from './components/common/SuccessAlert.vue';
-import TaskList from './components/common/TaskList.vue';
-import TaskPopper from './components/common/TaskPopper.vue';
 import TranslationsDownload from './components/common/TranslationsDownload.vue';
 
 // Import directives
