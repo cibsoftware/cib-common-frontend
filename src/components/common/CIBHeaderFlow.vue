@@ -18,11 +18,31 @@
 -->
 <template>
   <div style="height: 55px"> <!-- Empty container with height of navbar -->
-    <b-navbar toggleable="md" fixed="top" type="light" class="border-bottom bg-white px-3 py-0">
+    <b-navbar toggleable="md" fixed="top" type="light" class="border-bottom bg-white px-3">
       <slot></slot>
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
       <b-collapse is-nav id="nav_collapse" class="flex-grow-0">
         <b-navbar-nav>
+          <!-- Engine Selector - only show if more than one engine -->
+          <b-nav-item-dropdown v-if="engines.length > 1" extra-toggle-classes="py-1" right :title="$t('cib-header.engine')">
+            <template v-slot:button-content>
+              <span class="visually-hidden">{{ $t('cib-header.engine') }}</span>
+              <span class="mdi mdi-24px mdi-engine align-middle"></span>
+            </template>
+            <b-dropdown-item
+                v-for="engine in engines"
+                :key="engine.name"
+                :active="engine.name === selectedEngine"
+                @click="selectEngine(engine.name)"
+                :title="$t('cib-header.engine') + ': ' + engine.name">
+              <div class="d-flex align-items-baseline">
+                <span class="flex-grow-1">
+                  {{ engine.name }}
+                </span>
+              </div>
+            </b-dropdown-item>
+          </b-nav-item-dropdown>
+
           <b-nav-item-dropdown extra-toggle-classes="py-1" right :title="$t('cib-header.languages')">
             <template v-slot:button-content>
               <span class="visually-hidden">{{ $t('cib-header.languages') }}</span>
@@ -66,11 +86,58 @@
 export default {
   name: 'CIBHeaderFlow',
   inject: ['currentLanguage'],
-  props: { languages: Array, user: Object },
+  props: {
+    languages: Array,
+    user: Object,
+    engines: { type: Array, default: () => [] },
+    initialSelectedEngine: { type: String, default: null }
+  },
+  emits: ['logout', 'engine-selected'],
+  data() {
+    return {
+      selectedEngine: this.initialSelectedEngine
+    }
+  },
+  mounted() {
+    this.initializeSelectedEngine()
+  },
+  watch: {
+    engines(newEngines) {
+      if (!newEngines || newEngines.length === 0) {
+        this.selectedEngine = null
+        return
+      }
+      if (!this.selectedEngine || !newEngines.some(e => e.name === this.selectedEngine)) {
+        this.initializeSelectedEngine()
+      }
+    }
+  },
   methods: {
-    logout: function() {
+    logout() {
       sessionStorage.getItem('token') ? sessionStorage.removeItem('token') : localStorage.removeItem('token')
       this.$emit('logout')
+    },
+    initializeSelectedEngine() {
+      const list = this.engines || []
+      let selected = this.initialSelectedEngine
+
+      if (selected && list.some(e => e.name === selected)) {
+        this.selectedEngine = selected
+        return
+      }
+
+      const defaultEngine = list.find(e => e.name === 'default')
+      if (defaultEngine) {
+        this.selectedEngine = defaultEngine.name
+      } else if (list.length > 0) {
+        this.selectedEngine = list[0].name
+      } else {
+        this.selectedEngine = null
+      }
+    },
+    selectEngine(engineName) {
+      this.selectedEngine = engineName
+      this.$emit('engine-selected', engineName)
     }
   }
 }
