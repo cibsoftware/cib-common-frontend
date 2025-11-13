@@ -1,0 +1,12 @@
+# Ai can see:
+# - File names
+# - Paths/locations
+# - Directory structure
+
+# Ai cannot see:
+# - File contents
+# - Configuration values
+# - Specific properties
+# - Sensitive data
+
+.npmrc

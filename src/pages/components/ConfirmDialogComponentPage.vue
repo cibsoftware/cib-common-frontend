@@ -1,0 +1,299 @@
+<template>
+  <div class="component-page h-100">
+    <!-- Component Documentation Header -->
+    <div class="container border-bottom border-light pb-3 mb-4">
+      <div class="row align-items-center">
+        <div class="col-12">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <h2 class="mb-1 d-flex align-items-center">
+                <span class="mdi mdi-24px me-2 mdi-help-circle-outline"></span>
+                ConfirmDialog
+                <small class="badge ms-2 bg-success">Vue Component</small>
+              </h2>
+              <p class="text-muted mb-0">Modal confirmation dialog for user actions</p>
+            </div>
+            <div class="text-end">
+              <small class="text-muted d-block">Category: Feedback</small>
+              <small class="text-muted d-block">File: ConfirmDialog.vue</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <ul class="nav nav-tabs mb-4">
+      <li class="nav-item">
+        <a class="nav-link" :class="{ active: activeTab === 'overview' }" @click="activeTab = 'overview'" href="#">
+          <span class="mdi mdi-information-outline me-1"></span>Overview
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" :class="{ active: activeTab === 'props' }" @click="activeTab = 'props'" href="#">
+          <span class="mdi mdi-cog-outline me-1"></span>Props
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" :class="{ active: activeTab === 'events' }" @click="activeTab = 'events'" href="#">
+          <span class="mdi mdi-lightning-bolt-outline me-1"></span>Events
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" :class="{ active: activeTab === 'slots' }" @click="activeTab = 'slots'" href="#">
+          <span class="mdi mdi-puzzle-outline me-1"></span>Slots
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" :class="{ active: activeTab === 'examples' }" @click="activeTab = 'examples'" href="#">
+          <span class="mdi mdi-code-tags me-1"></span>Examples
+        </a>
+      </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content overflow-auto" style="max-height: calc(95vh - 300px);">
+      <!-- Overview Tab -->
+      <div v-show="activeTab === 'overview'" >
+        <div class="row">
+          <div class="col-12">
+            <h4>Purpose</h4>
+            <p>ConfirmDialog provides a reusable confirmation modal for critical user actions, ensuring users confirm their intentions before proceeding with potentially destructive operations.</p>
+            
+            <h4>Use Cases</h4>
+            <ul>
+              <li>Confirm deletion of items</li>
+              <li>Confirm navigation away from unsaved forms</li>
+              <li>Confirm critical actions with potential side effects</li>
+              <li>Display custom confirmation messages with parameters</li>
+            </ul>
+            
+            <h4>Integration</h4>
+            <div class="bg-light p-3 rounded">
+              <h6>Import Statement:</h6>
+              <pre><code>import ConfirmDialog from './components/common/ConfirmDialog.vue'</code></pre>
+              
+              <h6 class="mt-3">Component Registration:</h6>
+              <pre><code>components: {
+  ConfirmDialog
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Props Tab -->
+      <div v-show="activeTab === 'props'" >
+        <div v-if="componentData.props && componentData.props.length > 0">
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>Default</th>
+                  <th>Required</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="prop in componentData.props" :key="prop.name">
+                  <td><code>{{ prop.name }}</code></td>
+                  <td><span class="badge bg-info">{{ prop.type }}</span></td>
+                  <td><code>{{ prop.default || 'undefined' }}</code></td>
+                  <td><span class="badge" :class="prop.required ? 'bg-danger' : 'bg-success'">{{ prop.required ? 'Yes' : 'No' }}</span></td>
+                  <td>{{ prop.description }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div v-else class="text-center py-5 text-muted">
+          No props defined for this component
+        </div>
+      </div>
+
+      <!-- Events Tab -->
+      <div v-show="activeTab === 'events'" >
+        <div v-if="componentData.events && componentData.events.length > 0">
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Parameters</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="event in componentData.events" :key="event.name">
+                  <td><code>@{{ event.name }}</code></td>
+                  <td><code>{{ event.parameters || 'none' }}</code></td>
+                  <td>{{ event.description }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div v-else class="text-center py-5 text-muted">
+          No events defined for this component
+        </div>
+      </div>
+
+      <!-- Slots Tab -->
+      <div v-show="activeTab === 'slots'" >
+        <div v-if="componentData.slots && componentData.slots.length > 0">
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Scoped Props</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="slot in componentData.slots" :key="slot.name">
+                  <td><code>{{ slot.name || 'default' }}</code></td>
+                  <td><code>{{ slot.scopedProps || 'none' }}</code></td>
+                  <td>{{ slot.description }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div v-else class="text-center py-5 text-muted">
+          No slots defined for this component
+        </div>
+      </div>
+
+      <!-- Examples Tab -->
+      <div v-show="activeTab === 'examples'" >
+        <div v-if="componentData.examples && componentData.examples.length > 0">
+          <div v-for="(example, index) in componentData.examples" :key="index" class="mb-4">
+            <h5>{{ example.title }}</h5>
+            <p class="text-muted">{{ example.description }}</p>
+            <div class="bg-light p-3 rounded">
+              <pre><code>{{ example.code }}</code></pre>
+            </div>
+          </div>
+        </div>
+        <div v-else class="text-center py-5 text-muted">
+          No examples available for this component
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'ConfirmDialogComponentPage',
+  data() {
+    return {
+      activeTab: 'overview',
+      componentData: {
+        props: [
+          { name: 'okTitle', type: 'String', default: 'undefined', required: false, description: 'Custom text for the OK button' }
+        ],
+        events: [
+          { name: 'ok', parameters: 'param', description: 'Emitted when user confirms the action, passes the parameter from show() method' }
+        ],
+        slots: [
+          { name: 'default', scopedProps: 'param', description: 'Custom confirmation message content, receives param from show() method' }
+        ],
+        examples: [
+          {
+            title: 'Basic Confirmation',
+            description: 'Simple confirmation dialog with custom message',
+            code: `<ConfirmDialog ref="confirmDialog" @ok="handleConfirm">
+  <template #default="{ param }">
+    Are you sure you want to delete "{{ param.name }}"?
+  </template>
+</ConfirmDialog>
+
+<!-- Show dialog -->
+<script>
+this.$refs.confirmDialog.show({ name: 'Document.pdf' })
+<\/script>`
+          }
+        ]
+      }
+    }
+  }
+}
+</script>
+
+<style scoped>
+/* Tab styling */
+.nav-tabs .nav-link {
+  border: 1px solid transparent;
+  border-radius: 0.375rem 0.375rem 0 0;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: #fff;
+  border-color: #dee2e6 #dee2e6 #fff;
+  color: #0d6efd;
+}
+
+.nav-tabs .nav-link:hover {
+  border-color: #e9ecef #e9ecef #dee2e6;
+  isolation: isolate;
+}
+
+/* Code styling */
+pre {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+  padding: 1rem;
+  font-size: 0.875rem;
+  overflow-x: auto;
+}
+
+code {
+  color: #d63384;
+  background-color: #f8f9fa;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+}
+
+pre code {
+  color: #212529;
+  background-color: transparent;
+  padding: 0;
+}
+
+/* Badge styling */
+.badge {
+  font-size: 0.75em;
+}
+
+/* Table styling */
+.table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  border-top: none;
+}
+
+/* Icon sizes */
+.mdi-24px {
+  font-size: 24px;
+}
+
+/* Tab content styling */
+.tab-content {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.tab-pane {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
