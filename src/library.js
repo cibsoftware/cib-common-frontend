@@ -19,7 +19,7 @@ import TaskPopper from './components/common/TaskPopper.vue';
 // Import directives
 import { HoverStyle } from './components/common/directives.js';
 
-// Import all components from cib-common-components
+// Import all components from @cib/bootstrap-components
 import {
   BAlert,
   BAvatar,
@@ -77,7 +77,7 @@ import {
   BWaitingBox,
   registerComponents,
   mergeLocaleMessage
-} from 'cib-common-components';
+} from '@cib/bootstrap-components';
 
 // Export individual components and directives
 export {
@@ -100,7 +100,7 @@ export {
   HoverStyle,
   TaskPopper,
   
-  // cib-common-components
+  // bootstrap-components
   BAlert,
   BAvatar,
   BBadge,
@@ -161,7 +161,7 @@ export {
 
 // Plugin installation function
 export function install(app) {
-  // Register all cib-common-components first
+  // Register all bootstrap-components first
   registerComponents(app);
   
   // Register local components

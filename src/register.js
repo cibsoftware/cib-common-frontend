@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import { registerComponents } from 'cib-common-components'
+import { registerComponents } from '@cib/bootstrap-components'
 import { HoverStyle } from '@/components/common/directives.js'
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
 

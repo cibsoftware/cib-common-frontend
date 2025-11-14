@@ -58,7 +58,7 @@ npm install @cib/common-frontend
 - **TaskPopper** - Popover component for task-related information
 - **TranslationsDownload** - Component for handling translation file downloads
 
-### Bootstrap Components (from cib-common-components)
+### Bootstrap Components (from bootstrap-components)
 
 - **BAlert** - Alert component with dismiss functionality and auto-dismiss timer
 - **BAvatar** - Avatar component with image, text, and size variants
