@@ -1,6 +1,6 @@
 {
   "name": "@cib/common-frontend",
-  "version": "0.0.4-dev.2",
+  "version": "0.0.4-dev.3",
   "type": "module",
   "description": "Common Vue.js components library for CIB applications",
   "main": "dist/cib-common-frontend.umd.js",
@@ -10,7 +10,7 @@
       "import": "./dist/cib-common-frontend.es.js",
       "require": "./dist/cib-common-frontend.umd.js"
     },
-    "./dist/style.css": "./dist/library.css"
+    "./dist/style.css": "./dist/common-frontend.css"
   },
   "files": [
     "dist",
