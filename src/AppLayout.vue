@@ -39,6 +39,8 @@
     </CIBHeaderFlow>
 
     <router-view class="flex-grow-1 overflow-hidden" ref="down"></router-view>
+
+    <h2>Hello world!</h2>
     
     <!-- Footer -->
     <footer class="bg-light text-center text-muted py-3 border-top">

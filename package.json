@@ -2,7 +2,7 @@
   "name": "@cib/common-frontend",
   "version": "0.0.4-dev.9",
   "type": "module",
-  "description": "Common Vue.js components library for CIB applications test",
+  "description": "Common Vue.js components library for CIB applications",
   "main": "dist/cib-common-frontend.umd.js",
   "module": "dist/cib-common-frontend.es.js",
   "exports": {
