@@ -23,6 +23,8 @@
     "test:unit": "vitest",
     "lint": "eslint . --fix",
     "format": "prettier --write src/",
+    "bump:dev": "scripts/bump-dev-version.sh",
+    "remove:dev": "scripts/npm-version-release.sh",
     "publish:dev": "npm run build && npm version prerelease --preid=dev --force && npm publish --registry https://nexus.cib.de/repository/npm-hosted-dev/ --tag dev"
   },
   "dependencies": {
