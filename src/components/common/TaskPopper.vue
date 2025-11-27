@@ -24,7 +24,6 @@
         <b-button-close style="margin-top: -0.25rem" @click="closePopover" :title="$t('task-popper.close')"></b-button-close>
         <span>{{ title }}</span>
       </template>
-      <TaskList :tasks="tasks" :almost="delayAt"></TaskList>
     </b-popover>
   </div>
 </template>
