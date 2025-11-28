@@ -29,7 +29,7 @@
     "@cib/bootstrap-components": "1.0.0",
     "@mdi/font": "7.4.47",
     "@popperjs/core": "2.11.8",
-    "axios": "1.12.2",
+    "axios": "1.13.2",
     "bootstrap": "5.3.8",
     "vue": "3.5.13",
     "vue-i18n": "11.1.10",
@@ -49,7 +49,7 @@
     "vitest": "3.1.3"
   },
   "peerDependencies": {
-    "axios": "^1.12.2",
-    "vue": "^3.5.13"
+    "axios": "^1.13.2",
+    "vue": "^6.4.1"
   }
 }
