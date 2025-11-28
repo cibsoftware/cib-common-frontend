@@ -26,22 +26,22 @@
     "publish:dev": "npm run build && npm version prerelease --preid=dev --force && npm publish --registry https://nexus.cib.de/repository/npm-hosted-dev/ --tag dev"
   },
   "dependencies": {
-    "@mdi/font": "^7.4.47",
-    "@popperjs/core": "^2.11.8",
-    "axios": "^1.9.0",
-    "bootstrap": "^5.3.6",
-    "@cib/bootstrap-components": "^2.1.1-dev.2",
-    "moment": "^2.29.4",
-    "vue": "^3.5.13",
-    "vue-i18n": "^9.2.2",
-    "vue-router": "^4.2.0"
+    "@mdi/font": "7.4.47",
+    "@popperjs/core": "2.11.8",
+    "axios": "1.9.0",
+    "bootstrap": "5.3.6",
+    "@cib/bootstrap-components": "2.1.1-dev.2",
+    "moment": "2.29.4",
+    "vue": "3.5.13",
+    "vue-i18n": "9.2.2",
+    "vue-router": "4.2.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.2.4",
-    "eslint": "^9.18.0",
-    "prettier": "^3.5.3",
-    "vite": "^6.0.11",
-    "vitest": "^3.1.3"
+    "@vitejs/plugin-vue": "5.2.4",
+    "eslint": "9.18.0",
+    "prettier": "3.5.3",
+    "vite": "6.0.11",
+    "vitest": "3.1.3"
   },
   "peerDependencies": {
     "axios": "^1.9.0",
