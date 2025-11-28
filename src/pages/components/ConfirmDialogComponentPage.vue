@@ -224,16 +224,15 @@ export default {
           {
             title: 'Basic Confirmation',
             description: 'Simple confirmation dialog with custom message',
-            code: `<ConfirmDialog ref="confirmDialog" @ok="handleConfirm">
-  <template #default="{ param }">
-    Are you sure you want to delete "{{ param.name }}"?
-  </template>
-</ConfirmDialog>
-
-<!-- Show dialog -->
-<script>
-this.$refs.confirmDialog.show({ name: 'Document.pdf' })
-<\/script>`
+            code: '<ConfirmDialog ref="confirmDialog" @ok="handleConfirm">\n' +
+                  '  <template #default="{ param }">\n' +
+                  '    Are you sure you want to delete "{{ param.name }}"?\n' +
+                  '  </template>\n' +
+                  '</ConfirmDialog>\n\n' +
+                  '<!-- Show dialog -->\n' +
+                  '<script>\n' +
+                  'this.$refs.confirmDialog.show({ name: \'Document.pdf\' })\n' +
+                  '</' + 'script>\n'
           }
         ]
       }
