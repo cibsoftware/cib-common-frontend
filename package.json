@@ -33,7 +33,7 @@
     "@cib/bootstrap-components": "1.0.0",
     "moment": "2.29.4",
     "vue": "3.5.13",
-    "vue-i18n": "9.2.2",
+    "vue-i18n": "11.1.10",
     "vue-router": "4.2.0"
   },
   "devDependencies": {
