@@ -26,11 +26,11 @@
     "publish:dev": "npm run build && npm version prerelease --preid=dev --force && npm publish --registry https://nexus.cib.de/repository/npm-hosted-dev/ --tag dev"
   },
   "dependencies": {
+    "@cib/bootstrap-components": "1.0.0",
     "@mdi/font": "7.4.47",
     "@popperjs/core": "2.11.8",
     "axios": "1.12.2",
     "bootstrap": "5.3.8",
-    "@cib/bootstrap-components": "1.0.0",
     "vue": "3.5.13",
     "vue-i18n": "11.1.10",
     "vue-router": "4.5.1"
