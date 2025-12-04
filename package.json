@@ -1,26 +1,30 @@
 {
   "name": "@cib/common-frontend",
+  "description": "Common Vue.js components library for CIB applications",
   "version": "1.0.2-dev.0",
   "type": "module",
-  "description": "Common Vue.js components library for CIB applications",
-  "main": "dist/cib-common-frontend.umd.js",
-  "module": "dist/cib-common-frontend.es.js",
-  "exports": {
-    ".": {
-      "import": "./dist/cib-common-frontend.es.js",
-      "require": "./dist/cib-common-frontend.umd.js"
-    },
-    "./dist/style.css": "./dist/common-frontend.css"
-  },
+  "license": "Apache-2.0",
+  "main": "dist/common-frontend.umd.js",
+  "module": "dist/common-frontend.es.js",
+  "style": "dist/common-frontend.css",
   "files": [
     "dist",
     "src"
   ],
+  "exports": {
+    ".": {
+      "import": "./dist/common-frontend.es.js",
+      "require": "./dist/common-frontend.umd.js"
+    },
+    "./dist/style.css": "./dist/common-frontend.css"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test:unit": "vitest",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:unit": "vitest run --coverage --reporter=default --reporter=junit --outputFile=target/vitest-reports/TEST-front-end.xml",
     "lint": "eslint . --fix",
     "format": "prettier --write src/",
     "publish:dev": "npm run build && npm version prerelease --preid=dev --force && npm publish --registry https://nexus.cib.de/repository/npm-hosted-dev/ --tag dev"
@@ -35,6 +39,7 @@
   "devDependencies": {
     "@eslint/js": "9.39.1",
     "@vitejs/plugin-vue": "5.2.4",
+    "@vitest/coverage-istanbul": "3.1.3",
     "@vitest/eslint-plugin": "1.1.44",
     "@vue/test-utils": "2.4.6",
     "cypress": "14.3.3",
@@ -43,6 +48,7 @@
     "eslint-plugin-vue": "9.32.0",
     "prettier": "3.5.3",
     "vite": "6.4.1",
+    "vite-plugin-vue-devtools": "7.7.6",
     "vitest": "3.1.3"
   },
   "peerDependencies": {

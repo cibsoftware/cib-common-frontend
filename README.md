@@ -312,9 +312,9 @@ npm run build
 ```
 
 This creates:
-- `dist/cib-common-frontend.es.js` - ES module version
-- `dist/cib-common-frontend.umd.js` - UMD version for browsers
-- `dist/library.css` - Compiled styles
+- `dist/common-frontend.es.js` - ES module version
+- `dist/common-frontend.umd.js` - UMD version for browsers
+- `dist/common-frontend.css` - Compiled styles
 
 ### Development Scripts
 
@@ -390,6 +390,7 @@ This project is proprietary software for internal use.
 ## Dependencies
 
 ### Runtime Dependencies
+- @cib/bootstrap-components 1.0+
 - Vue 3.3+
 - Bootstrap 5.3+
 - Vue Router 4.2+
