@@ -332,7 +332,7 @@ export default {
     },
     getAriaSort(field) {
       if (this.isSortedByField(field)) {
-        return this.$t(`bcomponents.${this.isSortedByFieldAscending(field) ? 'ariaSortAsc' : 'ariaSortDes'}`)
+        return this.isSortedByFieldAscending(field) ? this.$t('bcomponents.ariaSortAsc') : this.$t('bcomponents.ariaSortDesc')
       }
       return this.$t('bcomponents.ariaSortNone')
     },
