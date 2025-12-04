@@ -16,8 +16,8 @@
  */
 import { createApp } from 'vue'
 import { createI18n } from 'vue-i18n'
-import AppLayout from './AppLayout.vue'
-import router from './routes.js'
+import AppLayout from './app/AppLayout.vue'
+import router from './app/routes.js'
 
 // Import Bootstrap CSS
 import 'bootstrap/dist/css/bootstrap.min.css'

@@ -169,7 +169,7 @@ const router = createRouter({
 
 // Optional: Set page titles
 router.beforeEach((to, from, next) => {
-  document.title = to.meta.title || 'Cib Common Frontend'
+  document.title = to.meta.title || 'CIB Common Frontend'
   next()
 })
 
