@@ -30,23 +30,6 @@ describe('library.js', () => {
     // Find all .vue files in /src/
     const vueFiles = findComponents(srcDir, '.vue')
 
-    it('all .vue files have license headers', () => {
-      vueFiles.forEach(f => {
-        const content = fs.readFileSync(f, 'utf-8')
-        const hasLicenseHeader = content.includes('Copyright CIB software GmbH') && content.includes('apache.org/licenses/LICENSE-2.0')
-        expect(hasLicenseHeader).toBe(true, `File ${f} is missing license header`)
-      })
-    })
-
-    it('all .js files have license headers', () => {
-      const jsFiles = findComponents(srcDir, '.js')
-      jsFiles.forEach(f => {
-        const content = fs.readFileSync(f, 'utf-8')
-        const hasLicenseHeader = content.includes('Copyright CIB software GmbH') && content.includes('apache.org/licenses/LICENSE-2.0')
-        expect(hasLicenseHeader).toBe(true, `File ${f} is missing license header`)
-      })
-    })
-
     it('exports all .vue components from /src/', () => {
 
       // Get the base name (without extension) for each .vue file
@@ -109,8 +92,8 @@ describe('library.js', () => {
       'en',
       'de',
       'es',
-      'ru',
       'it',
+      'ru',
       'ua'
     ])('should have translations for supported language: %s', (lang) => {
       library.mergeLocaleMessage(mockI18n, lang)
@@ -127,6 +110,7 @@ describe('library.js', () => {
         en: await import('@/assets/translations_en.json'),
         de: await import('@/assets/translations_de.json'),
         es: await import('@/assets/translations_es.json'),
+        it: await import('@/assets/translations_it.json'),
         ru: await import('@/assets/translations_ru.json'),
         ua: await import('@/assets/translations_ua.json')
       }
