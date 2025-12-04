@@ -21,11 +21,10 @@ export default defineConfig({
       fileName: (format) => `cib-common-frontend.${format}.js`
     },
     rollupOptions: {
-      external: ['vue', 'axios', 'bootstrap', 'vue-i18n', 'vue-router'],
+      external: ['vue', 'bootstrap', 'vue-i18n', 'vue-router'],
       output: {
         globals: {
           vue: 'Vue',
-          axios: 'axios',
           bootstrap: 'bootstrap',
           'vue-i18n': 'VueI18n',
           'vue-router': 'VueRouter'
