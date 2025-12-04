@@ -392,7 +392,6 @@ This project is proprietary software for internal use.
 ### Runtime Dependencies
 - Vue 3.3+
 - Bootstrap 5.3+
-- Axios 1.6+
 - Vue Router 4.2+
 - Vue i18n 9.2+
 
