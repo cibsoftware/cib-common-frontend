@@ -45,13 +45,14 @@ export default defineConfig({
       fileName: (format) => `common-frontend.${format}.js`
     },
     rollupOptions: {
-      external: ['vue', 'bootstrap', 'vue-i18n', 'vue-router'],
+      external: ['vue', 'bootstrap', 'vue-i18n', 'vue-router', '@cib/bootstrap-components'],
       output: {
         globals: {
           vue: 'Vue',
           bootstrap: 'bootstrap',
           'vue-i18n': 'VueI18n',
-          'vue-router': 'VueRouter'
+          'vue-router': 'VueRouter',
+          '@cib/bootstrap-components': 'CibBootstrapComponents'
         }
       }
     }
