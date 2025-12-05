@@ -40,20 +40,18 @@
 
     <router-view class="flex-grow-1 overflow-hidden" ref="down"></router-view>
 
-    <h2>Hello world!</h2>
-    
     <!-- Footer -->
     <footer class="bg-light text-center text-muted py-3 border-top">
       <div class="container">
-        <small>© 2025 CIB Common Components Library</small>
+        <small>© {{ new Date().getFullYear() }} CIB Common Frontend Library</small>
       </div>
     </footer>
   </div>
 </template>
 
 <script>
-import CIBHeaderFlow from './components/common/CIBHeaderFlow.vue'
-import logoSvg from './assets/logo.svg'
+import CIBHeaderFlow from '../components/common/CIBHeaderFlow.vue'
+import logoSvg from '../assets/logo.svg'
 
 export default {
   name: 'AppLayout',
@@ -62,7 +60,8 @@ export default {
   },
   data() {
     return {
-      logoPath: logoSvg
+      logoPath: logoSvg,
+      pageTitle: 'CIB Common Frontend'
     }
   },
   provide() {

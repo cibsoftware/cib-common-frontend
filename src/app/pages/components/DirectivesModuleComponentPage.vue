@@ -352,7 +352,7 @@ export default {
         }"
       &gt;
         &lt;div class="card-body"&gt;
-          &lt;h6 class="card-title"&gt;{{ item.title }}&lt;/h6&gt;
+          &lt;h6 class="card-title"&gt;&#123;&#123; item.title &#125;&#125;&lt;/h6&gt;
           &lt;div 
             class="card-text"
             style="height: 60px; overflow: hidden;"

@@ -224,7 +224,7 @@
     &lt;/div&gt;
     
     &lt;button type="submit" class="btn btn-primary"&gt;
-      {{ showValidation ? 'Fix Errors' : 'Submit' }}
+      &#123;&#123; showValidation ? 'Fix Errors' : 'Submit' &#125;&#125;
     &lt;/button&gt;
   &lt;/template&gt;
 &lt;/CIBForm&gt;</code></pre>
@@ -271,7 +271,7 @@
     &lt;/CIBForm&gt;
     
     &lt;div v-if="message" class="alert alert-info mt-3"&gt;
-      {{ message }}
+      &#123;&#123; message &#125;&#125;
     &lt;/div&gt;
   &lt;/div&gt;
 &lt;/template&gt;
