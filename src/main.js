@@ -23,7 +23,6 @@ import { mergeLocaleMessage } from '@cib/bootstrap-components'
 // Import Bootstrap CSS
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
-import './assets/main.css'
 import '@mdi/font/css/materialdesignicons.css'
 import '@cib/bootstrap-components/dist/style.css'
 import 'bootstrap'
