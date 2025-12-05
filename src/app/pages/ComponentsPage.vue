@@ -311,7 +311,6 @@ export default {
 </script>
 
 <style scoped>
-@import '@mdi/font/css/materialdesignicons.min.css';
 
 /* Component navigation styling */
 .components-navbar {
@@ -385,19 +384,6 @@ pre code {
 /* Welcome message styling */
 .mdi-48px {
   font-size: 48px;
-}
-
-/* Icon sizes */
-.mdi-18px {
-  font-size: 18px;
-}
-
-.mdi-16px {
-  font-size: 16px;
-}
-
-.mdi-24px {
-  font-size: 24px;
 }
 
 /* Smooth transitions */

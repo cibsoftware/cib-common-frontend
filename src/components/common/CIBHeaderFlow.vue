@@ -143,9 +143,20 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .lang-label {
   min-width: 36px; /* adjust as needed */
   display: inline-block;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    border: 0;
+    padding: 0;
+    clip: rect(0 0 0 0);
+    overflow: hidden;
 }
 </style>
