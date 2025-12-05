@@ -243,8 +243,8 @@
           <p class="text-muted">Text element with copy functionality but no click action</p>
           <div class="bg-light p-3 rounded">
             <pre><code>&lt;CopyableActionButton
-  display-value="API-KEY-12345-ABCDE"
-  copy-value="sk_test_12345abcdef67890"
+  display-value="ABCDE"
+  copy-value="12345"
   :clickable="false"
   title="API Key (click to copy full key)"
   @copy="handleCopy"
