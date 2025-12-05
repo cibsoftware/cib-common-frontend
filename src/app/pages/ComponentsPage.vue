@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import SidebarsDataFlow from '../components/common/SidebarsDataFlow.vue'
+import SidebarsDataFlow from '../../components/common/SidebarsDataFlow.vue'
 
 export default {
   name: 'ComponentsPage',

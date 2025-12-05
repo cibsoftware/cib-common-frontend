@@ -291,7 +291,7 @@
     &lt;/div&gt;
     
     &lt;div class="alert alert-success" v-if="copyMessage"&gt;
-      {{ copyMessage }}
+      &#123;&#123; copyMessage &#125;&#125;
     &lt;/div&gt;
   &lt;/div&gt;
 &lt;/template&gt;
