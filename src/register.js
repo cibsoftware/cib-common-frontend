@@ -46,22 +46,22 @@ const registerComponents = function(app) {
   app.component('b-dd-form', app.component('b-dropdown-form'))
 
   // Register local components
-  app.component('CIBForm', CIBForm);
-  app.component('CIBHeaderFlow', CIBHeaderFlow);
-  app.component('ConfirmDialog', ConfirmDialog);
-  app.component('ContentBlock', ContentBlock);
-  app.component('CopyableActionButton', CopyableActionButton);
-  app.component('ErrorDialog', ErrorDialog);
-  app.component('FlowTable', FlowTable);
-  app.component('GenericTabs', GenericTabs);
-  app.component('HighlightedText', HighlightedText);
-  app.component('PagedScrollableContent', PagedScrollableContent);
-  app.component('PaginationControl', PaginationControl);
-  app.component('SidebarsDataFlow', SidebarsDataFlow);
-  app.component('SidebarsFlow', SidebarsFlow);
-  app.component('SuccessAlert', SuccessAlert);
-  app.component('TaskPopper', TaskPopper);
-  app.component('TranslationsDownload', TranslationsDownload);
+  app.component('CIBForm', CIBForm)
+  app.component('CIBHeaderFlow', CIBHeaderFlow)
+  app.component('ConfirmDialog', ConfirmDialog)
+  app.component('ContentBlock', ContentBlock)
+  app.component('CopyableActionButton', CopyableActionButton)
+  app.component('ErrorDialog', ErrorDialog)
+  app.component('FlowTable', FlowTable)
+  app.component('GenericTabs', GenericTabs)
+  app.component('HighlightedText', HighlightedText)
+  app.component('PagedScrollableContent', PagedScrollableContent)
+  app.component('PaginationControl', PaginationControl)
+  app.component('SidebarsDataFlow', SidebarsDataFlow)
+  app.component('SidebarsFlow', SidebarsFlow)
+  app.component('SuccessAlert', SuccessAlert)
+  app.component('TaskPopper', TaskPopper)
+  app.component('TranslationsDownload', TranslationsDownload)
   
   // Register local directives
   app.directive('hover-style', HoverStyle)
