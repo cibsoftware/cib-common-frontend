@@ -134,24 +134,25 @@ function reportSameValuesTable(objBase, objTest, languages, path) {
   expect(objBase).not.toBeNull()
   expect(objTest).not.toBeNull()
 
+  if (skipPath(path)) {
+    return true
+  }
+
   if (typeof objBase === 'string') {
-    if (!skipPath(path)) {
+    const hasSameValues = objTest.map(
+      (v, index) => objBase === v && !skipValue(objBase, languages[index])
+    ).find(v => v)
+    if (hasSameValues) {
 
-      const hasSameValues = objTest.map(
-        (v, index) => objBase === v && !skipValue(objBase, languages[index])
-      ).find(v => v)
-      if (hasSameValues) {
-
-        if (!hasHeader) {
-          console.log(`Error: Next strings have the same values comparing to EN`)
-          hasHeader = true
-        }
-
-        const v = objTest.map(
-          (v, index) => (objBase === v && !skipValue(objBase, languages[index])) ? languages[index] : '  '
-        ).join(' | ')
-        console.log(`| en | ${v} | ${path} |`)
+      if (!hasHeader) {
+        console.log(`Error: Next strings have the same values comparing to EN`)
+        hasHeader = true
       }
+
+      const v = objTest.map(
+        (v, index) => (objBase === v && !skipValue(objBase, languages[index])) ? languages[index] : '  '
+      ).join(' | ')
+      console.log(`| en | ${v} | ${path} |`)
     }
   }
   else {
