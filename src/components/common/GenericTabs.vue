@@ -17,6 +17,7 @@
 
 -->
 <template>
+  <!-- NOSONAR: This component is designed to be used inside a <ul> or <ol> container -->
   <li
       class="nav-item m-0 flex-shrink-0 border-0"
       v-for="(tab, index) in tabs"
