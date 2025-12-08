@@ -283,13 +283,11 @@ export default {
             sortDesc: this.sortBy === (field.sortBy || field.key) ? !this.sortDesc : true,
           })
         }
-        else {
-          if (this.sortKey === field.key) {
-            this.sortOrder *= -1
-          } else {
-            this.sortKey = field.key
-            this.sortOrder = 1
-          }
+        else if (this.sortKey === field.key) {
+          this.sortOrder *= -1
+        } else {
+          this.sortKey = field.key
+          this.sortOrder = 1
         }
       }
     },
