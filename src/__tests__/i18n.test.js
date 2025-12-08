@@ -15,8 +15,8 @@
  *  limitations under the License.
  */
 import { describe, it, expect } from 'vitest'
-import { readFileSync } from 'fs'
-import { resolve } from 'path'
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { findComponents } from './utils.js'
 
 const languages = ['de', 'en', 'es', 'it', 'ru', 'ua']
@@ -65,9 +65,7 @@ function haveSameProperties(objBase, objTest, path) {
 
 function skipPath(path) {
   // cib-header.<lang>
-  const ignorePaths = [
-    ...(languages.map(lang => `cib-header.${lang}`)),
-  ];
+  const ignorePaths = languages.map(lang => `cib-header.${lang}`)
   return !path || ignorePaths.includes(path)
 }
 
@@ -145,7 +143,7 @@ function reportSameValuesTable(objBase, objTest, languages, path) {
   if (typeof objBase === 'string') {
     const hasSameValues = objTest.map(
       (v, index) => objBase === v && !skipValue(objBase, languages[index])
-    ).find(v => v)
+    ).find(Boolean)
     if (hasSameValues) {
 
       if (!hasHeader) {
@@ -177,34 +175,29 @@ function reportSameValuesTable(objBase, objTest, languages, path) {
 describe('i18n', () => {
 
   describe('loadable', () => {
-    languages.forEach(lang => {
-      it(`${lang}`, () => {
-        const translations = getTranslation(lang)
-        expect(translations).toBeDefined()
-      })
+    it.each(languages)('%s', (lang) => {
+      const translations = getTranslation(lang)
+      expect(translations).toBeDefined()
     })
   })
 
   describe('compare en with', () => {
     const translationEn = getTranslation('en')
-    languages.filter(lang => lang !== 'en').forEach(lang => {
-      it(`${lang}`, () => {
-        const translationLang = getTranslation(lang)
-        expect(haveSameProperties(translationEn, translationLang, lang)).toBeTruthy()
-      })
+    const additionalLanguages = languages.filter(lang => lang !== 'en')
+
+    it.each(additionalLanguages)(`en.keys === %s.keys`, (lang) => {
+      const translationLang = getTranslation(lang)
+      expect(haveSameProperties(translationEn, translationLang, lang)).toBeTruthy()
     })
 
-    languages.filter(lang => lang !== 'en').forEach(lang => {
-      it(`${lang}, report same values`, () => {
-        const translationLang = getTranslation(lang)
-        expect(reportSameValues(translationEn, translationLang, lang, lang)).toBeTruthy()
-      })
+    it.each(additionalLanguages)(`en !== %s, report same values`, (lang) => {
+      const translationLang = getTranslation(lang)
+      expect(reportSameValues(translationEn, translationLang, lang, lang)).toBeTruthy()
     })
 
     it(`same values as table`, () => {
-      const filteredLanguages = languages.filter(lang => lang !== 'en')
-      const translations = filteredLanguages.map(lang => getTranslation(lang))
-      expect(reportSameValuesTable(translationEn, translations, filteredLanguages, '')).toBeTruthy()
+      const translations = additionalLanguages.map(lang => getTranslation(lang))
+      expect(reportSameValuesTable(translationEn, translations, additionalLanguages, '')).toBeTruthy()
     })
   })
 

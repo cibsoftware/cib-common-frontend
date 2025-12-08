@@ -378,9 +378,9 @@ export default {
         const ths = this.$refs.table.querySelectorAll('th')
         if (ths && ths.length > 0) {
           // Clean existing widths
-          ths.forEach(th => {
+          for (const th of ths) {
             th.style.removeProperty('width')
-          })
+          }
           // Get the container width
           const tableContainer = this.$refs.table.parentElement
           const containerWidth = tableContainer ? tableContainer.clientWidth : this.$refs.table.clientWidth

@@ -18,8 +18,8 @@ import { describe, it, expect } from 'vitest'
 import { findComponents } from './utils.js'
 
 // Node.js modules for file system and path
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 
 describe('package', () => {
   // eslint-disable-next-line no-undef
@@ -30,21 +30,21 @@ describe('package', () => {
     it('all .vue files have license headers', () => {
       const vueFiles = findComponents(srcDir, '.vue')
       expect(vueFiles.length).toBeGreaterThan(0)
-      vueFiles.forEach(f => {
+      for (const f of vueFiles) {
         const content = fs.readFileSync(f, 'utf-8')
         const hasLicenseHeader = content.includes('Copyright CIB software GmbH') && content.includes('apache.org/licenses/LICENSE-2.0')
         expect(hasLicenseHeader).toBe(true, `File ${f} is missing license header`)
-      })
+      }
     })
 
     it('all .js files have license headers', () => {
       const jsFiles = findComponents(srcDir, '.js')
       expect(jsFiles.length).toBeGreaterThan(0)
-      jsFiles.forEach(f => {
+      for (const f of jsFiles) {
         const content = fs.readFileSync(f, 'utf-8')
         const hasLicenseHeader = content.includes('Copyright CIB software GmbH') && content.includes('apache.org/licenses/LICENSE-2.0')
         expect(hasLicenseHeader).toBe(true, `File ${f} is missing license header`)
-      })
+      }
     })
   })
 })
