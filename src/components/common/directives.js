@@ -17,7 +17,7 @@
 
 const HoverStyle = {
     inserted: function(el, binding) {
-        var prevStyle = {}
+        let prevStyle = {}
         el.addEventListener('mouseover', function() {
             if (binding.value.styles) {
                 prevStyle = JSON.parse(JSON.stringify(el.style))

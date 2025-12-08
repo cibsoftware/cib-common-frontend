@@ -40,8 +40,8 @@ export default {
   data: function() { return {	tasks: [], busy: false } },
   methods: {
     addTask: function(name, cancel, promiseFactory) {
-      var self = this
-      var length = this.tasks.push({ name: name, cancel: cancel, state: null, progress: 0 })
+      let self = this
+      const length = this.tasks.push({ name: name, cancel: cancel, state: null, progress: 0 })
       this.$refs.pop.$emit('open')
       if (promiseFactory) {
         return promiseFactory(handleProgress, fakeProgress).then(function(res) {
@@ -61,8 +61,8 @@ export default {
           self.$refs.pop.$emit('close')
       }
       function fakeProgress() {
-        var seq = [45, 66, 79, 87, 92, 95, 98, 99] // reverse fibonacci complement
-        var i = 0
+        const seq = [45, 66, 79, 87, 92, 95, 98, 99] // reverse fibonacci complement
+        let i = 0
         repeatWithTimeout(1000, function() {
           update(seq[i++])
           return i < seq.length && self.tasks[length-1].state == null
@@ -72,7 +72,7 @@ export default {
     triggerDownload: function(blob, filename) {
       if (navigator.msSaveBlob) navigator.msSaveBlob(blob, filename) // Internet Explorer
       else {
-        var hiddenFile = document.createElement('a')
+        let hiddenFile = document.createElement('a')
         hiddenFile.href = window.URL.createObjectURL(blob)
         hiddenFile.download = filename
         document.body.appendChild(hiddenFile)
