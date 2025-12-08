@@ -18,9 +18,10 @@ import { describe, it, expect, vi } from 'vitest'
 import * as library from '../library.js'
 import { findComponents } from './utils.js'
 
-// Node.js modules for file system and path
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
+
+const languages = ['de', 'en', 'es', 'it', 'ru', 'ua']
 
 /**
  * Component name to its import path
@@ -64,7 +65,7 @@ describe('library.js', () => {
     })
 
     it('valid name of .vue components', () => {
-      vueFiles.forEach(file => {
+      for (const file of vueFiles) {
         const fileName = path.basename(file, '.vue')
 
         // Check that the file name is a valid JavaScript identifier
@@ -84,7 +85,7 @@ describe('library.js', () => {
           const namePattern = new RegExp(`name:\\s*['"]${fileName}['"]`)
           expect(content).toMatch(namePattern, `File ${file} does not contain name: '${fileName}'`)
         }
-      })
+      }
     })
   })
 
@@ -100,14 +101,7 @@ describe('library.js', () => {
       }
     }
 
-    it.each([
-      'en',
-      'de',
-      'es',
-      'it',
-      'ru',
-      'ua'
-    ])('should have translations for supported language: %s', (lang) => {
+    it.each(languages)('should have translations for supported language: %s', (lang) => {
       library.mergeLocaleMessage(mockI18n, lang)
       expect(mockI18n.global.mergeLocaleMessage).toHaveBeenCalledWith(lang, expect.any(Object))
     })
@@ -117,21 +111,10 @@ describe('library.js', () => {
       expect(mockI18n.global.mergeLocaleMessage).toHaveBeenCalledWith('fr', expect.any(Object))
     })
 
-    it('should have translation content for all supported languages', async () => {
-      const translations = {
-        en: await import('@/assets/translations_en.json'),
-        de: await import('@/assets/translations_de.json'),
-        es: await import('@/assets/translations_es.json'),
-        it: await import('@/assets/translations_it.json'),
-        ru: await import('@/assets/translations_ru.json'),
-        ua: await import('@/assets/translations_ua.json')
-      }
-
-      Object.entries(translations).forEach(([lang, translation]) => {
-        expect(lang).toBeDefined()
-        expect(translation.default).toBeDefined()
-        expect(Object.keys(translation.default).length).toBeGreaterThan(0)
-      })
+    it.each(languages)('should have translation content for %s language', async (lang) => {
+      const translation = await import(`@/assets/translations_${lang}.json`)
+      expect(translation.default).toBeDefined()
+      expect(Object.keys(translation.default).length).toBeGreaterThan(0)
     })
   })
 
