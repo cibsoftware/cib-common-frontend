@@ -100,12 +100,12 @@ import {
 import '@cib/bootstrap-components/dist/style.css'
 
 // Import translation files
-import en from '@/assets/translations_en.json'
-import de from '@/assets/translations_de.json'
-import es from '@/assets/translations_es.json'
-import it from '@/assets/translations_it.json'
-import ru from '@/assets/translations_ru.json'
-import ua from '@/assets/translations_ua.json'
+import en from './assets/translations_en.json'
+import de from './assets/translations_de.json'
+import es from './assets/translations_es.json'
+import it from './assets/translations_it.json'
+import ru from './assets/translations_ru.json'
+import ua from './assets/translations_ua.json'
 
 const mergeLocaleMessage = function(i18n, lang) {
   bootstrapMergeLocaleMessage(i18n, lang)

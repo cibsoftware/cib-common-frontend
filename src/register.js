@@ -31,7 +31,7 @@ import SidebarsFlow from './components/common/SidebarsFlow.vue';
 import SuccessAlert from './components/common/SuccessAlert.vue';
 import TranslationsDownload from './components/common/TranslationsDownload.vue';
 import TaskPopper from './components/common/TaskPopper.vue';
-import { HoverStyle } from '@/components/common/directives.js'
+import { HoverStyle } from './components/common/directives.js'
 
 const registerComponents = function(app) {
 
