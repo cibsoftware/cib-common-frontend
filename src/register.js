@@ -37,6 +37,8 @@ const registerComponents = function(app) {
 
   bootstrapRegisterComponents(app)
 
+  // Register global dialogs
+  app.component('error-dialog', ErrorDialog)
   app.component('confirm-dialog', ConfirmDialog)
 
   // ALIASES
