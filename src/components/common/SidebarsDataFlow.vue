@@ -76,8 +76,8 @@ export default {
   computed: {
     middleClasses: function() {
       if (this.leftOpen) {
-        var middleSize = this.leftSize.map((val, i) => { return 12 - val - (this.rightOpen ? this.rightSize[i] : 0) })
-        var offset = this.leftSize.map((size, i) => { return 'offset-' + this.breakpoints[i] + size }).join(' ')
+        const middleSize = this.leftSize.map((val, i) => { return 12 - val - (this.rightOpen ? this.rightSize[i] : 0) })
+        const offset = this.leftSize.map((size, i) => { return 'offset-' + this.breakpoints[i] + size }).join(' ')
         return this.colClasses(middleSize) + ' ' + offset
       } else if (this.rightOpen) return this.colClasses(this.rightSize.map(val => { return 12 - val }))
       else return 'col-12'

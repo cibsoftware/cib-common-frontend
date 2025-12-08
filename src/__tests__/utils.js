@@ -24,7 +24,7 @@ export function findComponents(dir, extension = '.vue') {
   list.forEach(file => {
     const filePath = path.join(dir, file)
     const stat = fs.statSync(filePath)
-    if (stat && stat.isDirectory()) {
+    if (stat?.isDirectory()) {
       results = results.concat(findComponents(filePath, extension))
     } else if (file.endsWith(extension)) {
       results.push(filePath)

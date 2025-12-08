@@ -22,6 +22,18 @@ import { findComponents } from './utils.js'
 import fs from 'fs'
 import path from 'path'
 
+/**
+ * Component name to its import path
+ */
+function nameToImportPath(vueFiles, name) {
+  const pathName = vueFiles.find(f => path.basename(f, '.vue') === name)
+  if (!pathName) {
+    throw new Error(`Component ${name} not found in vueFiles`)
+  }
+  const relPathName = pathName.substring(pathName.indexOf('src/') + 4).replace(/\\/g, '/')
+  return './' + relPathName
+}
+
 describe('library.js', () => {
   // eslint-disable-next-line no-undef
   const srcDir = path.resolve(__dirname, '../../src/components')
@@ -41,14 +53,14 @@ describe('library.js', () => {
       const exportedKeys = Object.keys(library)
 
       // Check that each component is exported
-      const missing = vueComponentNames.filter(
+      const missingImports = vueComponentNames.filter(
         name => !exportedKeys.includes(name)
-      )
+      ).map((name) => {
+        const relPathName = nameToImportPath(vueFiles, name)
+        return `import ${name} from '${relPathName}'`
+      })
 
-      expect(missing.map((name) => {
-        const pathName = vueFiles.find(f => path.basename(f, '.vue') === name).substring(srcDir.length)
-        return `import ${name} from '@${pathName}'`
-      }).join('\n')).toEqual('')
+      expect(missingImports.join('\n')).toEqual('')
     })
 
     it('valid name of .vue components', () => {
