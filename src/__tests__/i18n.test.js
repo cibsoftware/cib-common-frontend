@@ -43,9 +43,13 @@ function haveSameProperties(objBase, objTest, path) {
     const keysBase = Object.keys(objBase)
     const keysTest = Object.keys(objTest)
 
+    // Sort keys for comparison
+    keysBase.sort()
+    keysTest.sort()
+
     // Compare key sets
-    const keysBaseSorted = keysBase.toSorted().join(',')
-    const keysTestSorted = keysTest.toSorted().join(',')
+    const keysBaseSorted = keysBase.join(',')
+    const keysTestSorted = keysTest.join(',')
     expect(keysBaseSorted, `Missing/extra key for "${path}" path`).toBe(keysTestSorted)
 
     // Recurse into nested objects
