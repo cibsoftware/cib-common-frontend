@@ -110,27 +110,9 @@ import ua from '@/assets/translations_ua.json'
 const mergeLocaleMessage = function(i18n, lang) {
   bootstrapMergeLocaleMessage(i18n, lang)
 
-  if (lang === 'en') {
-    i18n.global.mergeLocaleMessage(lang, en)
-  }
-  else if (lang === 'de') {
-    i18n.global.mergeLocaleMessage(lang, de)
-  }
-  else if (lang === 'es') {
-    i18n.global.mergeLocaleMessage(lang, es)
-  }
-  else if (lang === 'it') {
-    i18n.global.mergeLocaleMessage(lang, it)
-  }
-  else if (lang === 'ru') {
-    i18n.global.mergeLocaleMessage(lang, ru)
-  }
-  else if (lang === 'ua') {
-    i18n.global.mergeLocaleMessage(lang, ua)
-  }
-  else {
-    i18n.global.mergeLocaleMessage(lang, en)
-  }
+  const translations = { en, de, es, it, ru, ua }
+  const messages = translations[lang] || en
+  i18n.global.mergeLocaleMessage(lang, messages)
 }
 
 // Export individual components and directives
