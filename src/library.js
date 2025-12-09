@@ -32,72 +32,39 @@ import SidebarsFlow from './components/common/SidebarsFlow.vue';
 import SuccessAlert from './components/common/SuccessAlert.vue';
 import TranslationsDownload from './components/common/TranslationsDownload.vue';
 import TaskPopper from './components/common/TaskPopper.vue';
-
-// Import directives
 import { HoverStyle } from './components/common/directives.js';
+
+import registerComponents from './register.js'
 
 // Import all components from @cib/bootstrap-components
 import {
-  BAlert,
-  BAvatar,
-  BBadge,
-  BButton,
-  BButtonClose,
-  BCalendar,
-  BCard,
-  BCardBody,
-  BCardText,
-  BCol,
-  BCollapse,
-  BDPopover,
-  BDdItemBtn,
-  BDropdown,
-  BDropdownDivider,
-  BDropdownForm,
-  BDropdownGroup,
-  BDropdownItem,
-  BDropdownItemButton,
-  BForm,
-  BFormCheckbox,
-  BFormDatepicker,
-  BFormFile,
-  BFormGroup,
-  BFormInput,
-  BFormRow,
-  BFormSelect,
-  BFormSelectOption,
-  BFormTag,
-  BFormTextarea,
-  BFormTimepicker,
-  BInputGroup,
-  BInputGroupAppend,
-  BInputGroupPrepend,
-  BInputGroupText,
-  BLink,
-  BListGroup,
-  BListGroupItem,
-  BModal,
-  BNavItemDropdown,
-  BNavbar,
-  BNavbarBrand,
-  BNavbarNav,
-  BNavbarToggle,
-  BOverlay,
-  BPagination,
-  BPopover,
-  BProgress,
-  BProgressBar,
-  BSpinner,
-  BTab,
-  BTabs,
-  BToggle,
-  BWaitingBox,
-  registerComponents,
-  mergeLocaleMessage
+  mergeLocaleMessage as bootstrapMergeLocaleMessage
 } from '@cib/bootstrap-components';
+
+// Import bootstrap-components styles
+import '@cib/bootstrap-components/dist/style.css'
+
+// Import translation files
+import en from './assets/translations_en.json'
+import de from './assets/translations_de.json'
+import es from './assets/translations_es.json'
+import it from './assets/translations_it.json'
+import ru from './assets/translations_ru.json'
+import ua from './assets/translations_ua.json'
+
+const mergeLocaleMessage = function(i18n, lang) {
+  bootstrapMergeLocaleMessage(i18n, lang)
+
+  const translations = { en, de, es, it, ru, ua }
+  const messages = translations[lang] || en
+  i18n.global.mergeLocaleMessage(lang, messages)
+}
 
 // Export individual components and directives
 export {
+  registerComponents,
+  mergeLocaleMessage,
+
   // Local components
   CIBForm,
   CIBHeaderFlow,
@@ -116,94 +83,6 @@ export {
   TranslationsDownload,
   HoverStyle,
   TaskPopper,
-  
-  // bootstrap-components
-  BAlert,
-  BAvatar,
-  BBadge,
-  BButton,
-  BButtonClose,
-  BCalendar,
-  BCard,
-  BCardBody,
-  BCardText,
-  BCol,
-  BCollapse,
-  BDPopover,
-  BDdItemBtn,
-  BDropdown,
-  BDropdownDivider,
-  BDropdownForm,
-  BDropdownGroup,
-  BDropdownItem,
-  BDropdownItemButton,
-  BForm,
-  BFormCheckbox,
-  BFormDatepicker,
-  BFormFile,
-  BFormGroup,
-  BFormInput,
-  BFormRow,
-  BFormSelect,
-  BFormSelectOption,
-  BFormTag,
-  BFormTextarea,
-  BFormTimepicker,
-  BInputGroup,
-  BInputGroupAppend,
-  BInputGroupPrepend,
-  BInputGroupText,
-  BLink,
-  BListGroup,
-  BListGroupItem,
-  BModal,
-  BNavItemDropdown,
-  BNavbar,
-  BNavbarBrand,
-  BNavbarNav,
-  BNavbarToggle,
-  BOverlay,
-  BPagination,
-  BPopover,
-  BProgress,
-  BProgressBar,
-  BSpinner,
-  BTab,
-  BTabs,
-  BToggle,
-  BWaitingBox,
-  registerComponents,
-  mergeLocaleMessage
-};
-
-// Plugin installation function
-export function install(app) {
-  // Register all bootstrap-components first
-  registerComponents(app);
-  
-  // Register local components
-  app.component('CIBForm', CIBForm);
-  app.component('CIBHeaderFlow', CIBHeaderFlow);
-  app.component('ConfirmDialog', ConfirmDialog);
-  app.component('ContentBlock', ContentBlock);
-  app.component('CopyableActionButton', CopyableActionButton);
-  app.component('ErrorDialog', ErrorDialog);
-  app.component('FlowTable', FlowTable);
-  app.component('GenericTabs', GenericTabs);
-  app.component('HighlightedText', HighlightedText);
-  app.component('PagedScrollableContent', PagedScrollableContent);
-  app.component('PaginationControl', PaginationControl);
-  app.component('SidebarsDataFlow', SidebarsDataFlow);
-  app.component('SidebarsFlow', SidebarsFlow);
-  app.component('SuccessAlert', SuccessAlert);
-  app.component('TaskPopper', TaskPopper);
-  app.component('TranslationsDownload', TranslationsDownload);
-  
-  // Register local directives
-  app.directive('hover-style', HoverStyle);
 }
 
-// Auto-install when used via CDN
-if (typeof window !== 'undefined' && window.Vue) {
-  window.Vue.use({ install });
-}
+export * from '@cib/bootstrap-components'

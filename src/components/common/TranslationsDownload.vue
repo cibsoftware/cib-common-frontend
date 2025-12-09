@@ -21,10 +21,10 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
-import { i18n } from '@/i18n.js'
+import { onMounted, getCurrentInstance } from 'vue'
 
 onMounted(() => {
+  const i18n = getCurrentInstance().appContext.config.globalProperties.$i18n
   const currentLocale = i18n.global.locale.value || i18n.global.locale
   const messages = i18n.global.getLocaleMessage(currentLocale)
 

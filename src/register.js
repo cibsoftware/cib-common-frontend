@@ -14,20 +14,56 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import { registerComponents } from '@cib/bootstrap-components'
-import { HoverStyle } from '@/components/common/directives.js'
-import ConfirmDialog from '@/components/common/ConfirmDialog.vue'
+import { registerComponents as bootstrapRegisterComponents } from '@cib/bootstrap-components'
+import CIBForm from './components/common/CIBForm.vue';
+import CIBHeaderFlow from './components/common/CIBHeaderFlow.vue';
+import ConfirmDialog from './components/common/ConfirmDialog.vue';
+import ContentBlock from './components/common/ContentBlock.vue';
+import CopyableActionButton from './components/common/CopyableActionButton.vue';
+import ErrorDialog from './components/common/ErrorDialog.vue';
+import FlowTable from './components/common/FlowTable.vue';
+import GenericTabs from './components/common/GenericTabs.vue';
+import HighlightedText from './components/common/HighlightedText.vue';
+import PagedScrollableContent from './components/common/PagedScrollableContent.vue';
+import PaginationControl from './components/common/PaginationControl.vue';
+import SidebarsDataFlow from './components/common/SidebarsDataFlow.vue';
+import SidebarsFlow from './components/common/SidebarsFlow.vue';
+import SuccessAlert from './components/common/SuccessAlert.vue';
+import TranslationsDownload from './components/common/TranslationsDownload.vue';
+import TaskPopper from './components/common/TaskPopper.vue';
+import { HoverStyle } from './components/common/directives.js'
 
-const registerOwnComponents = function(app) {
+const registerComponents = function(app) {
 
-  registerComponents(app)
+  bootstrapRegisterComponents(app)
 
+  // Register global dialogs
+  app.component('error-dialog', ErrorDialog)
   app.component('confirm-dialog', ConfirmDialog)
 
   // ALIASES
   app.component('b-dd', app.component('b-dropdown'))
   app.component('b-dd-form', app.component('b-dropdown-form'))
 
+  // Register local components
+  app.component('CIBForm', CIBForm)
+  app.component('CIBHeaderFlow', CIBHeaderFlow)
+  app.component('ConfirmDialog', ConfirmDialog)
+  app.component('ContentBlock', ContentBlock)
+  app.component('CopyableActionButton', CopyableActionButton)
+  app.component('ErrorDialog', ErrorDialog)
+  app.component('FlowTable', FlowTable)
+  app.component('GenericTabs', GenericTabs)
+  app.component('HighlightedText', HighlightedText)
+  app.component('PagedScrollableContent', PagedScrollableContent)
+  app.component('PaginationControl', PaginationControl)
+  app.component('SidebarsDataFlow', SidebarsDataFlow)
+  app.component('SidebarsFlow', SidebarsFlow)
+  app.component('SuccessAlert', SuccessAlert)
+  app.component('TaskPopper', TaskPopper)
+  app.component('TranslationsDownload', TranslationsDownload)
+  
+  // Register local directives
   app.directive('hover-style', HoverStyle)
   app.directive('block-truncate', {
       inserted: function(el) {
@@ -47,4 +83,4 @@ const registerOwnComponents = function(app) {
 
 }
 
-export default registerOwnComponents
+export default registerComponents

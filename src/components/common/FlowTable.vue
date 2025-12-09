@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import { createSortComparator } from '@/utils/sort.js'
+import { createSortComparator } from '../../utils/sort.js'
 
 export default {
   name: 'FlowTable',
