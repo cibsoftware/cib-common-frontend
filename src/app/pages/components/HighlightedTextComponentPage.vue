@@ -115,8 +115,17 @@
 
       <!-- Examples Tab -->
       <div v-show="activeTab === 'examples'">
-        <div class="text-center py-5 text-muted">
-          Component examples will be added here
+        <div class="py-5 text-muted">
+          <p>One span</p>
+          <highlighted-text text="This is a simple example." keyword="simple"></highlighted-text>
+          <p class="mt-4">Multiple spans</p>
+          <highlighted-text text="Highlighting multiple instances of the word highlight in this highlight example." keyword="highlight"></highlighted-text>
+          <p class="mt-4">Case insensitive</p>
+          <highlighted-text text="This HighlightedText component highlights keywords." keyword="highlight"></highlighted-text>
+          <p class="mt-4">No keyword match</p>
+          <highlighted-text text="This text does not contain the search term." keyword="absent"></highlighted-text>
+          <p class="mt-4">Empty keyword</p>
+          <highlighted-text text="This text remains unchanged when the keyword is empty." keyword=""></highlighted-text>
         </div>
       </div>
     </div>

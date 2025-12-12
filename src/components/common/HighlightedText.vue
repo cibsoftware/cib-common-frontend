@@ -40,7 +40,7 @@ export default {
       // Create a regular expression to match the keyword
       const regex = new RegExp(`(${this.keyword})`, 'gi')
       // Replace the matched keyword with a span element
-      return this.text.replace(regex, '<span class="mark p-0">$1</span>')
+      return this.text.replace(regex, '<mark class="p-0">$1</mark>')
     }
   }
 }
