@@ -37,6 +37,8 @@ export default mergeConfig(
 
           // Exlclude app files
           'src/app/**',
+          'src/main.js',
+          'src/__tests__/**',
 
           // Test and config files
           'cypress/e2e/**', // Exclude Cypress tests
@@ -44,7 +46,11 @@ export default mergeConfig(
           'vite.config.js', // Exclude Vite config
           'vitest.config.js', // Exclude this config file itself
           '**/*.config.js', // Exclude all config files
+
+          // Exclude Vite internals
+          '**/\0**', // Exclude Vite virtual modules
         ],
+        excludeNodeModules: true,
       },
     },
   }),
