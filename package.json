@@ -30,7 +30,7 @@
     "publish:dev": "npm run build && npm version prerelease --preid=dev --force && npm publish --registry https://nexus.cib.de/repository/npm-hosted-dev/ --tag dev"
   },
   "dependencies": {
-    "@cib/bootstrap-components": "1.0.2-dev.1",
+    "@cib/bootstrap-components": "1.0.2",
     "@mdi/font": "7.4.47",
     "@popperjs/core": "2.11.8",
     "bootstrap": "5.3.8",
