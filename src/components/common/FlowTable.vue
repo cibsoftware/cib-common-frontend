@@ -17,13 +17,12 @@
 
 -->
 <template>
-  <table class="table" :class="computedTableClass" :style="computedTableStyles" role="table" ref="table">
-    <thead :class="theadClass" role="rowgroup">
-    <tr :class="[ !nativeLayout && 'd-flex' ]" role="row">
+  <table class="table" :class="computedTableClass" :style="computedTableStyles" ref="table">
+    <thead :class="theadClass">
+    <tr :class="[ !nativeLayout && 'd-flex' ]">
       <th v-for="(field, index) in computedColumns"
           :key="index"
           :class="[field.class, field.thClass, getSortClass(field)]"
-          role="columnheader"
           :aria-sort="getAriaSort(field)"
           @click.stop="handleColumnClick(field)"
           :style="{
@@ -80,14 +79,13 @@
       </th>
     </tr>
     </thead>
-    <tbody role="rowgroup">
+    <tbody>
     <tr v-for="(item, index) in sortedItems" :key="index"
         :class="[getRowClass(item), nativeLayout ? '' : 'd-flex']"
         @mouseenter="$emit('mouseenter', item)"
         @mouseleave="$emit('mouseleave', item)"
         @click.stop="onRowClick(item)"
-        style="cursor: pointer"
-        role="row">
+        style="cursor: pointer">
       <td v-for="(field, colIndex) in computedColumns"
           :key="field.key"
           :class="[
@@ -95,8 +93,7 @@
             field.tdClass,
             nativeLayout ? '' : 'd-flex align-items-center'
           ]"
-          :style="isResizableFlex ? { width: columnWidths[colIndex] } : {}"
-          role="cell">
+          :style="isResizableFlex ? { width: columnWidths[colIndex] } : {}">
         <slot :name="'cell(' + field.key +')'" :item="item" :value="item[field.key]" :index="index">
           {{ item[field.key] }}
         </slot>

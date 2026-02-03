@@ -18,10 +18,10 @@
 -->
 <template>
     <SidebarsDataFlow
-      v-model:left-open="showLeftSidebar" 
+      v-model:left-open="showLeftSidebar"
       :left-size="[12, 6, 4, 4, 3]"
       left-caption="Components Library">
-      
+
       <template #left>
         <!-- Components Navigation -->
         <div class="components-navbar h-100 d-flex flex-column">
