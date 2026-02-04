@@ -77,7 +77,7 @@
           <div class="col-12">
             <h4>Purpose</h4>
             <p>FlowTable is a comprehensive data table component that provides advanced functionality for displaying tabular data with features like sorting, column selection, resizing, and custom cell rendering.</p>
-            
+
             <h4>Use Cases</h4>
             <ul>
               <li>Display large datasets with pagination</li>
@@ -86,12 +86,12 @@
               <li>Resize table columns dynamically</li>
               <li>Custom cell rendering with slots</li>
             </ul>
-            
+
             <h4>Integration</h4>
             <div class="bg-light p-3 rounded">
               <h6>Import Statement:</h6>
               <pre><code>import FlowTable from './components/common/FlowTable.vue'</code></pre>
-              
+
               <h6 class="mt-3">Component Registration:</h6>
               <pre><code>components: {
   FlowTable
@@ -178,6 +178,24 @@
           <p class="text-muted">{{ example.description }}</p>
           <div class="bg-light p-3 rounded">
             <pre><code>{{ example.code }}</code></pre>
+            <template v-if="index === 1">
+              <div class="w-100">
+                <FlowTable
+                  class="w-100"
+                  :resizable="true"
+                  :nativeLayout="true"
+                  :columns="['name', 'email', 'actions']"
+                  :column-definitions="[
+                    { key: 'name', label: 'Full Name', sortable: true },
+                    { key: 'email', label: 'Email Address with long caption', sortable: true },
+                    { key: 'phone', label: 'Phone Number' },
+                    { key: 'actions', label: 'Action', disableToggle: true, sortable: false }
+                  ]"
+                  :column-selection="true"
+                  :items="users"
+                />
+              </div>
+            </template>
           </div>
         </div>
       </div>

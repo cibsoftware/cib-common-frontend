@@ -17,30 +17,53 @@
 
 -->
 <template>
-  <table class="table" :class="computedTableClass" :style="computedTableStyles" role="table" ref="table">
-    <thead :class="theadClass" role="rowgroup">
-    <tr :class="[ !nativeLayout && 'd-flex' ]" role="row">
+  <table class="table" :class="computedTableClass" :style="computedTableStyles" ref="table">
+    <thead :class="theadClass">
+    <tr :class="[ !nativeLayout && 'd-flex' ]">
       <th v-for="(field, index) in computedColumns"
           :key="index"
           :class="[field.class, field.thClass, getSortClass(field)]"
-          role="columnheader"
           :aria-sort="getAriaSort(field)"
           @click.stop="handleColumnClick(field)"
           :style="{
             ...(resizable ? { width: columnWidths[index], position: 'relative' } : {}),
-            cursor: field.sortable !== false ? 'pointer' : 'default'
+            cursor: field.sortable ? 'pointer' : 'default'
           }">
 
-        <div v-if="field.label || field.sortable !== false"
+        <div v-if="field.label || field.sortable"
              class="d-flex align-items-center"
              :class="getHeaderJustifyClass(field)">
-          <div v-if="field.label">
+          <div v-if="field.label" class="d-flex w-100 position-relative">
             <slot :name="'header(' + field.key +')'" :field="field">
-              {{ $t(prefix + field.label) }}
+              <span>{{ $t(prefix + field.label) }}</span>
             </slot>
+
+            <span v-if="computedColumnSelection && index === computedColumns.length - 1" class="position-absolute end-0 top-0">
+              <button class="btn btn-link btn-sm p-0 m-0 d-flex align-items-center justify-content-center" type="button" data-bs-toggle="dropdown"
+                      aria-expanded="false" aria-haspopup="true" :aria-label="$t('table.selectColumns')"
+                      :title="$t('table.selectColumns')"
+                      style="width: 24px; height: 24px; position: relative;">
+                  <small class="visually-hidden">{{ $t('table.selectColumns') }}</small>
+                  <small class="mdi mdi-24px mdi-table-plus"></small>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end" role="menu">
+                <template v-for="column in toggleableColumns" :key="column.key">
+                  <li v-if="column.groupSeparator === true"
+                      class="dropdown-divider">
+                  </li>
+                  <li :title="$t('table.toggleColumn', { column: $t(column.label) })" class="dropdown-item" role="menuitem">
+                    <input type="checkbox" :id="column.key" tabindex="-1"
+                      :checked="computedColumns.some(col => col.key === column.key)"
+                      :aria-label="$t('table.toggleColumn', { column: $t(column.label) })"
+                      v-on:change="toggleColumn(column)">
+                    <label :for="column.key" class="ps-2">{{ $t(column.label) }}</label>
+                  </li>
+                </template>
+              </ul>
+            </span>
           </div>
 
-          <div v-if="field.sortable !== false" class="sort-icon">
+          <div v-if="field.sortable" class="sort-icon">
               <span v-if="isSortedByField(field)">
                 <i v-if="isSortedByFieldAscending(field)" class="mdi mdi-chevron-up"></i>
                 <i v-else class="mdi mdi-chevron-down"></i>
@@ -49,59 +72,36 @@
           </div>
         </div>
 
-        <span :style="columnSelectionStyle" v-if="computedColumnSelection && index === computedColumns.length - 1">
-            &nbsp;
-            <button class="btn btn-link btn-sm p-0" type="button" data-bs-toggle="dropdown"
-                    aria-expanded="false" aria-haspopup="true" :aria-label="$t('table.selectColumns')"
-                    :title="$t('table.selectColumns')">
-                <span class="visually-hidden">{{ $t('table.selectColumns') }}</span>
-                <span class="mdi mdi-24px mdi-table-plus align-middle"></span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end" role="menu">
-              <template v-for="column in toggleableColumns" :key="column.key">
-                <li v-if="column.groupSeparator === true"
-                    class="dropdown-divider">
-                </li>
-                <li @click="toggleColumn(column)"
-                    :title="$t('table.toggleColumn', { column: $t(column.label) })" class="dropdown-item" role="menuitem">
-                  <input readonly type="checkbox" :id="column.key" tabindex="-1" :checked="computedColumns.some(col => col.key === column.key)"
-                         :aria-label="$t('table.toggleColumn', { column: $t(column.label) })">
-                  <label :for="column.key" class="ps-2" @click.stop=";">{{ $t(column.label) }}</label>
-                </li>
-              </template>
-            </ul>
-          </span>
-
-        <span
-            v-if="resizable && index !== computedColumns.length - 1"
-            :style="resizeHandleStyle"
-            @mousedown.stop="startResize(index, $event)">
-          </span>
+        <button v-if="resizable && index !== computedColumns.length - 1"
+          class="btn btn-link p-0 m-0 position-absolute top-0 h-100 bg-transparent resize-column"
+          type="button"
+          :aria-label="$t('table.resizeColumn')"
+          tabindex="-1"
+          @mousedown.stop="startResize(index, $event)">
+        </button>
       </th>
     </tr>
     </thead>
-    <tbody role="rowgroup">
-    <tr v-for="(item, index) in sortedItems" :key="index"
+    <tbody>
+      <tr v-for="(item, index) in sortedItems" :key="index"
         :class="[getRowClass(item), nativeLayout ? '' : 'd-flex']"
-        @mouseenter="$emit('mouseenter', item)"
-        @mouseleave="$emit('mouseleave', item)"
+        @mouseenter="$emit('mouseenter', item)" @focusin=";"
+        @mouseleave="$emit('mouseleave', item)" @focusout=";"
         @click.stop="onRowClick(item)"
-        style="cursor: pointer"
-        role="row">
-      <td v-for="(field, colIndex) in computedColumns"
+        style="cursor: pointer">
+        <td v-for="(field, colIndex) in computedColumns"
           :key="field.key"
           :class="[
             field.class,
             field.tdClass,
             nativeLayout ? '' : 'd-flex align-items-center'
           ]"
-          :style="isResizableFlex ? { width: columnWidths[colIndex] } : {}"
-          role="cell">
-        <slot :name="'cell(' + field.key +')'" :item="item" :value="item[field.key]" :index="index">
-          {{ item[field.key] }}
-        </slot>
-      </td>
-    </tr>
+          :style="isResizableFlex ? { width: columnWidths[colIndex] } : {}">
+          <slot :name="'cell(' + field.key +')'" :item="item" :value="item[field.key]" :index="index">
+            {{ item[field.key] }}
+          </slot>
+        </td>
+      </tr>
     </tbody>
   </table>
 </template>
@@ -236,29 +236,6 @@ export default {
           createSortComparator(item => item[this.sortKey], this.sortOrder === -1)
       )
     },
-    columnSelectionStyle() {
-      return {
-        position: 'absolute',
-        top: '0',
-        right: '0',
-        width: '30px',
-        height: '100%',
-        display: 'flex',
-        zIndex: '10',
-      }
-    },
-    resizeHandleStyle() {
-      return {
-        position: 'absolute',
-        top: '0',
-        right: '-7px',
-        width: '12px',
-        height: '100%',
-        cursor: 'col-resize',
-        zIndex: '10',
-        background: 'transparent'
-      }
-    },
     isResizableFlex() {
       return this.resizable && !this.nativeLayout
     }
@@ -346,9 +323,9 @@ export default {
       if (!this.resizable) return
 
       const startX = event.clientX
-      const startWidth = parseFloat(this.columnWidths[index])
+      const startWidth = Number.parseFloat(this.columnWidths[index])
       const adjacentIndex = index === this.columnWidths.length - 1 ? index - 1 : index + 1
-      const adjacentStartWidth = parseFloat(this.columnWidths[adjacentIndex])
+      const adjacentStartWidth = Number.parseFloat(this.columnWidths[adjacentIndex])
       const minWidth = 75
       this.resizing = true
 
@@ -458,7 +435,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="css" scoped>
 :deep(.dropdown-menu) {
   position: fixed !important;
   max-height: 400px;
@@ -474,5 +451,12 @@ export default {
     padding: 0;
     clip: rect(0 0 0 0);
     overflow: hidden;
+}
+
+.resize-column {
+  right: -7px;
+  width: 12px;
+  cursor: col-resize;
+  z-index: 10;
 }
 </style>

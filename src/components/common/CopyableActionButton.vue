@@ -23,17 +23,17 @@
       v-bind="bindAttrs"
       :class="containerClasses"
       :title="title || displayValue"
-      @mouseenter="isHovered = true"
-      @mouseleave="isHovered = false"
+      @mouseenter="isHovered = true" @focusin="isHovered = true"
+      @mouseleave="isHovered = false" @focusout="isHovered = false"
       @click="handleClick"
   >
     {{ displayValue }}
-    <span
+    <button
         v-if="isHovered"
         @click.stop.prevent="handleCopy"
         :title="$t('commons.copyValue') + ':\n' + valueToCopy"
-        class="mdi mdi-18px mdi-content-copy position-absolute end-0 text-secondary lh-sm"
-    ></span>
+        class="btn btn-link p-0 m-0 bg-transparent mdi mdi-18px mdi-content-copy position-absolute end-0 text-secondary lh-sm"
+    ></button>
   </component>
 </template>
 

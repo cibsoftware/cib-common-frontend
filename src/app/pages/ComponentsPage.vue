@@ -18,10 +18,10 @@
 -->
 <template>
     <SidebarsDataFlow
-      v-model:left-open="showLeftSidebar" 
+      v-model:left-open="showLeftSidebar"
       :left-size="[12, 6, 4, 4, 3]"
       left-caption="Components Library">
-      
+
       <template #left>
         <!-- Components Navigation -->
         <div class="components-navbar h-100 d-flex flex-column">
@@ -33,20 +33,21 @@
                 type="text"
                 v-model.trim="componentSearch"
                 placeholder="Search components..."
+                aria-label="Search components"
                 class="form-control form-control-sm"
                 style="height: 32px;"
               />
             </div>
           </div>
-          
+
           <!-- Scrollable Components List -->
           <div class="navbar-content flex-grow-1 overflow-auto">
             <div class="p-3">
               <div class="list-group">
-                <router-link 
-                  v-for="component in filteredComponents" 
+                <router-link
+                  v-for="component in filteredComponents"
                   :key="component.name"
-                  :to="'/components/' + getComponentRoute(component.name)" 
+                  :to="'/components/' + getComponentRoute(component.name)"
                   class="list-group-item list-group-item-action text-decoration-none"
                   active-class="active">
                   <div class="d-flex w-100 justify-content-between">
@@ -77,7 +78,7 @@
 
         </div>
       </template>
-      
+
       <!-- Main content area with router-view -->
       <div class="d-flex flex-column bg-light p-3 h-100">
         <div class="d-flex flex-column container-fluid bg-white border rounded shadow-sm h-100 py-3">
@@ -106,7 +107,7 @@ export default {
   components: {
     SidebarsDataFlow
   },
-  data: function() { 
+  data: function() {
     return {
       showLeftSidebar: true,
       componentSearch: '',
@@ -258,12 +259,12 @@ export default {
       ]
     }
   },
-  computed: { 
+  computed: {
     filteredComponents: function() {
       if (!this.componentSearch.trim()) {
         return this.components
       }
-      
+
       const search = this.componentSearch.toLowerCase()
       return this.components.filter(component => {
         return component.name.toLowerCase().includes(search) ||

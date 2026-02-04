@@ -72,12 +72,12 @@
     <!-- Tab Content -->
     <div class="tab-content overflow-auto" style="max-height: calc(95vh - 300px);">
       <!-- Overview Tab -->
-      <div v-show="activeTab === 'overview'" class="tab-pane">
+      <div v-show="activeTab === 'overview'" class="tab-pane" :class="{ 'active show': activeTab === 'overview' }">
         <div class="row">
           <div class="col-12">
             <h4>Purpose</h4>
             <p>CopyableActionButton combines clickable actions with copy-to-clipboard functionality, supporting both navigation and data copying in a single component. It dynamically renders as a button, router-link, or anchor tag based on configuration, and shows a copy icon on hover.</p>
-            
+
             <h4>Use Cases</h4>
             <ul>
               <li>Copy values to clipboard on hover with visual feedback</li>
@@ -87,12 +87,12 @@
               <li>Open external links in new tabs while providing copy functionality</li>
               <li>Non-clickable text elements with copy-to-clipboard feature</li>
             </ul>
-            
+
             <h4>Integration</h4>
             <div class="bg-light p-3 rounded">
               <h6>Import Statement:</h6>
               <pre><code>import CopyableActionButton from './components/common/CopyableActionButton.vue'</code></pre>
-              
+
               <h6 class="mt-3">Component Registration:</h6>
               <pre><code>components: {
   CopyableActionButton
@@ -103,7 +103,7 @@
       </div>
 
       <!-- Props Tab -->
-      <div v-show="activeTab === 'props'" class="tab-pane">
+      <div v-show="activeTab === 'props'" class="tab-pane" :class="{ 'active show': activeTab === 'props' }">
         <div class="table-responsive">
           <table class="table table-striped">
             <thead>
@@ -164,7 +164,7 @@
       </div>
 
       <!-- Events Tab -->
-      <div v-show="activeTab === 'events'" class="tab-pane">
+      <div v-show="activeTab === 'events'" class="tab-pane" :class="{ 'active show': activeTab === 'events' }">
         <div class="table-responsive">
           <table class="table table-striped">
             <thead>
@@ -191,14 +191,17 @@
       </div>
 
       <!-- Slots Tab -->
-      <div v-show="activeTab === 'slots'" class="tab-pane">
+      <div v-show="activeTab === 'slots'" class="tab-pane" :class="{ 'active show': activeTab === 'slots' }">
         <div class="text-center py-5 text-muted">
           This component does not define any slots. Content is provided via the displayValue prop.
         </div>
       </div>
 
       <!-- Examples Tab -->
-      <div v-show="activeTab === 'examples'" class="tab-pane">
+      <div v-show="activeTab === 'examples'" class="tab-pane" :class="{ 'active show': activeTab === 'examples' }">
+        <div class="alert alert-success" v-if="copyMessage">
+          {{ copyMessage }}
+        </div>
         <div class="mb-4">
           <h5>Basic Copyable Button</h5>
           <p class="text-muted">Simple clickable button with copy-to-clipboard functionality</p>
@@ -209,6 +212,16 @@
   @copy="handleCopy"
 /&gt;</code></pre>
           </div>
+          <div class="mt-3">
+            <h6>Live Example:</h6>
+            <div class="border p-0 rounded" style="width: 150px;">
+              <CopyableActionButton
+                display-value="john.doe@example.com"
+                @click="handleEmailClick"
+                @copy="handleCopy"
+              />
+            </div>
+          </div>
         </div>
 
         <div class="mb-4">
@@ -216,11 +229,22 @@
           <p class="text-muted">Router link that also allows copying of the displayed value</p>
           <div class="bg-light p-3 rounded">
             <pre><code>&lt;CopyableActionButton
-  display-value="View User Profile"
-  copy-value="https://example.com/users/123"
-  :to="{ name: 'UserProfile', params: { id: 123 } }"
+  display-value="TaskListComponent view"
+  copy-value="TaskListComponent copy value"
+  :to="{ name: 'TaskListComponent' }"
   @copy="handleCopy"
 /&gt;</code></pre>
+          </div>
+          <div class="mt-3">
+            <h6>Live Example:</h6>
+            <div class="border p-0 rounded" style="width: 150px;">
+              <CopyableActionButton
+                display-value="TaskListComponent view"
+                copy-value="TaskListComponent copy value"
+                :to="{ name: 'TaskListComponent' }"
+                @copy="handleCopy"
+              />
+            </div>
           </div>
         </div>
 
@@ -236,6 +260,18 @@
   @copy="handleCopy"
 /&gt;</code></pre>
           </div>
+          <div class="mt-3">
+            <h6>Live Example:</h6>
+            <div class="border p-0 rounded" style="width: 150px;">
+              <CopyableActionButton
+                display-value="Visit Documentation"
+                copy-value="https://docs.example.com/api/v1"
+                to="https://docs.example.com/api/v1"
+                :new-tab="true"
+                @copy="handleCopy"
+              />
+            </div>
+          </div>
         </div>
 
         <div class="mb-4">
@@ -250,6 +286,18 @@
   @copy="handleCopy"
 /&gt;</code></pre>
           </div>
+          <div class="mt-3">
+            <h6>Live Example:</h6>
+            <div class="border p-0 rounded" style="width: 150px;">
+              <CopyableActionButton
+                display-value="ABCDE"
+                copy-value="12345"
+                :clickable="false"
+                title="API Key (click to copy full key)"
+                @copy="handleCopy"
+              />
+            </div>
+          </div>
         </div>
 
         <div class="mb-4">
@@ -262,6 +310,17 @@
   :clickable="false"
   @copy="handleCopy"
 /&gt;</code></pre>
+          </div>
+          <div class="mt-3">
+            <h6>Live Example:</h6>
+            <div class="border p-0 rounded" style="width: 150px;">
+              <CopyableActionButton
+                display-value="Very Long File Name That Gets..."
+                copy-value="Very Long File Name That Gets Truncated In The Display But Can Be Copied In Full.pdf"
+                :clickable="false"
+                @copy="handleCopy"
+              />
+            </div>
           </div>
         </div>
 
@@ -279,7 +338,7 @@
         @copy="copyToClipboard"
       /&gt;
     &lt;/div&gt;
-    
+
     &lt;div class="mb-3"&gt;
       &lt;label&gt;Profile URL:&lt;/label&gt;
       &lt;CopyableActionButton
@@ -289,7 +348,7 @@
         @copy="copyToClipboard"
       /&gt;
     &lt;/div&gt;
-    
+
     &lt;div class="alert alert-success" v-if="copyMessage"&gt;
       &#123;&#123; copyMessage &#125;&#125;
     &lt;/div&gt;
@@ -331,11 +390,42 @@ export default {
 </template>
 
 <script>
+import CopyableActionButton from '../../../components/common/CopyableActionButton.vue'
+
 export default {
   name: 'CopyableActionButtonComponentPage',
+  components: {
+    CopyableActionButton
+  },
   data() {
     return {
-      activeTab: 'overview'
+      activeTab: 'overview',
+      user: {
+        id: 123,
+        email: 'john.doe@example.com'
+      },
+      copyMessage: '',
+      profileUrl: 'https://myapp.com/profiles/123'
+    }
+  },
+  methods: {
+    handleEmailClick() {
+      alert('Email clicked: ' + this.user.email)
+    },
+    handleCopy(value) {
+      this.copyMessage = `Copied: ${value}`
+      setTimeout(() => {
+        this.copyMessage = ''
+      }, 2000)
+    },
+    copyToClipboard(value) {
+      this.copyMessage = `Copied: ${value}`
+      setTimeout(() => {
+        this.copyMessage = ''
+      }, 2000)
+    },
+    openEmailClient() {
+      window.open(`mailto:${this.user.email}`)
     }
   }
 }
