@@ -148,7 +148,7 @@ export default {
         } else if (this.$router && this.routerTo) {
           const resolved = this.$router.resolve(this.routerTo)
           // Get the base URL from current location, ensuring we include the context path
-          const baseUrl = window.location.origin + window.location.pathname.split('#')[0]
+          const baseUrl = globalThis.location.origin + globalThis.location.pathname.split('#')[0]
           href = baseUrl + '#' + resolved.path + (resolved.query ? '?' + new URLSearchParams(resolved.query).toString() : '')
         }
         return {
