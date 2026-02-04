@@ -33,8 +33,8 @@ export { default as SuccessAlert } from './components/common/SuccessAlert.vue';
 export { default as TranslationsDownload } from './components/common/TranslationsDownload.vue';
 export { default as TaskPopper } from './components/common/TaskPopper.vue';
 
-import { HoverStyle } from './components/common/directives.js';
-import registerComponents from './register.js'
+export { HoverStyle } from './components/common/directives.js';
+export { default as registerComponents } from './register.js'
 
 // Import all components from @cib/bootstrap-components
 import {
@@ -52,21 +52,12 @@ import it from './assets/translations_it.json'
 import ru from './assets/translations_ru.json'
 import ua from './assets/translations_ua.json'
 
-const mergeLocaleMessage = function(i18n, lang) {
+export function mergeLocaleMessage(i18n, lang) {
   bootstrapMergeLocaleMessage(i18n, lang)
 
   const translations = { en, de, es, it, ru, ua }
   const messages = translations[lang] || en
   i18n.global.mergeLocaleMessage(lang, messages)
-}
-
-// Export individual components and directives
-export {
-  registerComponents,
-  mergeLocaleMessage,
-
-  // Local components
-  HoverStyle,
 }
 
 export * from '@cib/bootstrap-components'
