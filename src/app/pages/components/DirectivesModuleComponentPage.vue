@@ -18,56 +18,14 @@
 -->
 <template>
   <div class="component-page h-100">
-    <!-- Component Documentation Header -->
-    <div class="container border-bottom border-light pb-3 mb-4">
-      <div class="row align-items-center">
-        <div class="col-12">
-          <div class="d-flex align-items-center justify-content-between">
-            <div>
-              <h2 class="mb-1 d-flex align-items-center">
-                <span class="mdi mdi-24px me-2 mdi-code-braces"></span>
-                DirectivesModule
-                <small class="badge ms-2 bg-info">JavaScript Module</small>
-              </h2>
-              <p class="text-muted mb-0">Custom Vue directives for common functionality</p>
-            </div>
-            <div class="text-end">
-              <small class="text-muted d-block">Category: Utilities</small>
-              <small class="text-muted d-block">File: directives.js</small>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Navigation Tabs -->
-    <ul class="nav nav-tabs mb-4">
-      <li class="nav-item">
-        <a class="nav-link" :class="{ active: activeTab === 'overview' }" @click="activeTab = 'overview'" href="#">
-          <span class="mdi mdi-information-outline me-1"></span>Overview
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" :class="{ active: activeTab === 'directives' }" @click="activeTab = 'directives'" href="#">
-          <span class="mdi mdi-code-braces me-1"></span>Directives
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" :class="{ active: activeTab === 'parameters' }" @click="activeTab = 'parameters'" href="#">
-          <span class="mdi mdi-cog-outline me-1"></span>Parameters
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" :class="{ active: activeTab === 'usage' }" @click="activeTab = 'usage'" href="#">
-          <span class="mdi mdi-information-variant me-1"></span>Usage
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" :class="{ active: activeTab === 'examples' }" @click="activeTab = 'examples'" href="#">
-          <span class="mdi mdi-code-tags me-1"></span>Examples
-        </a>
-      </li>
-    </ul>
+    <ComponentPageHeader
+      v-model:active-tab="activeTab"
+      icon="mdi-code-braces"
+      component-name="DirectivesModule"
+      description="Collection of custom Vue directives"
+      category="Directives"
+      file-name="directives.js"
+    />
 
     <!-- Tab Content -->
     <div class="tab-content overflow-auto" style="max-height: calc(95vh - 300px);">
@@ -390,8 +348,13 @@ export default {
 </template>
 
 <script>
+import ComponentPageHeader from '../ComponentPageHeader.vue'
+
 export default {
   name: 'DirectivesModuleComponentPage',
+  components: {
+    ComponentPageHeader
+  },
   data() {
     return {
       activeTab: 'overview'
@@ -401,23 +364,6 @@ export default {
 </script>
 
 <style scoped>
-/* Tab styling */
-.nav-tabs .nav-link {
-  border: 1px solid transparent;
-  border-radius: 0.375rem 0.375rem 0 0;
-}
-
-.nav-tabs .nav-link.active {
-  background-color: #fff;
-  border-color: #dee2e6 #dee2e6 #fff;
-  color: #0d6efd;
-}
-
-.nav-tabs .nav-link:hover {
-  border-color: #e9ecef #e9ecef #dee2e6;
-  isolation: isolate;
-}
-
 /* Code styling */
 pre {
   background-color: #f8f9fa;

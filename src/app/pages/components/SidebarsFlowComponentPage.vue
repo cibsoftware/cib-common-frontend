@@ -18,56 +18,14 @@
 -->
 <template>
   <div class="component-page h-100">
-    <!-- Component Documentation Header -->
-    <div class="container border-bottom border-light pb-3 mb-4">
-      <div class="row align-items-center">
-        <div class="col-12">
-          <div class="d-flex align-items-center justify-content-between">
-            <div>
-              <h2 class="mb-1 d-flex align-items-center">
-                <span class="mdi mdi-24px me-2 mdi-page-layout-sidebar-right"></span>
-                SidebarsFlow
-                <small class="badge ms-2 bg-success">Vue Component</small>
-              </h2>
-              <p class="text-muted mb-0">Alternative sidebar layout component</p>
-            </div>
-            <div class="text-end">
-              <small class="text-muted d-block">Category: Layout</small>
-              <small class="text-muted d-block">File: SidebarsFlow.vue</small>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Navigation Tabs -->
-    <ul class="nav nav-tabs mb-4">
-      <li class="nav-item">
-        <a class="nav-link" :class="{ active: activeTab === 'overview' }" @click="activeTab = 'overview'" href="#">
-          <span class="mdi mdi-information-outline me-1"></span>Overview
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" :class="{ active: activeTab === 'props' }" @click="activeTab = 'props'" href="#">
-          <span class="mdi mdi-cog-outline me-1"></span>Props
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" :class="{ active: activeTab === 'events' }" @click="activeTab = 'events'" href="#">
-          <span class="mdi mdi-lightning-bolt-outline me-1"></span>Events
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" :class="{ active: activeTab === 'slots' }" @click="activeTab = 'slots'" href="#">
-          <span class="mdi mdi-puzzle-outline me-1"></span>Slots
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" :class="{ active: activeTab === 'examples' }" @click="activeTab = 'examples'" href="#">
-          <span class="mdi mdi-code-tags me-1"></span>Examples
-        </a>
-      </li>
-    </ul>
+    <ComponentPageHeader
+      v-model:active-tab="activeTab"
+      icon="mdi-page-layout-sidebar-right"
+      component-name="SidebarsFlow"
+      description="Layout with configurable sidebars"
+      category="Layout"
+      file-name="SidebarsFlow.vue"
+    />
 
     <!-- Tab Content -->
     <div class="tab-content">
@@ -124,8 +82,13 @@
 </template>
 
 <script>
+import ComponentPageHeader from '../ComponentPageHeader.vue'
+
 export default {
   name: 'SidebarsFlowComponentPage',
+  components: {
+    ComponentPageHeader
+  },
   data() {
     return {
       activeTab: 'overview'
@@ -135,23 +98,6 @@ export default {
 </script>
 
 <style scoped>
-/* Tab styling */
-.nav-tabs .nav-link {
-  border: 1px solid transparent;
-  border-radius: 0.375rem 0.375rem 0 0;
-}
-
-.nav-tabs .nav-link.active {
-  background-color: #fff;
-  border-color: #dee2e6 #dee2e6 #fff;
-  color: #0d6efd;
-}
-
-.nav-tabs .nav-link:hover {
-  border-color: #e9ecef #e9ecef #dee2e6;
-  isolation: isolate;
-}
-
 /* Code styling */
 pre {
   background-color: #f8f9fa;
