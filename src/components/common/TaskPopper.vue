@@ -49,7 +49,7 @@ export default {
           return res
         }, function(err) {
           update(false)
-          return Promise.reject(err)
+          throw err
         })
       } else return update
 
