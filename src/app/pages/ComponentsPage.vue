@@ -325,8 +325,8 @@ export default {
 }
 
 .list-group-item.active .badge {
-  background-color: rgba(255, 255, 255, 0.2) !important;
-  color: white;
+  background-color: rgba(255, 255, 255, 0.3) !important;
+  color: #212529 !important;
 }
 
 /* Tab styling */
