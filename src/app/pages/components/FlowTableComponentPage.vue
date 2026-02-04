@@ -297,7 +297,7 @@ pre {
 }
 
 code {
-  color: #d63384;
+  color: #b02a67;
   background-color: #f8f9fa;
   padding: 0.2rem 0.4rem;
   border-radius: 0.25rem;

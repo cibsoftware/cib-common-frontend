@@ -78,7 +78,7 @@
           <div class="col-12">
             <h4>Purpose</h4>
             <p>CIBHeaderFlow provides a consistent application header with language selection, user account menu, and navigation elements following CIB design standards. It includes responsive navigation with Bootstrap components and integrates with vue-i18n for internationalization.</p>
-            
+
             <h4>Use Cases</h4>
             <ul>
               <li>Application header with branding and navigation</li>
@@ -87,17 +87,17 @@
               <li>Help documentation and support links</li>
               <li>Responsive navigation for desktop and mobile devices</li>
             </ul>
-            
+
             <h4>Integration</h4>
             <div class="bg-light p-3 rounded">
               <h6>Import Statement:</h6>
               <pre><code>import CIBHeaderFlow from './components/common/CIBHeaderFlow.vue'</code></pre>
-              
+
               <h6 class="mt-3">Component Registration:</h6>
               <pre><code>components: {
   CIBHeaderFlow
 }</code></pre>
-              
+
               <h6 class="mt-3">Required Injection:</h6>
               <pre><code>// Parent component must provide currentLanguage function
 provide() {
@@ -203,8 +203,8 @@ provide() {
           <h5>Basic Header with Language Switcher</h5>
           <p class="text-muted">Simple header with branding and language selection</p>
           <div class="bg-light p-3 rounded">
-            <pre><code>&lt;CIBHeaderFlow 
-  :languages="['en', 'de', 'es']" 
+            <pre><code>&lt;CIBHeaderFlow
+  :languages="['en', 'de', 'es']"
   @logout="handleLogout"&gt;
   &lt;div class="d-flex align-items-center"&gt;
     &lt;img src="/logo.svg" alt="Logo" height="38"&gt;
@@ -218,7 +218,7 @@ provide() {
           <h5>Header with User Account and Help</h5>
           <p class="text-muted">Complete header with user account, help items, and custom menu items</p>
           <div class="bg-light p-3 rounded">
-            <pre><code>&lt;CIBHeaderFlow 
+            <pre><code>&lt;CIBHeaderFlow
   :languages="['en', 'de', 'es']"
   :user="{ displayName: 'John Doe' }"
   @logout="handleLogout"&gt;
@@ -227,7 +227,7 @@ provide() {
     &lt;img src="/logo.svg" alt="Logo" height="38"&gt;
     &lt;span class="ms-2"&gt;My Application&lt;/span&gt;
   &lt;/div&gt;
-  
+
   &lt;!-- Help menu items --&gt;
   &lt;template #helpItems&gt;
     &lt;b-dropdown-item href="/help"&gt;Documentation&lt;/b-dropdown-item&gt;
@@ -235,7 +235,7 @@ provide() {
     &lt;b-dropdown-divider&gt;&lt;/b-dropdown-divider&gt;
     &lt;b-dropdown-item href="/about"&gt;About&lt;/b-dropdown-item&gt;
   &lt;/template&gt;
-  
+
   &lt;!-- User menu items --&gt;
   &lt;template #userItems&gt;
     &lt;b-dropdown-item href="/profile"&gt;Profile&lt;/b-dropdown-item&gt;
@@ -323,7 +323,7 @@ pre {
 }
 
 code {
-  color: #d63384;
+  color: #b02a67;
   background-color: #f8f9fa;
   padding: 0.2rem 0.4rem;
   border-radius: 0.25rem;

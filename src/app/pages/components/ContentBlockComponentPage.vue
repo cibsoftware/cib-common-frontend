@@ -77,7 +77,7 @@
           <div class="col-12">
             <h4>Purpose</h4>
             <p>ContentBlock provides a standardized content container with consistent padding, borders, and spacing for creating uniform layouts. It features a card-like design with Bootstrap styling, including a header section with title and optional info popover, an actions area, and a main content area.</p>
-            
+
             <h4>Use Cases</h4>
             <ul>
               <li>Wrap content sections with consistent styling</li>
@@ -86,12 +86,12 @@
               <li>Apply standard CIB content styling across the application</li>
               <li>Display content with optional help information and action buttons</li>
             </ul>
-            
+
             <h4>Integration</h4>
             <div class="bg-light p-3 rounded">
               <h6>Import Statement:</h6>
               <pre><code>import ContentBlock from './components/common/ContentBlock.vue'</code></pre>
-              
+
               <h6 class="mt-3">Component Registration:</h6>
               <pre><code>components: {
   ContentBlock
@@ -187,8 +187,8 @@
           <h5>Content Block with Info Popover</h5>
           <p class="text-muted">Content block with title and informational popover</p>
           <div class="bg-light p-3 rounded">
-            <pre><code>&lt;ContentBlock 
-  title="Settings" 
+            <pre><code>&lt;ContentBlock
+  title="Settings"
   info="Configure your application preferences and options here"&gt;
   &lt;div class="col-12"&gt;
     &lt;form&gt;
@@ -210,8 +210,8 @@
           <h5>Content Block with Actions</h5>
           <p class="text-muted">Content block with title, info, and action buttons in the header</p>
           <div class="bg-light p-3 rounded">
-            <pre><code>&lt;ContentBlock 
-  title="Data Table" 
+            <pre><code>&lt;ContentBlock
+  title="Data Table"
   info="This table shows all available records with pagination"&gt;
   &lt;template #actions&gt;
     &lt;button class="btn btn-primary btn-sm me-2"&gt;
@@ -221,7 +221,7 @@
       &lt;i class="mdi mdi-refresh"&gt;&lt;/i&gt; Refresh
     &lt;/button&gt;
   &lt;/template&gt;
-  
+
   &lt;div class="col-12"&gt;
     &lt;table class="table table-striped"&gt;
       &lt;thead&gt;
@@ -269,7 +269,7 @@
       &lt;/div&gt;
     &lt;/ContentBlock&gt;
   &lt;/div&gt;
-  
+
   &lt;div class="col-md-6"&gt;
     &lt;ContentBlock title="Recent Activity"&gt;
       &lt;div class="col-12"&gt;
@@ -329,7 +329,7 @@ pre {
 }
 
 code {
-  color: #d63384;
+  color: #b02a67;
   background-color: #f8f9fa;
   padding: 0.2rem 0.4rem;
   border-radius: 0.25rem;

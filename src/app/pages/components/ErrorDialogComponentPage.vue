@@ -77,7 +77,7 @@
           <div class="col-12">
             <h4>Purpose</h4>
             <p>ErrorDialog provides a consistent way to display error messages to users, supporting both simple string messages and structured error objects with internationalization.</p>
-            
+
             <h4>Use Cases</h4>
             <ul>
               <li>Display API error responses</li>
@@ -85,12 +85,12 @@
               <li>Present system error messages</li>
               <li>Display localized error messages using i18n</li>
             </ul>
-            
+
             <h4>Integration</h4>
             <div class="bg-light p-3 rounded">
               <h6>Import Statement:</h6>
               <pre><code>import ErrorDialog from './components/common/ErrorDialog.vue'</code></pre>
-              
+
               <h6 class="mt-3">Component Registration:</h6>
               <pre><code>components: {
   ErrorDialog
@@ -187,7 +187,7 @@ pre {
 }
 
 code {
-  color: #d63384;
+  color: #b02a67;
   background-color: #f8f9fa;
   padding: 0.2rem 0.4rem;
   border-radius: 0.25rem;
