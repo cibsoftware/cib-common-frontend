@@ -193,7 +193,7 @@ export default {
     },
 
     changeItemsPerPage(newItemsPerPage) {
-      const itemsPerPage = parseInt(newItemsPerPage)
+      const itemsPerPage = Number.parseInt(newItemsPerPage)
       // Calculate what the new current page should be to show similar items
       const currentFirstItem = (this.currentPage - 1) * this.itemsPerPage + 1
       const newPage = Math.ceil(currentFirstItem / itemsPerPage)
