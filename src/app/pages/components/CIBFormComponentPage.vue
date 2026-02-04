@@ -77,7 +77,7 @@
           <div class="col-12">
             <h4>Purpose</h4>
             <p>CIBForm is a form wrapper component that provides HTML5 validation functionality with Bootstrap styling. It handles form submission, validation state management, and provides visual feedback for form validation errors.</p>
-            
+
             <h4>Use Cases</h4>
             <ul>
               <li>Create forms with HTML5 validation</li>
@@ -86,12 +86,12 @@
               <li>Provide consistent form behavior across the application</li>
               <li>Manage validation state and user feedback</li>
             </ul>
-            
+
             <h4>Integration</h4>
             <div class="bg-light p-3 rounded">
               <h6>Import Statement:</h6>
               <pre><code>import CIBForm from './components/common/CIBForm.vue'</code></pre>
-              
+
               <h6 class="mt-3">Component Registration:</h6>
               <pre><code>components: {
   CIBForm
@@ -166,10 +166,10 @@
             <pre><code>&lt;CIBForm @submitted="handleSubmit" @fail="handleValidationError"&gt;
   &lt;div class="mb-3"&gt;
     &lt;label for="email" class="form-label"&gt;Email&lt;/label&gt;
-    &lt;input 
-      type="email" 
-      class="form-control" 
-      id="email" 
+    &lt;input
+      type="email"
+      class="form-control"
+      id="email"
       v-model="email"
       required
     &gt;
@@ -177,13 +177,13 @@
       Please provide a valid email address.
     &lt;/div&gt;
   &lt;/div&gt;
-  
+
   &lt;div class="mb-3"&gt;
     &lt;label for="name" class="form-label"&gt;Name&lt;/label&gt;
-    &lt;input 
-      type="text" 
-      class="form-control" 
-      id="name" 
+    &lt;input
+      type="text"
+      class="form-control"
+      id="name"
       v-model="name"
       required
       minlength="2"
@@ -192,7 +192,7 @@
       Name must be at least 2 characters long.
     &lt;/div&gt;
   &lt;/div&gt;
-  
+
   &lt;button type="submit" class="btn btn-primary"&gt;Submit&lt;/button&gt;
 &lt;/CIBForm&gt;</code></pre>
           </div>
@@ -206,10 +206,10 @@
   &lt;template #default="{ showValidation }"&gt;
     &lt;div class="mb-3"&gt;
       &lt;label for="username" class="form-label"&gt;Username&lt;/label&gt;
-      &lt;input 
-        type="text" 
-        class="form-control" 
-        id="username" 
+      &lt;input
+        type="text"
+        class="form-control"
+        id="username"
         v-model="username"
         required
         pattern="[a-zA-Z0-9_]{3,}"
@@ -218,11 +218,11 @@
         Username must be at least 3 characters (letters, numbers, underscore only).
       &lt;/div&gt;
     &lt;/div&gt;
-    
+
     &lt;div v-if="showValidation" class="alert alert-warning"&gt;
       Please correct the errors above before submitting.
     &lt;/div&gt;
-    
+
     &lt;button type="submit" class="btn btn-primary"&gt;
       &#123;&#123; showValidation ? 'Fix Errors' : 'Submit' &#125;&#125;
     &lt;/button&gt;
@@ -242,9 +242,9 @@
         &lt;div class="col-md-6"&gt;
           &lt;div class="mb-3"&gt;
             &lt;label for="firstName" class="form-label"&gt;First Name&lt;/label&gt;
-            &lt;input 
-              type="text" 
-              class="form-control" 
+            &lt;input
+              type="text"
+              class="form-control"
               id="firstName"
               v-model="form.firstName"
               required
@@ -255,9 +255,9 @@
         &lt;div class="col-md-6"&gt;
           &lt;div class="mb-3"&gt;
             &lt;label for="lastName" class="form-label"&gt;Last Name&lt;/label&gt;
-            &lt;input 
-              type="text" 
-              class="form-control" 
+            &lt;input
+              type="text"
+              class="form-control"
               id="lastName"
               v-model="form.lastName"
               required
@@ -266,10 +266,10 @@
           &lt;/div&gt;
         &lt;/div&gt;
       &lt;/div&gt;
-      
+
       &lt;button type="submit" class="btn btn-success"&gt;Save User&lt;/button&gt;
     &lt;/CIBForm&gt;
-    
+
     &lt;div v-if="message" class="alert alert-info mt-3"&gt;
       &#123;&#123; message &#125;&#125;
     &lt;/div&gt;
@@ -347,7 +347,7 @@ pre {
 }
 
 code {
-  color: #d63384;
+  color: #b02a67;
   background-color: #f8f9fa;
   padding: 0.2rem 0.4rem;
   border-radius: 0.25rem;

@@ -77,7 +77,7 @@
           <div class="col-12">
             <h4>Purpose</h4>
             <p>SidebarsDataFlow provides a flexible layout with collapsible left and right sidebars, perfect for creating dashboard-style interfaces with navigation panels and detail views.</p>
-            
+
             <h4>Use Cases</h4>
             <ul>
               <li>Dashboard layouts with navigation sidebar</li>
@@ -85,12 +85,12 @@
               <li>Three-column layouts with optional sidebars</li>
               <li>Responsive layouts that hide sidebars on mobile</li>
             </ul>
-            
+
             <h4>Integration</h4>
             <div class="bg-light p-3 rounded">
               <h6>Import Statement:</h6>
               <pre><code>import SidebarsDataFlow from './components/common/SidebarsDataFlow.vue'</code></pre>
-              
+
               <h6 class="mt-3">Component Registration:</h6>
               <pre><code>components: {
   SidebarsDataFlow
@@ -218,7 +218,7 @@ export default {
   <template #left>
     <!-- Navigation content -->
   </template>
-  
+
   <!-- Main content -->
   <div>Main content area</div>
 </SidebarsDataFlow>`
@@ -259,7 +259,7 @@ pre {
 }
 
 code {
-  color: #d63384;
+  color: #b02a67;
   background-color: #f8f9fa;
   padding: 0.2rem 0.4rem;
   border-radius: 0.25rem;

@@ -77,17 +77,17 @@
           <div class="col-12">
             <h4>Purpose</h4>
             <p>Custom Vue directives that provide reusable DOM manipulation and interaction functionality across components. These directives enhance HTML elements with additional behavior for styling, text truncation, and user interactions.</p>
-            
+
             <h4>Available Directives</h4>
             <ul>
               <li><strong>v-hover-style</strong> - Applies styles and CSS classes on mouseover/mouseleave events</li>
               <li><strong>v-block-truncate</strong> - Automatically truncates text content that overflows its container</li>
             </ul>
-            
+
             <h4>Registration</h4>
             <div class="bg-light p-3 rounded">
               <p>These directives are automatically registered when using the application. They're available globally in all Vue components.</p>
-              
+
               <h6>Manual Registration (if needed):</h6>
               <pre><code>import { HoverStyle } from './components/common/directives.js'
 
@@ -223,7 +223,7 @@ app.directive('block-truncate', {
           <p>Automatically truncate text that overflows its container:</p>
           <div class="bg-light p-3 rounded">
             <pre><code>&lt;!-- Static truncation (on element insertion) --&gt;
-&lt;div 
+&lt;div
   style="width: 200px; height: 40px; overflow: hidden;"
   v-block-truncate
 &gt;
@@ -231,7 +231,7 @@ app.directive('block-truncate', {
 &lt;/div&gt;
 
 &lt;!-- Dynamic truncation (with reactive text) --&gt;
-&lt;div 
+&lt;div
   style="width: 150px; height: 60px; overflow: hidden;"
   v-block-truncate="{ text: dynamicText }"
 &gt;
@@ -259,7 +259,7 @@ export default {
             <pre><code>&lt;template&gt;
   &lt;div class="container"&gt;
     &lt;!-- Button with hover effects --&gt;
-    &lt;button 
+    &lt;button
       class="btn btn-outline-primary me-2"
       v-hover-style="{
         styles: {
@@ -271,10 +271,10 @@ export default {
       }"&gt;
       Hover for Animation
     &lt;/button&gt;
-    
+
     &lt;!-- Card with hover classes --&gt;
-    &lt;div 
-      class="card d-inline-block" 
+    &lt;div
+      class="card d-inline-block"
       style="width: 200px;"
       v-hover-style="{
         classes: ['shadow-lg', 'border-info']
@@ -298,7 +298,7 @@ export default {
     &lt;!-- Fixed width container with auto-truncation --&gt;
     &lt;div class="mb-3"&gt;
       &lt;h6&gt;Product Description:&lt;/h6&gt;
-      &lt;div 
+      &lt;div
         class="border p-2"
         style="width: 300px; height: 50px; overflow: hidden;"
         v-block-truncate
@@ -306,12 +306,12 @@ export default {
         This is a very long product description that contains many details about the features, benefits, and specifications that might not fit in the allocated space but will be automatically truncated.
       &lt;/div&gt;
     &lt;/div&gt;
-    
+
     &lt;!-- Dynamic content truncation --&gt;
     &lt;div class="mb-3"&gt;
       &lt;h6&gt;Dynamic Content:&lt;/h6&gt;
       &lt;textarea v-model="userText" class="form-control mb-2"&gt;&lt;/textarea&gt;
-      &lt;div 
+      &lt;div
         class="border p-2 bg-light"
         style="width: 250px; height: 40px; overflow: hidden;"
         v-block-truncate="{ text: userText }"
@@ -339,12 +339,12 @@ export default {
           <div class="bg-light p-3 rounded">
             <pre><code>&lt;template&gt;
   &lt;div class="row"&gt;
-    &lt;div 
-      v-for="item in items" 
-      :key="item.id" 
+    &lt;div
+      v-for="item in items"
+      :key="item.id"
       class="col-md-4 mb-3"
     &gt;
-      &lt;div 
+      &lt;div
         class="card h-100"
         v-hover-style="{
           styles: { transform: 'scale(1.02)' },
@@ -353,7 +353,7 @@ export default {
       &gt;
         &lt;div class="card-body"&gt;
           &lt;h6 class="card-title"&gt;&#123;&#123; item.title &#125;&#125;&lt;/h6&gt;
-          &lt;div 
+          &lt;div
             class="card-text"
             style="height: 60px; overflow: hidden;"
             v-block-truncate="{ text: item.description }"
@@ -429,7 +429,7 @@ pre {
 }
 
 code {
-  color: #d63384;
+  color: #b02a67;
   background-color: #f8f9fa;
   padding: 0.2rem 0.4rem;
   border-radius: 0.25rem;
