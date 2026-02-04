@@ -88,17 +88,17 @@ export default {
   },
   methods: { // https://help.optimizely.com/Build_Campaigns_and_Experiments/Use_screen_measurements_to_design_for_responsive_breakpoints
     showMain: function(keepRight) {
-      if (window.innerWidth < 576) { // sm breakpoint
+      if (globalThis.innerWidth < 576) { // sm breakpoint
         this.$emit('update:leftOpen', false)
         this.$emit('update:rightOpen', false)
-      } else if (window.innerWidth < 768) { // md breakpoint
+      } else if (globalThis.innerWidth < 768) { // md breakpoint
         if (this.rightOpen && keepRight) this.$emit('update:leftOpen', false)
         else if (this.leftOpen && !keepRight) this.$emit('update:rightOpen', false)
       }
     },
     showRight: function() {
       this.$emit('update:rightOpen', true)
-      if (window.innerWidth < 768) this.$emit('update:leftOpen', false)
+      if (globalThis.innerWidth < 768) this.$emit('update:leftOpen', false)
     },
     colClasses: function(sizes) {
       return sizes.map((size, i) => {

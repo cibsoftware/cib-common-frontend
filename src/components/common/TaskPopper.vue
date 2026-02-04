@@ -73,13 +73,13 @@ export default {
       if (navigator.msSaveBlob) navigator.msSaveBlob(blob, filename) // Internet Explorer
       else {
         let hiddenFile = document.createElement('a')
-        hiddenFile.href = window.URL.createObjectURL(blob)
+        hiddenFile.href = globalThis.URL.createObjectURL(blob)
         hiddenFile.download = filename
         document.body.appendChild(hiddenFile)
         hiddenFile.click()
         setTimeout(function() { // Workaround for Edge
           document.body.removeChild(hiddenFile)
-          window.URL.revokeObjectURL(hiddenFile.href)
+          globalThis.URL.revokeObjectURL(hiddenFile.href)
         }, 500)
       }
     }

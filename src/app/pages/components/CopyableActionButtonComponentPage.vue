@@ -377,7 +377,7 @@ export default {
       })
     },
     openEmailClient() {
-      window.open(`mailto:${this.user.email}`)
+      globalThis.open(`mailto:${this.user.email}`)
     }
   }
 }
@@ -425,7 +425,7 @@ export default {
       }, 2000)
     },
     openEmailClient() {
-      window.open(`mailto:${this.user.email}`)
+      globalThis.open(`mailto:${this.user.email}`)
     }
   }
 }

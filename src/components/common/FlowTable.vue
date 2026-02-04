@@ -389,7 +389,7 @@ export default {
     },
     onRowClick(item) {
       // Only emit click if no text is selected
-      if (window.getSelection && window.getSelection().toString()) return
+      if (globalThis.getSelection && globalThis.getSelection().toString()) return
       this.$emit('click', item)
     },
   },
@@ -412,7 +412,7 @@ export default {
       this.$nextTick(() => {
         const ths = this.$refs.table.querySelectorAll('th');
         this.columnWidths = Array.from(ths).map(th => `${th.offsetWidth}px`)
-        if (window.ResizeObserver) {
+        if (globalThis.ResizeObserver) {
           this.resizeObserver = new ResizeObserver(() => {
             this.restartColumnWidths()
           })
@@ -423,10 +423,10 @@ export default {
         }
       })
     }
-    window.addEventListener("resize", this.restartColumnWidths)
+    globalThis.addEventListener("resize", this.restartColumnWidths)
   },
   beforeUnmount() {
-    window.removeEventListener("resize", this.restartColumnWidths)
+    globalThis.removeEventListener("resize", this.restartColumnWidths)
     if (this.resizeObserver) {
       this.resizeObserver.disconnect()
       this.resizeObserver = null
