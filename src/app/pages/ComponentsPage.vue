@@ -302,7 +302,7 @@ export default {
         'TranslationsDownload': 'translations-download',
         'directives': 'directives'
       }
-      return routeMap[componentName] || componentName.toLowerCase().replace(/([A-Z])/g, '-$1').replace(/^-/, '')
+      return routeMap[componentName]
     },
     clearSearch: function() {
       this.componentSearch = ''
