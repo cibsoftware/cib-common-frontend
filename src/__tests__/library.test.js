@@ -30,7 +30,7 @@ function nameToImportPath(vueFiles, name) {
   if (!pathName) {
     throw new Error(`Component ${name} not found in vueFiles`)
   }
-  const relPathName = pathName.substring(pathName.indexOf('src/') + 4).replace(/\\/g, '/')
+  const relPathName = pathName.substring(pathName.indexOf('src/') + 4).replaceAll('\\', '/')
   return './' + relPathName
 }
 
