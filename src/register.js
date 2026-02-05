@@ -31,7 +31,6 @@ import SidebarsFlow from './components/common/SidebarsFlow.vue';
 import SuccessAlert from './components/common/SuccessAlert.vue';
 import TranslationsDownload from './components/common/TranslationsDownload.vue';
 import TaskPopper from './components/common/TaskPopper.vue';
-import { HoverStyle } from './components/common/directives.js'
 
 const registerComponents = function(app) {
 
@@ -62,9 +61,8 @@ const registerComponents = function(app) {
   app.component('SuccessAlert', SuccessAlert)
   app.component('TaskPopper', TaskPopper)
   app.component('TranslationsDownload', TranslationsDownload)
-  
+
   // Register local directives
-  app.directive('hover-style', HoverStyle)
   app.directive('block-truncate', {
       inserted: function(el) {
       // Check if the block's height is smaller than the text content height. If so
