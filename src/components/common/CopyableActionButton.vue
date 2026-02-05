@@ -114,7 +114,6 @@ export default {
         // Router link styling
         return {
           ...baseClasses,
-          'text-info': true,
           'd-block': true,
         }
       } else if (this.clickable) {
@@ -124,7 +123,6 @@ export default {
           btn: true,
           'btn-link': true,
           'p-0': true,
-          'text-info': true,
           'text-start': true,
           'd-block': true,
         }
