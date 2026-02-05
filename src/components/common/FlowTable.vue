@@ -162,7 +162,7 @@ export default {
     tableClass: { type: String, default: '' },
     resizable: { type: Boolean, default: false },
     striped : { type: Boolean, default: false },
-    hover : { type: Boolean, default: false },
+    hover : { type: Boolean, default: true },
     sortBy: { type: String, default: null },
     sortDesc: { type: Boolean, default: false },
     /**
