@@ -33,7 +33,6 @@ export { default as SuccessAlert } from './components/common/SuccessAlert.vue';
 export { default as TranslationsDownload } from './components/common/TranslationsDownload.vue';
 export { default as TaskPopper } from './components/common/TaskPopper.vue';
 
-export { HoverStyle } from './components/common/directives.js';
 export { default as registerComponents } from './register.js'
 
 // Import all components from @cib/bootstrap-components

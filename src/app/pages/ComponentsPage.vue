@@ -248,14 +248,6 @@ export default {
           description: 'Component for downloading translation files',
           icon: 'mdi-download'
         },
-        {
-          name: 'directives',
-          type: 'js',
-          fileName: 'directives.js',
-          category: 'Utilities',
-          description: 'Custom Vue directives for common functionality',
-          icon: 'mdi-code-braces'
-        }
       ]
     }
   },
@@ -300,7 +292,6 @@ export default {
         'TaskList': 'task-list',
         'TaskPopper': 'task-popper',
         'TranslationsDownload': 'translations-download',
-        'directives': 'directives'
       }
       return routeMap[componentName]
     },

@@ -114,7 +114,6 @@ npm install @cib/common-frontend
 
 ### Directives
 
-- **HoverStyle** - Custom directive for hover effects
 - **BToggle** - Bootstrap toggle directive for collapsible elements
 - **BDPopover** - Bootstrap popover directive
 
@@ -237,7 +236,7 @@ export default {
     <button @click="showConfirm = true" class="btn btn-danger">
       Delete Item
     </button>
-    
+
     <ConfirmDialog
       v-model="showConfirm"
       type="danger"

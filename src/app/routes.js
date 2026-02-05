@@ -35,7 +35,6 @@ import SuccessAlertComponentPage from './pages/components/SuccessAlertComponentP
 import TaskListComponentPage from './pages/components/TaskListComponentPage.vue'
 import TaskPopperComponentPage from './pages/components/TaskPopperComponentPage.vue'
 import TranslationsDownloadComponentPage from './pages/components/TranslationsDownloadComponentPage.vue'
-import DirectivesModuleComponentPage from './pages/components/DirectivesModuleComponentPage.vue'
 
 const routes = [
   {
@@ -152,12 +151,6 @@ const routes = [
         component: TranslationsDownloadComponentPage,
         meta: { title: 'TranslationsDownload Component' }
       },
-      {
-        path: 'directives',
-        name: 'DirectivesComponent',
-        component: DirectivesModuleComponentPage,
-        meta: { title: 'Directives Module' }
-      }
     ]
   }
 ]
