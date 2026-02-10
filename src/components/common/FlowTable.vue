@@ -357,7 +357,7 @@ export default {
       document.addEventListener('mousemove', onMouseMove)
       document.addEventListener('mouseup', onMouseUp)
     },
-    restartColumnWidths: function() {
+    restartColumnWidths() {
       if (this.resizable && this.$refs.table) {
         const ths = this.$refs.table.querySelectorAll('th')
         if (ths && ths.length > 0) {
@@ -412,7 +412,7 @@ export default {
     }
     if (this.resizable) {
       this.$nextTick(() => {
-        const ths = this.$refs.table.querySelectorAll('th');
+        const ths = this.$refs.table.querySelectorAll('th')
         this.columnWidths = Array.from(ths).map(th => `${th.offsetWidth}px`)
         if (globalThis.ResizeObserver) {
           this.resizeObserver = new ResizeObserver(() => {
@@ -425,10 +425,10 @@ export default {
         }
       })
     }
-    globalThis.addEventListener("resize", this.restartColumnWidths)
+    globalThis.addEventListener('resize', this.restartColumnWidths)
   },
   beforeUnmount() {
-    globalThis.removeEventListener("resize", this.restartColumnWidths)
+    globalThis.removeEventListener('resize', this.restartColumnWidths)
     if (this.resizeObserver) {
       this.resizeObserver.disconnect()
       this.resizeObserver = null

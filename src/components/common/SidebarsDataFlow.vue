@@ -70,11 +70,11 @@
 export default {
   name: 'SidebarsDataFlow',
   props: { leftOpen: Boolean, rightOpen: Boolean, leftCaption: String, rightCaption: String,
-    leftSize: { type: Array, default: function() { return [12, 6, 4, 3, 3] } },
-    rightSize: { type: Array, default: function() { return [12, 6, 4, 3, 3] } }
+    leftSize: { type: Array, default() { return [12, 6, 4, 3, 3] } },
+    rightSize: { type: Array, default() { return [12, 6, 4, 3, 3] } }
   },
   computed: {
-    middleClasses: function() {
+    middleClasses() {
       if (this.leftOpen) {
         const middleSize = this.leftSize.map((val, i) => { return 12 - val - (this.rightOpen ? this.rightSize[i] : 0) })
         const offset = this.leftSize.map((size, i) => { return 'offset-' + this.breakpoints[i] + size }).join(' ')
@@ -82,12 +82,12 @@ export default {
       } else if (this.rightOpen) return this.colClasses(this.rightSize.map(val => { return 12 - val }))
       else return 'col-12'
     },
-    breakpoints: function() {
+    breakpoints() {
       return ['', 'sm-', 'md-', 'lg-', 'xl-']
     }
   },
   methods: { // https://help.optimizely.com/Build_Campaigns_and_Experiments/Use_screen_measurements_to_design_for_responsive_breakpoints
-    showMain: function(keepRight) {
+    showMain(keepRight) {
       if (globalThis.innerWidth < 576) { // sm breakpoint
         this.$emit('update:leftOpen', false)
         this.$emit('update:rightOpen', false)
@@ -96,11 +96,11 @@ export default {
         else if (this.leftOpen && !keepRight) this.$emit('update:rightOpen', false)
       }
     },
-    showRight: function() {
+    showRight() {
       this.$emit('update:rightOpen', true)
       if (globalThis.innerWidth < 768) this.$emit('update:leftOpen', false)
     },
-    colClasses: function(sizes) {
+    colClasses(sizes) {
       return sizes.map((size, i) => {
         if (!size) return 'd-none'
         else if (size && i > 0 && !sizes[i-1]) return 'd-' + this.breakpoints[i] + 'block col-' + this.breakpoints[i] + size

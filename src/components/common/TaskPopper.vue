@@ -37,11 +37,11 @@ function repeatWithTimeout(interval, fun) {
 export default {
   name: 'TaskPopper',
   props: { placement: String, target: [Function, String], title: String, delayAt: Number },
-  data: function() { return {	tasks: [], busy: false } },
+  data() { return {	tasks: [], busy: false } },
   methods: {
-    addTask: function(name, cancel, promiseFactory) {
+    addTask(name, cancel, promiseFactory) {
       let self = this
-      const length = this.tasks.push({ name: name, cancel: cancel, state: null, progress: 0 })
+      const length = this.tasks.push({ name, cancel, state: null, progress: 0 })
       this.$refs.pop.$emit('open')
       if (promiseFactory) {
         return promiseFactory(handleProgress, fakeProgress).then(function(res) {
@@ -69,7 +69,7 @@ export default {
         })
       }
     },
-    triggerDownload: function(blob, filename) {
+    triggerDownload(blob, filename) {
       if (navigator.msSaveBlob) navigator.msSaveBlob(blob, filename) // Internet Explorer
       else {
         let hiddenFile = document.createElement('a')

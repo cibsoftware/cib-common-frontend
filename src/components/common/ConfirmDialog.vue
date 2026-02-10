@@ -42,9 +42,9 @@ export default {
     okTitle: String
   },
   emits: ['ok'],
-  data: function() { return { param: null } },
+  data() { return { param: null } },
   methods: {
-    show: function(param) {
+    show(param) {
       this.param = param
       this.$refs.modal.show()
     }

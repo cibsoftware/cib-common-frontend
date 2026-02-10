@@ -38,9 +38,9 @@
 <script>
 export default {
   name: 'ErrorDialog',
-  data: function() { return { message: '' } },
+  data() { return { message: '' } },
   methods: {
-    show: function(error) {
+    show(error) {
       this.message = error.type ? this.$t('errors.' + error.type, error.params) : error
       this.$refs.modal.show()
     }

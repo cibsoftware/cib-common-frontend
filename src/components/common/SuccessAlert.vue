@@ -38,9 +38,9 @@
 export default {
   name: 'SuccessAlert',
   props: { top: { type: String, default: '60px' } },
-  data: function() { return { countdown: 0 } },
+  data() { return { countdown: 0 } },
   methods: {
-    show: function(time) { this.countdown = time || 5 }
+    show(time) { this.countdown = time || 5 }
   }
 }
 </script>

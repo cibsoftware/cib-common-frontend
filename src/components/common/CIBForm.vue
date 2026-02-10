@@ -25,11 +25,11 @@
 <script>
 export default {
   name: 'CIBForm',
-  data: function() {
+  data() {
     return { showValidation: false }
   },
   methods: {
-    onSubmit: function() {
+    onSubmit() {
       if (this.$refs.form.checkValidity()) {
         this.showValidation = false
         this.$emit('submitted')
