@@ -321,7 +321,7 @@ This creates:
 - `npm run build` - Build library for production
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
-- `npm run format` - Format code with Prettier
+- `npm run format` - Format code with ESLint
 
 ## Component Props & Events
 
@@ -398,7 +398,6 @@ This project is proprietary software for internal use.
 ### Development Dependencies
 - Vite 6.0+
 - ESLint 9.18+
-- Prettier 3.5+
 - Vitest 3.1+
 
 ## Notes
