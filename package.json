@@ -25,9 +25,8 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:unit": "vitest run --coverage --reporter=default --reporter=junit --outputFile=target/vitest-reports/TEST-front-end.xml",
-    "lint": "eslint . --fix",
-    "format": "prettier --write src/",
-    "publish:dev": "npm run build && npm version prerelease --preid=dev --force && npm publish --registry https://nexus.cib.de/repository/npm-hosted-dev/ --tag dev"
+    "lint": "eslint .",
+    "format": "eslint . --fix"
   },
   "dependencies": {
     "@cib/bootstrap-components": "1.0.3-dev.3",
@@ -50,7 +49,6 @@
     "eslint-plugin-vue": "9.32.0",
     "eslint-plugin-vuejs-accessibility": "2.4.1",
     "jsdom": "22.1.0",
-    "prettier": "3.5.3",
     "vite": "6.4.1",
     "vite-plugin-vue-devtools": "7.7.6",
     "vitest": "3.1.3"
