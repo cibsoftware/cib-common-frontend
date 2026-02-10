@@ -107,7 +107,7 @@ export default {
   components: {
     SidebarsDataFlow
   },
-  data: function() {
+  data() {
     return {
       showLeftSidebar: true,
       componentSearch: '',
@@ -252,7 +252,7 @@ export default {
     }
   },
   computed: {
-    filteredComponents: function() {
+    filteredComponents() {
       if (!this.componentSearch.trim()) {
         return this.components
       }
@@ -264,15 +264,15 @@ export default {
                component.category.toLowerCase().includes(search)
       })
     },
-    vueComponents: function() {
+    vueComponents() {
       return this.components.filter(comp => comp.type === 'vue')
     },
-    jsComponents: function() {
+    jsComponents() {
       return this.components.filter(comp => comp.type === 'js')
     }
   },
   methods: {
-    getComponentRoute: function(componentName) {
+    getComponentRoute(componentName) {
       // Convert component names to kebab-case routes
       const routeMap = {
         'FlowTable': 'flow-table',
@@ -295,7 +295,7 @@ export default {
       }
       return routeMap[componentName]
     },
-    clearSearch: function() {
+    clearSearch() {
       this.componentSearch = ''
     }
   }

@@ -15,22 +15,22 @@
  *  limitations under the License.
  */
 import { registerComponents as bootstrapRegisterComponents } from '@cib/bootstrap-components'
-import CIBForm from './components/common/CIBForm.vue';
-import CIBHeaderFlow from './components/common/CIBHeaderFlow.vue';
-import ConfirmDialog from './components/common/ConfirmDialog.vue';
-import ContentBlock from './components/common/ContentBlock.vue';
-import CopyableActionButton from './components/common/CopyableActionButton.vue';
-import ErrorDialog from './components/common/ErrorDialog.vue';
-import FlowTable from './components/common/FlowTable.vue';
-import GenericTabs from './components/common/GenericTabs.vue';
-import HighlightedText from './components/common/HighlightedText.vue';
-import PagedScrollableContent from './components/common/PagedScrollableContent.vue';
-import PaginationControl from './components/common/PaginationControl.vue';
-import SidebarsDataFlow from './components/common/SidebarsDataFlow.vue';
-import SidebarsFlow from './components/common/SidebarsFlow.vue';
-import SuccessAlert from './components/common/SuccessAlert.vue';
-import TranslationsDownload from './components/common/TranslationsDownload.vue';
-import TaskPopper from './components/common/TaskPopper.vue';
+import CIBForm from './components/common/CIBForm.vue'
+import CIBHeaderFlow from './components/common/CIBHeaderFlow.vue'
+import ConfirmDialog from './components/common/ConfirmDialog.vue'
+import ContentBlock from './components/common/ContentBlock.vue'
+import CopyableActionButton from './components/common/CopyableActionButton.vue'
+import ErrorDialog from './components/common/ErrorDialog.vue'
+import FlowTable from './components/common/FlowTable.vue'
+import GenericTabs from './components/common/GenericTabs.vue'
+import HighlightedText from './components/common/HighlightedText.vue'
+import PagedScrollableContent from './components/common/PagedScrollableContent.vue'
+import PaginationControl from './components/common/PaginationControl.vue'
+import SidebarsDataFlow from './components/common/SidebarsDataFlow.vue'
+import SidebarsFlow from './components/common/SidebarsFlow.vue'
+import SuccessAlert from './components/common/SuccessAlert.vue'
+import TranslationsDownload from './components/common/TranslationsDownload.vue'
+import TaskPopper from './components/common/TaskPopper.vue'
 
 const registerComponents = function(app) {
 
@@ -64,14 +64,14 @@ const registerComponents = function(app) {
 
   // Register local directives
   app.directive('block-truncate', {
-      inserted: function(el) {
+      inserted(el) {
       // Check if the block's height is smaller than the text content height. If so
           // add an ellipsis replacing the last word
         while (el.clientHeight < el.scrollHeight) {
         el.innerHTML = el.innerHTML.replace(/\W*\s(\S)*$/, '...')
         }
       },
-    update: function(el, binding) {
+    update(el, binding) {
       el.innerHTML = binding.value.text
       while (el.clientHeight < el.scrollHeight) {
         el.innerHTML = el.innerHTML.replace(/\W*\s(\S)*$/, '...')

@@ -147,7 +147,7 @@ function reportSameValuesTable(objBase, objTest, languages, path) {
     if (hasSameValues) {
 
       if (!hasHeader) {
-        console.log(`Error: Next strings have the same values comparing to EN`)
+        console.log('Error: Next strings have the same values comparing to EN')
         hasHeader = true
       }
 
@@ -185,31 +185,31 @@ describe('i18n', () => {
     const translationEn = getTranslation('en')
     const additionalLanguages = languages.filter(lang => lang !== 'en')
 
-    it.each(additionalLanguages)(`en.keys === %s.keys`, (lang) => {
+    it.each(additionalLanguages)('en.keys === %s.keys', (lang) => {
       const translationLang = getTranslation(lang)
       expect(haveSameProperties(translationEn, translationLang, lang)).toBeTruthy()
     })
 
-    it.each(additionalLanguages)(`en !== %s, report same values`, (lang) => {
+    it.each(additionalLanguages)('en !== %s, report same values', (lang) => {
       const translationLang = getTranslation(lang)
       expect(reportSameValues(translationEn, translationLang, lang, lang)).toBeTruthy()
     })
 
-    it(`same values as table`, () => {
+    it('same values as table', () => {
       const translations = additionalLanguages.map(lang => getTranslation(lang))
       expect(reportSameValuesTable(translationEn, translations, additionalLanguages, '')).toBeTruthy()
     })
   })
 
   describe('usage', () => {
-    it(`all en keys should be used`, () => {
+    it('all en keys should be used', () => {
       const translationEn = getTranslation('en')
 
       // convert transaltion object to flat list of keys
       const stringKeys = []
       const extractKeys = (obj, path) => {
         if (typeof obj === 'string') {
-          stringKeys.push({ path: path, value: obj })
+          stringKeys.push({ path, value: obj })
         } else if (typeof obj === 'object' && obj !== null) {
           for (const key of Object.keys(obj)) {
             extractKeys(obj[key], path.concat(key))

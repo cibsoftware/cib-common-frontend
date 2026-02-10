@@ -22,7 +22,7 @@
 
 <script>
 export default {
-  name: "HighlightedText",
+  name: 'HighlightedText',
   props: {
     text: {
       type: String,

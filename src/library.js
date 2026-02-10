@@ -16,29 +16,29 @@
  */
 
 // export all local components
-export { default as CIBForm } from './components/common/CIBForm.vue';
-export { default as CIBHeaderFlow } from './components/common/CIBHeaderFlow.vue';
-export { default as ConfirmDialog } from './components/common/ConfirmDialog.vue';
-export { default as ContentBlock } from './components/common/ContentBlock.vue';
-export { default as CopyableActionButton } from './components/common/CopyableActionButton.vue';
-export { default as ErrorDialog } from './components/common/ErrorDialog.vue';
-export { default as FlowTable } from './components/common/FlowTable.vue';
-export { default as GenericTabs } from './components/common/GenericTabs.vue';
-export { default as HighlightedText } from './components/common/HighlightedText.vue';
-export { default as PagedScrollableContent } from './components/common/PagedScrollableContent.vue';
-export { default as PaginationControl } from './components/common/PaginationControl.vue';
-export { default as SidebarsDataFlow } from './components/common/SidebarsDataFlow.vue';
-export { default as SidebarsFlow } from './components/common/SidebarsFlow.vue';
-export { default as SuccessAlert } from './components/common/SuccessAlert.vue';
-export { default as TranslationsDownload } from './components/common/TranslationsDownload.vue';
-export { default as TaskPopper } from './components/common/TaskPopper.vue';
+export { default as CIBForm } from './components/common/CIBForm.vue'
+export { default as CIBHeaderFlow } from './components/common/CIBHeaderFlow.vue'
+export { default as ConfirmDialog } from './components/common/ConfirmDialog.vue'
+export { default as ContentBlock } from './components/common/ContentBlock.vue'
+export { default as CopyableActionButton } from './components/common/CopyableActionButton.vue'
+export { default as ErrorDialog } from './components/common/ErrorDialog.vue'
+export { default as FlowTable } from './components/common/FlowTable.vue'
+export { default as GenericTabs } from './components/common/GenericTabs.vue'
+export { default as HighlightedText } from './components/common/HighlightedText.vue'
+export { default as PagedScrollableContent } from './components/common/PagedScrollableContent.vue'
+export { default as PaginationControl } from './components/common/PaginationControl.vue'
+export { default as SidebarsDataFlow } from './components/common/SidebarsDataFlow.vue'
+export { default as SidebarsFlow } from './components/common/SidebarsFlow.vue'
+export { default as SuccessAlert } from './components/common/SuccessAlert.vue'
+export { default as TranslationsDownload } from './components/common/TranslationsDownload.vue'
+export { default as TaskPopper } from './components/common/TaskPopper.vue'
 
 export { default as registerComponents } from './register.js'
 
 // Import all components from @cib/bootstrap-components
 import {
   mergeLocaleMessage as bootstrapMergeLocaleMessage
-} from '@cib/bootstrap-components';
+} from '@cib/bootstrap-components'
 
 // Import bootstrap-components styles
 import '@cib/bootstrap-components/dist/style.css'
