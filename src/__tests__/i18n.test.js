@@ -265,7 +265,7 @@ describe('i18n', () => {
       const translationEn = getTranslation('en')
 
       // convert transaltion object to flat list of keys
-      const stringLongKeys = extractKeys(translationEn, '').filter(k => k !== 'errors.')
+      const stringLongKeys = extractKeys(translationEn, '')
       const notDeclaredKeys = []
 
       // get keys from @cib/bootstrap-components package using bootstrapMergeLocaleMessage()
@@ -276,7 +276,10 @@ describe('i18n', () => {
       const bootstrapStringLongKeys = extractKeys(bootstrapTranslationEn, '')
       expect(bootstrapStringLongKeys.length).toBeGreaterThan(0)
       // add them to declared keys list
-      stringLongKeys.push(...bootstrapStringLongKeys)
+      stringLongKeys.push(
+        'errors.',
+        ...bootstrapStringLongKeys,
+      )
 
       // Find all .vue files in /src/
       const vueFiles = findComponents('src', '.vue')

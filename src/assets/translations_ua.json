@@ -8,23 +8,6 @@
 			"tooltip": "Натисніть, щоб завантажити наступні {chunkSize} записів"
 		}
 	},
-	"cib-header": {
-		"engine": "Двигун",
-		"languages": "Мова",
-		"helpItems": "Інформація та допомога",
-		"logout": "Вийти",
-		"de": "Deutsch",
-		"en": "English",
-		"es": "Español",
-		"it": "Italiano",
-		"ua": "Українська",
-		"ru": "Русский"
-	},
-	"admin": {
-		"users": {
-			"account": "Обліковий запис користувача"
-		}
-	},
 	"error": {
 		"title": "Помилка"
 	},

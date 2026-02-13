@@ -8,23 +8,6 @@
 			"tooltip": "Haga clic para cargar los siguientes {chunkSize} registros"
 		}
 	},
-	"cib-header": {
-		"engine": "Motor",
-		"languages": "Idioma",
-		"helpItems": "Información & Ayuda",
-		"logout": "Cerrar sesión",
-		"de": "Deutsch",
-		"en": "English",
-		"es": "Español",
-		"it": "Italiano",
-		"ua": "Українська",
-		"ru": "Русский"
-	},
-	"admin": {
-		"users": {
-			"account": "Cuenta"
-		}
-	},
 	"error": {
 		"title": "Error"
 	},

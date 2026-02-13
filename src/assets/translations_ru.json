@@ -8,23 +8,6 @@
 			"tooltip": "Нажмите, чтобы загрузить следующие {chunkSize} записей"
 		}
 	},
-	"cib-header": {
-		"engine": "Движок",
-		"languages": "Язык",
-		"helpItems": "Информация и помощь",
-		"logout": "Выйти",
-		"de": "Deutsch",
-		"en": "English",
-		"es": "Español",
-		"it": "Italiano",
-		"ua": "Українська",
-		"ru": "Русский"
-	},
-	"admin": {
-		"users": {
-			"account": "Учетная запись пользователя"
-		}
-	},
 	"error": {
 		"title": "Ошибка"
 	},

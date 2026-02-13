@@ -8,23 +8,6 @@
 			"tooltip": "Click to load next {chunkSize} records"
 		}
 	},
-	"cib-header": {
-		"engine": "Engine",
-		"languages": "Languages",
-		"helpItems": "Info & Help",
-		"logout": "Logout",
-		"de": "Deutsch",
-		"en": "English",
-		"es": "Español",
-		"it": "Italiano",
-		"ua": "Українська",
-		"ru": "Русский"
-	},
-	"admin": {
-		"users": {
-			"account": "Account"
-		}
-	},
 	"error": {
 		"title": "Error"
 	},

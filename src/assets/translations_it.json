@@ -8,23 +8,6 @@
 			"tooltip": "Clicca per caricare i successivi {chunkSize} record"
 		}
 	},
-	"cib-header": {
-		"engine": "Motore",
-		"languages": "Lingue",
-		"helpItems": "Info e Aiuto",
-		"logout": "Esci",
-		"de": "Deutsch",
-		"en": "English",
-		"es": "Español",
-		"it": "Italiano",
-		"ua": "Українська",
-		"ru": "Русский"
-	},
-	"admin": {
-		"users": {
-			"account": "Account"
-		}
-	},
 	"error": {
 		"title": "Errore"
 	},
