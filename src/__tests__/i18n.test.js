@@ -315,4 +315,27 @@ describe('i18n', () => {
       expect(notDeclaredKeys.length).toBe(0)
     })
   })
+
+  it('all own keys should not redeclare keys from @cib/bootstrap-components', () => {
+    const translationEn = getTranslation('en')
+
+    // convert transaltion object to flat list of keys
+    const ownLongKeys = extractKeys(translationEn, '')
+
+    // get keys from @cib/bootstrap-components package using bootstrapMergeLocaleMessage()
+    const parentEn = {}
+    bootstrapMergeLocaleMessage({ global: { mergeLocaleMessage: (lang, messages) => {
+      Object.assign(parentEn, messages)
+    } } }, 'en')
+    const parentLongKeys = extractKeys(parentEn, '')
+    expect(parentLongKeys.length).toBeGreaterThan(0)
+
+    // Check that none of own keys is in bootstrap keys
+    const redeclaredKeys = ownLongKeys.filter(k => parentLongKeys.includes(k))
+    if (redeclaredKeys.length > 0) {
+      const message = 'Next translation keys are redeclaring keys from @cib/bootstrap-components:\n' + redeclaredKeys.map(k => `- ${k}`).join('\n')
+      expect(message).toBe('')
+    }
+    expect(redeclaredKeys.length).toBe(0)
+  })
 })
