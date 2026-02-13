@@ -1,6 +1,7 @@
 {
 	"commons": {
 		"copyValue": "Copiar valor",
+		"loading": "Cargando...",
 		"noMoreResults": "No hay más resultados",
 		"loadMore": {
 			"title": "Cargar más",
