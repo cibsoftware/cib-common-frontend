@@ -16,7 +16,6 @@
  */
 import { registerComponents as bootstrapRegisterComponents } from '@cib/bootstrap-components'
 import CIBForm from './components/common/CIBForm.vue'
-import CIBHeaderFlow from './components/common/CIBHeaderFlow.vue'
 import ConfirmDialog from './components/common/ConfirmDialog.vue'
 import ContentBlock from './components/common/ContentBlock.vue'
 import CopyableActionButton from './components/common/CopyableActionButton.vue'
@@ -46,7 +45,6 @@ const registerComponents = function(app) {
 
   // Register local components
   app.component('CIBForm', CIBForm)
-  app.component('CIBHeaderFlow', CIBHeaderFlow)
   app.component('ConfirmDialog', ConfirmDialog)
   app.component('ContentBlock', ContentBlock)
   app.component('CopyableActionButton', CopyableActionButton)

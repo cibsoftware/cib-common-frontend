@@ -23,7 +23,6 @@ import SidebarsDataFlowComponentPage from './pages/components/SidebarsDataFlowCo
 import ConfirmDialogComponentPage from './pages/components/ConfirmDialogComponentPage.vue'
 import ErrorDialogComponentPage from './pages/components/ErrorDialogComponentPage.vue'
 import PaginationControlComponentPage from './pages/components/PaginationControlComponentPage.vue'
-import CIBHeaderFlowComponentPage from './pages/components/CIBHeaderFlowComponentPage.vue'
 import CIBFormComponentPage from './pages/components/CIBFormComponentPage.vue'
 import ContentBlockComponentPage from './pages/components/ContentBlockComponentPage.vue'
 import CopyableActionButtonComponentPage from './pages/components/CopyableActionButtonComponentPage.vue'
@@ -78,12 +77,6 @@ const routes = [
         name: 'PaginationControlComponent',
         component: PaginationControlComponentPage,
         meta: { title: 'PaginationControl Component' }
-      },
-      {
-        path: 'cib-header-flow',
-        name: 'CIBHeaderFlowComponent',
-        component: CIBHeaderFlowComponentPage,
-        meta: { title: 'CIBHeaderFlow Component' }
       },
       {
         path: 'cib-form',
