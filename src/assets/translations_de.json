@@ -1,4 +1,12 @@
 {
+	"commons": {
+		"copyValue": "Wert kopieren",
+		"noMoreResults": "Keine weiteren Ergebnisse",
+		"loadMore": {
+			"title": "Mehr laden",
+			"tooltip": "Klicken Sie, um die nächsten {chunkSize} Einträge zu laden"
+		}
+	},
 	"cib-header": {
 		"engine": "Engine",
 		"languages": "Sprache",
@@ -21,6 +29,11 @@
 	},
 	"confirm": {
 		"title": "Bitte bestätigen"
+	},
+	"table": {
+		"resizeColumn": "Spalte anpassen",
+		"selectColumns": "Spalten anzeigen",
+		"toggleColumn": "Spalte \"{column}\" umschalten"
 	},
 	"bcomponents": {
 		"ariaSortAsc": "Aufsteigend",

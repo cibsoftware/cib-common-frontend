@@ -22,6 +22,11 @@
 	"confirm": {
 		"title": "Si prega di confermare"
 	},
+	"table": {
+		"resizeColumn": "Regola la colonna",
+		"selectColumns": "Mostra colonne",
+		"toggleColumn": "Attiva/disattiva colonna \"{column}\""
+	},
 	"bcomponents": {
 		"ariaSortAsc": "Crescente",
 		"ariaSortDesc": "Decrescente",

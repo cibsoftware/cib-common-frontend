@@ -1,4 +1,12 @@
 {
+	"commons": {
+		"copyValue": "Скопіювати значення",
+		"noMoreResults": "Більше немає результатів",
+		"loadMore": {
+			"title": "Завантажити ще",
+			"tooltip": "Натисніть, щоб завантажити наступні {chunkSize} записів"
+		}
+	},
 	"cib-header": {
 		"engine": "Двигун",
 		"languages": "Мова",
@@ -21,6 +29,11 @@
 	},
 	"confirm": {
 		"title": "Потрібне підтвердження"
+	},
+	"table": {
+		"resizeColumn": "Змінити розмір стовпця",
+		"selectColumns": "Показати стовпці",
+		"toggleColumn": "Переключити стовпець \"{column}\""
 	},
 	"bcomponents": {
 		"ariaSortAsc": "За зростанням",

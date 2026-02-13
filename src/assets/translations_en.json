@@ -1,4 +1,12 @@
 {
+	"commons": {
+		"copyValue": "Copy value",
+		"noMoreResults": "No more results",
+		"loadMore": {
+			"title": "Load more",
+			"tooltip": "Click to load next {chunkSize} records"
+		}
+	},
 	"cib-header": {
 		"engine": "Engine",
 		"languages": "Languages",
@@ -21,6 +29,11 @@
 	},
 	"confirm": {
 		"title": "Please confirm"
+	},
+	"table": {
+		"resizeColumn": "Resize column",
+		"selectColumns": "Display columns",
+		"toggleColumn": "Toggle \"{column}\" column"
 	},
 	"bcomponents": {
 		"ariaSortAsc": "Ascending",
