@@ -35,6 +35,9 @@
 		"selectColumns": "Показать столбцы",
 		"toggleColumn": "Переключить столбец \"{column}\""
 	},
+	"task-popper": {
+		"close": "Закрыть"
+	},
 	"bcomponents": {
 		"ariaSortAsc": "По возрастанию",
 		"ariaSortDesc": "По убыванию",

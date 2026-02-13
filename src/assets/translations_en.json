@@ -35,6 +35,9 @@
 		"selectColumns": "Display columns",
 		"toggleColumn": "Toggle \"{column}\" column"
 	},
+	"task-popper": {
+		"close": "Close"
+	},
 	"bcomponents": {
 		"ariaSortAsc": "Ascending",
 		"ariaSortDesc": "Descending",

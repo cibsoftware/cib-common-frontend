@@ -35,6 +35,9 @@
 		"selectColumns": "Spalten anzeigen",
 		"toggleColumn": "Spalte \"{column}\" umschalten"
 	},
+	"task-popper": {
+		"close": "Schließen"
+	},
 	"bcomponents": {
 		"ariaSortAsc": "Aufsteigend",
 		"ariaSortDesc": "Absteigend",

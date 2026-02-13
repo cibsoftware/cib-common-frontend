@@ -35,6 +35,9 @@
 		"selectColumns": "Показати стовпці",
 		"toggleColumn": "Переключити стовпець \"{column}\""
 	},
+	"task-popper": {
+		"close": "Закрити"
+	},
 	"bcomponents": {
 		"ariaSortAsc": "За зростанням",
 		"ariaSortDesc": "За спаданням",
