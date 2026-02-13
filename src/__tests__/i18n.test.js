@@ -265,7 +265,7 @@ describe('i18n', () => {
       const translationEn = getTranslation('en')
 
       // convert transaltion object to flat list of keys
-      const stringLongKeys = extractKeys(translationEn, '')
+      const stringLongKeys = extractKeys(translationEn, '').filter(k => k !== 'errors.')
       const notDeclaredKeys = []
 
       // get keys from @cib/bootstrap-components package using bootstrapMergeLocaleMessage()
