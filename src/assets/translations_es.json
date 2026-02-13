@@ -1,19 +1,11 @@
 {
-	"cib-header": {
-		"engine": "Motor",
-		"languages": "Idioma",
-		"helpItems": "Información & Ayuda",
-		"logout": "Cerrar sesión",
-		"de": "Deutsch",
-		"en": "English",
-		"es": "Español",
-		"it": "Italiano",
-		"ua": "Українська",
-		"ru": "Русский"
-	},
-	"admin": {
-		"users": {
-			"account": "Cuenta"
+	"commons": {
+		"copyValue": "Copiar valor",
+		"loading": "Cargando...",
+		"noMoreResults": "No hay más resultados",
+		"loadMore": {
+			"title": "Cargar más",
+			"tooltip": "Haga clic para cargar los siguientes {chunkSize} registros"
 		}
 	},
 	"error": {
@@ -21,6 +13,14 @@
 	},
 	"confirm": {
 		"title": "Confirmar"
+	},
+	"table": {
+		"resizeColumn": "Ajustar columna",
+		"selectColumns": "Mostrar columnas",
+		"toggleColumn": "Alternar columna \"{column}\""
+	},
+	"task-popper": {
+		"close": "Cerrar"
 	},
 	"bcomponents": {
 		"ariaSortAsc": "Ascendente",

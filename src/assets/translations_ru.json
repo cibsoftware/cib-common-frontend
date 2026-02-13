@@ -1,19 +1,11 @@
 {
-	"cib-header": {
-		"engine": "Движок",
-		"languages": "Язык",
-		"helpItems": "Информация и помощь",
-		"logout": "Выйти",
-		"de": "Deutsch",
-		"en": "English",
-		"es": "Español",
-		"it": "Italiano",
-		"ua": "Українська",
-		"ru": "Русский"
-	},
-	"admin": {
-		"users": {
-			"account": "Учетная запись пользователя"
+	"commons": {
+		"copyValue": "Копировать значение",
+		"loading": "Загрузка...",
+		"noMoreResults": "Больше нет результатов",
+		"loadMore": {
+			"title": "Загрузить ещё",
+			"tooltip": "Нажмите, чтобы загрузить следующие {chunkSize} записей"
 		}
 	},
 	"error": {
@@ -21,6 +13,14 @@
 	},
 	"confirm": {
 		"title": "Необходимо подтверждение"
+	},
+	"table": {
+		"resizeColumn": "Изменить размер столбца",
+		"selectColumns": "Показать столбцы",
+		"toggleColumn": "Переключить столбец \"{column}\""
+	},
+	"task-popper": {
+		"close": "Закрыть"
 	},
 	"bcomponents": {
 		"ariaSortAsc": "По возрастанию",

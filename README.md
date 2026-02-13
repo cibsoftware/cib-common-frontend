@@ -41,7 +41,6 @@ npm install @cib/common-frontend
 ### CIB Custom Components
 
 - **CIBForm** - Comprehensive form component for CIB applications
-- **CIBHeaderFlow** - Header component specifically designed for flow applications
 - **ConfirmDialog** - Specialized confirmation dialog with different types (warning, danger, info, success)
 - **ContentBlock** - Reusable content block component for structured layouts
 - **CopyableActionButton** - Button component with copy-to-clipboard functionality

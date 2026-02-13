@@ -20,7 +20,7 @@
   <slot></slot>
 
   <div v-if="loading && showLoadingSpinner" class="text-center">
-    <b-waiting-box class="d-inline me-2" styling="width: 35px"></b-waiting-box> {{ $t('admin.loading') }}
+    <b-waiting-box class="d-inline me-2" styling="width: 35px"></b-waiting-box> {{ $t('commons.loading') }}
   </div>
   <div v-else-if="!loading && allLoaded && loadedCount > 0" class="text-center text-muted py-2">
     {{ $t('commons.noMoreResults') }}
