@@ -22,6 +22,10 @@ import {
   mergeLocaleMessage as bootstrapMergeLocaleMessage
 } from '@cib/bootstrap-components'
 
+// just for 'sidebars.tasks' tests
+import { createI18n } from 'vue-i18n'
+import { mergeLocaleMessage } from '@/library.js'
+
 const languages = ['de', 'en', 'es', 'it', 'ru', 'ua']
 
 function getTranslation(lang) {
@@ -340,5 +344,43 @@ describe('i18n', () => {
       expect(message).toBe('')
     }
     expect(redeclaredKeys.length).toBe(0)
+  })
+
+  describe('sidebars.tasks', () => {
+    it('ru', () => {
+      const i18n = createI18n({
+        locale: 'ru',
+      })
+      mergeLocaleMessage(i18n, 'ru')
+      expect(i18n.global.t('sidebars.tasks', 0)).toBe('задач')
+      expect(i18n.global.t('sidebars.tasks', 1)).toBe('задача')
+      expect(i18n.global.t('sidebars.tasks', 2)).toBe('задач')
+      expect(i18n.global.t('sidebars.tasks', 5)).toBe('задач')
+      expect(i18n.global.t('sidebars.tasks', 12)).toBe('задач')
+    })
+
+    it('ua', () => {
+      const i18n = createI18n({
+        locale: 'ua',
+      })
+      mergeLocaleMessage(i18n, 'ua')
+      expect(i18n.global.t('sidebars.tasks', 0)).toBe('завдань')
+      expect(i18n.global.t('sidebars.tasks', 1)).toBe('завдання')
+      expect(i18n.global.t('sidebars.tasks', 2)).toBe('завдань')
+      expect(i18n.global.t('sidebars.tasks', 5)).toBe('завдань')
+      expect(i18n.global.t('sidebars.tasks', 12)).toBe('завдань')
+    })
+
+    it('en', () => {
+      const i18n = createI18n({
+        locale: 'en',
+      })
+      mergeLocaleMessage(i18n, 'en')
+      expect(i18n.global.t('sidebars.tasks', 0)).toBe('tasks')
+      expect(i18n.global.t('sidebars.tasks', 1)).toBe('task')
+      expect(i18n.global.t('sidebars.tasks', 2)).toBe('tasks')
+      expect(i18n.global.t('sidebars.tasks', 5)).toBe('tasks')
+      expect(i18n.global.t('sidebars.tasks', 12)).toBe('tasks')
+    })
   })
 })
