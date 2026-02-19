@@ -26,5 +26,8 @@
 		"ariaSortAsc": "Aufsteigend",
 		"ariaSortDesc": "Absteigend",
 		"ariaSortNone": "Keine"
+	},
+	"sidebars": {
+		"tasks": " Aufgabe | Aufgaben"
 	}
 }

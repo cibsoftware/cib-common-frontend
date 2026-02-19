@@ -26,5 +26,8 @@
 		"ariaSortAsc": "Ascending",
 		"ariaSortDesc": "Descending",
 		"ariaSortNone": "None"
+	},
+	"sidebars": {
+		"tasks": " task | tasks"
 	}
 }

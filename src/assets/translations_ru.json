@@ -26,5 +26,8 @@
 		"ariaSortAsc": "По возрастанию",
 		"ariaSortDesc": "По убыванию",
 		"ariaSortNone": "Без сортировки"
+	},
+	"sidebars": {
+		"tasks": " задача | задачи | задач"
 	}
 }

@@ -20,7 +20,7 @@
   <div class="row g-0 position-relative h-100 bg-light">
     <transition name="slide-left"> <!-- In a fixed component the margin-top must be applied right in the component -->
       <div v-show="leftOpen" class="position-absolute border-end bg-white" :class="colClasses(leftSize)" style="top: 0; left: 0; bottom: 0; z-index: 0">
-        <b-button v-if="leftCaption" ref="leftSidebar" :aria-label="leftCaption + (number ? ` (${number})` : '')" variant="light" style="min-height: 40px; line-height: 20px;" :block="true" class="rounded-0 border-bottom text-start" @click="$emit('update:leftOpen', false)">
+        <b-button v-if="leftCaption" ref="leftSidebar" :aria-label="leftCaption + (number ? number + $t('sidebars.tasks', number) : '')" :aria-expanded="String(leftOpen)" variant="light" style="min-height: 40px; line-height: 20px;" :block="true" class="rounded-0 border-bottom text-start" @click="$emit('update:leftOpen', false)">
           <slot name="leftIcon">
             <span class="mdi mdi-18px mdi-chevron-left float-end"></span>
           </slot>
@@ -38,7 +38,7 @@
     </div>
     <transition name="fade"> <!-- In a fixed component the margin-top must be applied right in the component -->
       <slot name="filter">
-        <b-button v-if="!leftOpen && leftCaption" variant="light" class="rounded-0 border-end-0 text-nowrap position-absolute w-auto" @click="$emit('update:leftOpen', true)"
+        <b-button v-if="!leftOpen && leftCaption" :aria-label="leftCaption" :aria-expanded="String(leftOpen)" variant="light" class="rounded-0 border-end-0 text-nowrap position-absolute w-auto" @click="$emit('update:leftOpen', true)"
                   style="right: 100%; transform: rotate(-90deg); transform-origin: right top">
           {{ leftCaption }} <span v-if="number != null"><b-badge pill variant="light">{{ number }}</b-badge></span>
           <i class="mdi mdi-18px mdi-chevron-down"></i>
