@@ -17,7 +17,6 @@
 
 // export all local components
 export { default as CIBForm } from './components/common/CIBForm.vue'
-export { default as CIBHeaderFlow } from './components/common/CIBHeaderFlow.vue'
 export { default as ConfirmDialog } from './components/common/ConfirmDialog.vue'
 export { default as ContentBlock } from './components/common/ContentBlock.vue'
 export { default as CopyableActionButton } from './components/common/CopyableActionButton.vue'

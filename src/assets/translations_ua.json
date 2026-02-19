@@ -1,19 +1,11 @@
 {
-	"cib-header": {
-		"engine": "Двигун",
-		"languages": "Мова",
-		"helpItems": "Інформація та допомога",
-		"logout": "Вийти",
-		"de": "Deutsch",
-		"en": "English",
-		"es": "Español",
-		"it": "Italiano",
-		"ua": "Українська",
-		"ru": "Русский"
-	},
-	"admin": {
-		"users": {
-			"account": "Обліковий запис користувача"
+	"commons": {
+		"copyValue": "Скопіювати значення",
+		"loading": "Завантаження...",
+		"noMoreResults": "Більше немає результатів",
+		"loadMore": {
+			"title": "Завантажити ще",
+			"tooltip": "Натисніть, щоб завантажити наступні {chunkSize} записів"
 		}
 	},
 	"error": {
@@ -22,9 +14,20 @@
 	"confirm": {
 		"title": "Потрібне підтвердження"
 	},
+	"table": {
+		"resizeColumn": "Змінити розмір стовпця",
+		"selectColumns": "Показати стовпці",
+		"toggleColumn": "Переключити стовпець \"{column}\""
+	},
+	"task-popper": {
+		"close": "Закрити"
+	},
 	"bcomponents": {
 		"ariaSortAsc": "За зростанням",
 		"ariaSortDesc": "За спаданням",
 		"ariaSortNone": "Без сортування"
+	},
+	"sidebars": {
+		"tasks": " завдання | завдань"
 	}
 }

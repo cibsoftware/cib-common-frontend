@@ -153,14 +153,6 @@ export default {
           icon: 'mdi-page-next'
         },
         {
-          name: 'CIBHeaderFlow',
-          type: 'vue',
-          fileName: 'CIBHeaderFlow.vue',
-          category: 'Navigation',
-          description: 'Application header with language switcher and user menu',
-          icon: 'mdi-page-layout-header'
-        },
-        {
           name: 'CIBForm',
           type: 'vue',
           fileName: 'CIBForm.vue',
@@ -280,7 +272,6 @@ export default {
         'ConfirmDialog': 'confirm-dialog',
         'ErrorDialog': 'error-dialog',
         'PaginationControl': 'pagination-control',
-        'CIBHeaderFlow': 'cib-header-flow',
         'CIBForm': 'cib-form',
         'ContentBlock': 'content-block',
         'CopyableActionButton': 'copyable-action-button',

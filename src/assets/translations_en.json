@@ -1,19 +1,11 @@
 {
-	"cib-header": {
-		"engine": "Engine",
-		"languages": "Languages",
-		"helpItems": "Info & Help",
-		"logout": "Logout",
-		"de": "Deutsch",
-		"en": "English",
-		"es": "Español",
-		"it": "Italiano",
-		"ua": "Українська",
-		"ru": "Русский"
-	},
-	"admin": {
-		"users": {
-			"account": "Account"
+	"commons": {
+		"copyValue": "Copy value",
+		"loading": "Loading...",
+		"noMoreResults": "No more results",
+		"loadMore": {
+			"title": "Load more",
+			"tooltip": "Click to load next {chunkSize} records"
 		}
 	},
 	"error": {
@@ -22,9 +14,20 @@
 	"confirm": {
 		"title": "Please confirm"
 	},
+	"table": {
+		"resizeColumn": "Resize column",
+		"selectColumns": "Display columns",
+		"toggleColumn": "Toggle \"{column}\" column"
+	},
+	"task-popper": {
+		"close": "Close"
+	},
 	"bcomponents": {
 		"ariaSortAsc": "Ascending",
 		"ariaSortDesc": "Descending",
 		"ariaSortNone": "None"
+	},
+	"sidebars": {
+		"tasks": " task | tasks"
 	}
 }

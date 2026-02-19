@@ -1,19 +1,11 @@
 {
-	"cib-header": {
-		"engine": "Motore",
-		"languages": "Lingue",
-		"helpItems": "Info e Aiuto",
-		"logout": "Esci",
-		"de": "Deutsch",
-		"en": "English",
-		"es": "Español",
-		"it": "Italiano",
-		"ua": "Українська",
-		"ru": "Русский"
-	},
-	"admin": {
-		"users": {
-			"account": "Account"
+	"commons": {
+		"copyValue": "Copia valore",
+		"loading": "Caricamento in corso...",
+		"noMoreResults": "Nessun altro risultato",
+		"loadMore": {
+			"title": "Carica altro",
+			"tooltip": "Clicca per caricare i successivi {chunkSize} record"
 		}
 	},
 	"error": {
@@ -22,9 +14,20 @@
 	"confirm": {
 		"title": "Si prega di confermare"
 	},
+	"table": {
+		"resizeColumn": "Regola la colonna",
+		"selectColumns": "Mostra colonne",
+		"toggleColumn": "Attiva/disattiva colonna \"{column}\""
+	},
+	"task-popper": {
+		"close": "Chiudi"
+	},
 	"bcomponents": {
 		"ariaSortAsc": "Crescente",
 		"ariaSortDesc": "Decrescente",
 		"ariaSortNone": "Nessuno"
+	},
+	"sidebars": {
+		"tasks": " attività | attività"
 	}
 }

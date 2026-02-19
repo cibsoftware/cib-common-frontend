@@ -18,6 +18,9 @@ import { describe, it, expect } from 'vitest'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { findComponents } from './utils.js'
+import {
+  mergeLocaleMessage as bootstrapMergeLocaleMessage
+} from '@cib/bootstrap-components'
 
 const languages = ['de', 'en', 'es', 'it', 'ru', 'ua']
 
@@ -44,8 +47,8 @@ function haveSameProperties(objBase, objTest, path) {
     const keysTest = Object.keys(objTest)
 
     // Sort keys for comparison
-    keysBase.sort()
-    keysTest.sort()
+    keysBase.sort((a, b) => a.localeCompare(b))
+    keysTest.sort((a, b) => a.localeCompare(b))
 
     // Compare key sets
     const keysBaseSorted = keysBase.join(',')
@@ -172,6 +175,21 @@ function reportSameValuesTable(objBase, objTest, languages, path) {
   return true
 }
 
+function extractKeys(obj, path) {
+  const stringKeys = []
+  if (typeof obj === 'string') {
+    stringKeys.push(path)
+  } else if (typeof obj === 'object' && obj !== null) {
+    for (const key of Object.keys(obj)) {
+      const keyPath = path.length > 0 ? `${path}.${key}` : key
+      stringKeys.push(
+        ...extractKeys(obj[key], keyPath),
+      )
+    }
+  }
+  return stringKeys
+}
+
 describe('i18n', () => {
 
   describe('loadable', () => {
@@ -201,22 +219,13 @@ describe('i18n', () => {
     })
   })
 
+
   describe('usage', () => {
     it('all en keys should be used', () => {
       const translationEn = getTranslation('en')
 
       // convert transaltion object to flat list of keys
-      const stringKeys = []
-      const extractKeys = (obj, path) => {
-        if (typeof obj === 'string') {
-          stringKeys.push({ path, value: obj })
-        } else if (typeof obj === 'object' && obj !== null) {
-          for (const key of Object.keys(obj)) {
-            extractKeys(obj[key], path.concat(key))
-          }
-        }
-      }
-      extractKeys(translationEn, [])
+      const stringLongKeys = extractKeys(translationEn, '')
 
       // Find all .vue files in /src/
       const vueFiles = findComponents('src', '.vue')
@@ -227,29 +236,109 @@ describe('i18n', () => {
       for (const file of vueFiles) {
         const content = readFileSync(file, 'utf-8')
 
-        for (let i = stringKeys.length - 1; i >= 0; i--) {
-          const keyPath = stringKeys[i].path.join('.')
+        for (let i = stringLongKeys.length - 1; i >= 0; i--) {
+          const keyPath = stringLongKeys[i]
 
           // Remove ignored paths
           if (skipPath(keyPath)) {
-            stringKeys.splice(i, 1)
+            stringLongKeys.splice(i, 1)
             continue
           }
 
-          // search for usage, e.g. $t('some.key.path
           const usagePattern = new RegExp(`\\$t\\(\\s*['"\`]${keyPath}['"\`]`)
           if (usagePattern.test(content)) {
             // Found usage, remove from list
-            stringKeys.splice(i, 1)
+            stringLongKeys.splice(i, 1)
           }
         }
       }
 
       // Report unused keys
-      if (stringKeys.length > 0) {
-        console.log(`Unused translation keys in en (checked ${vueFiles.length} .vue files):\n`, '\n' + stringKeys.map(k => `- ${k.path.join('.')} = "${k.value}"`).join('\n'))
+      if (stringLongKeys.length > 0) {
+        const message = `Unused translation keys in en (checked ${vueFiles.length} .vue files):\n` + stringLongKeys.map(k => `- ${k}`).join('\n')
+        expect(message).toBe('')
       }
-      expect(stringKeys.length).toBe(0)
+      expect(stringLongKeys.length).toBe(0)
     })
+
+    it('all used keys should be declared in en', () => {
+      const translationEn = getTranslation('en')
+
+      // convert transaltion object to flat list of keys
+      const stringLongKeys = extractKeys(translationEn, '')
+      const notDeclaredKeys = []
+
+      // get keys from @cib/bootstrap-components package using bootstrapMergeLocaleMessage()
+      const bootstrapTranslationEn = {}
+      bootstrapMergeLocaleMessage({ global: { mergeLocaleMessage: (lang, messages) => {
+        Object.assign(bootstrapTranslationEn, messages)
+      } } }, 'en')
+      const bootstrapStringLongKeys = extractKeys(bootstrapTranslationEn, '')
+      expect(bootstrapStringLongKeys.length).toBeGreaterThan(0)
+      // add them to declared keys list
+      stringLongKeys.push(
+        'errors.',
+        ...bootstrapStringLongKeys,
+      )
+
+      // Find all .vue files in /src/
+      const vueFiles = findComponents('src', '.vue')
+      expect(vueFiles.length).toBeGreaterThan(0)
+
+      // Check usage of each used key in .vue files
+      // When not found in localization file, we consider it is not declared => report error
+      for (const file of vueFiles) {
+        const content = readFileSync(file, 'utf-8')
+
+        // get all $t('...') usages in the file
+        const usagePattern = /\$t\(\s*['"`]([^'"`]+)['"`]/g
+        let match
+        while ((match = usagePattern.exec(content)) !== null) {
+          const keyPath = match[1]
+
+          // Remove ignored paths
+          if (skipPath(keyPath)) {
+            continue
+          }
+
+          // Check if key is declared in en translation
+          const isDeclared = stringLongKeys.includes(keyPath)
+          if (!isDeclared) {
+            // Not declared, add to report list
+            notDeclaredKeys.push(keyPath)
+          }
+        }
+      }
+
+      // Report unused keys
+      if (notDeclaredKeys.length > 0) {
+        const message = `Next translation keys are missing in en, but used in checked ${vueFiles.length} .vue files:\n` + notDeclaredKeys.map(k => `- ${k}`).join('\n')
+        expect(message).toBe('')
+      }
+      expect(notDeclaredKeys.length).toBe(0)
+    })
+  })
+
+  it('all own keys should not redeclare keys from @cib/bootstrap-components', () => {
+    const translationEn = getTranslation('en')
+
+    // convert transaltion object to flat list of keys
+    const ownLongKeys = extractKeys(translationEn, '')
+
+    // get keys from @cib/bootstrap-components package using bootstrapMergeLocaleMessage()
+    const parentEn = {}
+    bootstrapMergeLocaleMessage({ global: { mergeLocaleMessage: (lang, messages) => {
+      Object.assign(parentEn, messages)
+    } } }, 'en')
+    const parentLongKeys = extractKeys(parentEn, '')
+    expect(parentLongKeys.length).toBeGreaterThan(0)
+
+    // Check that none of own keys is in bootstrap keys
+    const redeclaredKeys = ownLongKeys.filter(k => parentLongKeys.includes(k))
+    if (redeclaredKeys.length > 0) {
+      const message = 'Next translation keys are redeclaring keys from @cib/bootstrap-components:\n' + redeclaredKeys.map(k => `- ${k}`).join('\n')
+      expect(message).toBe('')
+    }
+    expect(redeclaredKeys.length).toBe(0)
   })
 })
