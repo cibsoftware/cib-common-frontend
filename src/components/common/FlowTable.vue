@@ -30,7 +30,7 @@
             cursor: field.sortable ? 'pointer' : 'default'
           }">
 
-        <div v-if="field.label || field.sortable"
+        <div v-if="field.label || field.sortable !== false"
              class="d-flex align-items-center"
              :class="getHeaderJustifyClass(field)">
           <div v-if="field.label" class="d-flex w-100 position-relative">
@@ -63,7 +63,7 @@
             </span>
           </div>
 
-          <div v-if="field.sortable" class="sort-icon">
+          <div v-if="field.sortable !== false" class="sort-icon">
               <span v-if="isSortedByField(field)">
                 <i v-if="isSortedByFieldAscending(field)" class="mdi mdi-chevron-up"></i>
                 <i v-else class="mdi mdi-chevron-down"></i>
@@ -458,7 +458,7 @@ export default {
 .resize-column {
   right: -7px;
   width: 12px;
-  cursor: col-resize;
+  cursor: col-resize !important;
   z-index: 10;
 }
 </style>
