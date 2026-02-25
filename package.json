@@ -1,7 +1,7 @@
 {
   "name": "@cib/common-frontend",
   "description": "Common Vue.js components library for CIB applications",
-  "version": "1.0.3-dev.10",
+  "version": "1.0.3-dev.11",
   "type": "module",
   "license": "Apache-2.0",
   "main": "dist/common-frontend.umd.js",
