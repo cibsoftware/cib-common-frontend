@@ -24,7 +24,7 @@
           <slot name="leftIcon">
             <span class="mdi mdi-18px mdi-chevron-left float-end"></span>
           </slot>
-          <h5 class="m-0 w-75" style="word-wrap: break-word">{{ leftCaption }}<span v-if="number != null" class="h5 ps-2"><b-badge pill variant="light" :title="numberTooltip">{{ number }}</b-badge></span></h5>
+          <h2 class="h5 m-0 w-75" style="word-wrap: break-word">{{ leftCaption }}<span v-if="number != null" class="h5 ps-2"><b-badge pill variant="light" :title="numberTooltip">{{ number }}</b-badge></span></h2>
         </b-button>
         <div :style="{ height: leftCaption ? 'calc(100% - ' + headerCalc + ')' : '100%' }">
           <slot name="left"></slot>
@@ -50,7 +50,7 @@
       <div v-show="rightOpen" class="border position-absolute border-top-0" :class="colClasses(rightSize)" style="top: 0; right: 0; bottom: 0">
         <b-button v-if="rightCaption" variant="light" style="min-height: 40px; line-height: 20px;" :block="true" class="rounded-0 border-bottom border-end" @click="$emit('update:rightOpen', false)">
           <span class="mdi mdi-18px mdi-chevron-right float-start"></span>
-          <h5 class="m-0 w-100">{{ rightCaption }}</h5>
+          <h2 class="h5 m-0 w-100">{{ rightCaption }}</h2>
         </b-button>
         <div :style="{ height: rightCaption ? 'calc(100% - ' + headerCalc + ')' : '100%' }">
           <slot name="right"></slot>
