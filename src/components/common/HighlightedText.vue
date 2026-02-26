@@ -17,7 +17,7 @@
 
 -->
 <template>
-  <div v-html="highlightedText"></div>
+  <span v-html="highlightedText"></span>
 </template>
 
 <script>
