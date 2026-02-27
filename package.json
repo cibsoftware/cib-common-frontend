@@ -29,7 +29,7 @@
     "format": "eslint . --fix"
   },
   "dependencies": {
-    "@cib/bootstrap-components": "1.0.3-dev.8",
+    "@cib/bootstrap-components": "1.0.3-dev.9",
     "@mdi/font": "7.4.47",
     "@popperjs/core": "2.11.8",
     "bootstrap": "5.3.8",
