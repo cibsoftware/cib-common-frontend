@@ -26,7 +26,7 @@ export default {
   props: {
     text: {
       type: String,
-      required: true
+      default: null
     },
     keyword: {
       type: String,
@@ -35,6 +35,8 @@ export default {
   },
   computed: {
     highlightedText() {
+      if (!this.text) return this.text
+
       if (!this.keyword) return this.text
 
       // Create a regular expression to match the keyword
