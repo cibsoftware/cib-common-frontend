@@ -78,4 +78,36 @@ describe('HighlightedText', () => {
     // ensure no <mark> tags are in the rendered html
     expect(wrapper.html()).not.toContain('<mark class="p-0">')
   })
+
+  it('text is undefined', () => {
+    const wrapper = mount(HighlightedText, {
+      props: {
+        keyword: '',
+      }
+    })
+    expect(wrapper.text()).toBe('')
+    expect(wrapper.html()).not.toContain('<mark')
+  })
+
+  it('text is null', () => {
+    const wrapper = mount(HighlightedText, {
+      props: {
+        text: null,
+        keyword: '',
+      }
+    })
+    expect(wrapper.text()).toBe('')
+    expect(wrapper.html()).not.toContain('<mark')
+  })
+
+  it('text is empty string', () => {
+    const wrapper = mount(HighlightedText, {
+      props: {
+        text: '',
+        keyword: 'test',
+      }
+    })
+    expect(wrapper.text()).toBe('')
+    expect(wrapper.html()).not.toContain('<mark')
+  })
 })

@@ -26,7 +26,7 @@ export default {
   props: {
     text: {
       type: String,
-      default: null
+      default: ''
     },
     keyword: {
       type: String,
@@ -35,7 +35,7 @@ export default {
   },
   computed: {
     highlightedText() {
-      if (!this.text) return this.text
+      if (!this.text) return ''
 
       if (!this.keyword) return this.text
 
