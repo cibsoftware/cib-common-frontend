@@ -17,7 +17,6 @@
 import js from '@eslint/js'
 import pluginVue from 'eslint-plugin-vue'
 import pluginVitest from '@vitest/eslint-plugin'
-import pluginCypress from 'eslint-plugin-cypress/flat'
 import pluginVueA11y from 'eslint-plugin-vuejs-accessibility'
 
 export default [
@@ -52,14 +51,6 @@ export default [
         }
       ],
     }
-  },
-
-  {
-    ...pluginCypress.configs.recommended,
-    files: [
-      'cypress/e2e/**/*.{cy,spec}.{js,ts,jsx,tsx}',
-      'cypress/support/**/*.{js,ts,jsx,tsx}'
-    ],
   },
 
   // CIB formatting rules
