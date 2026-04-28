@@ -31,11 +31,13 @@
   "dependencies": {
     "@cib/bootstrap-components": "1.0.3-dev.10",
     "@mdi/font": "7.4.47",
-    "@popperjs/core": "2.11.8",
-    "bootstrap": "5.3.8",
-    "vue": "3.5.33",
-    "vue-i18n": "11.4.0",
-    "vue-router": "5.0.6"
+    "@popperjs/core": "2.11.8"
+  },
+  "peerDependencies": {
+    "bootstrap": "^5.3.8",
+    "vue": "^3.5.33",
+    "vue-i18n": "^11.4.0",
+    "vue-router": "^5.0.6"
   },
   "devDependencies": {
     "@eslint/js": "9.39.4",
