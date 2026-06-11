@@ -29,5 +29,8 @@
 	},
 	"sidebars": {
 		"tasks": "tarea | tareas"
+	},
+	"filterableSelect": {
+		"userIdLabel": "ID de usuario"
 	}
 }

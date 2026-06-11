@@ -29,5 +29,8 @@
 	},
 	"sidebars": {
 		"tasks": "завдання | завдань"
+	},
+	"filterableSelect": {
+		"userIdLabel": "ID користувача"
 	}
 }

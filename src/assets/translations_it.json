@@ -29,5 +29,8 @@
 	},
 	"sidebars": {
 		"tasks": "attività | attività"
+	},
+	"filterableSelect": {
+		"userIdLabel": "ID utente"
 	}
 }
