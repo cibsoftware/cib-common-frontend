@@ -20,6 +20,7 @@ import ConfirmDialog from './components/common/ConfirmDialog.vue'
 import ContentBlock from './components/common/ContentBlock.vue'
 import CopyableActionButton from './components/common/CopyableActionButton.vue'
 import ErrorDialog from './components/common/ErrorDialog.vue'
+import FilterableSelect from './components/common/FilterableSelect.vue'
 import FlowTable from './components/common/FlowTable.vue'
 import GenericTabs from './components/common/GenericTabs.vue'
 import HighlightedText from './components/common/HighlightedText.vue'
@@ -49,6 +50,7 @@ const registerComponents = function(app) {
   app.component('ContentBlock', ContentBlock)
   app.component('CopyableActionButton', CopyableActionButton)
   app.component('ErrorDialog', ErrorDialog)
+  app.component('FilterableSelect', FilterableSelect)
   app.component('FlowTable', FlowTable)
   app.component('GenericTabs', GenericTabs)
   app.component('HighlightedText', HighlightedText)
