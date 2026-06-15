@@ -63,11 +63,11 @@ export default {
     loading: { type: Boolean, default: false }
   },
   emits: ['update:modelValue', 'update:loading', 'clean-elements', 'enter', 'shown', 'hide'],
-  data: function() {
+  data() {
     return { filter: '' }
   },
   watch: {
-    filter: function(val) {
+    filter(val) {
       if (val.length >= 3 && !this.loading) this.$emit('update:loading', true)
       else if (val.length < 3) {
         this.$emit('clean-elements', val)
@@ -76,7 +76,7 @@ export default {
     }
   },
   computed: {
-    filteredElements: function() {
+    filteredElements() {
       const list = {}
       if (this.elements) {
         if (Array.isArray(this.elements)) {
@@ -95,7 +95,7 @@ export default {
       }
       return list
     },
-    isValid: function() {
+    isValid() {
       let allElements = this.elements
       if (!Array.isArray(allElements)) allElements = Object.keys(allElements)
       return !this.noInvalidValues || !this.value ||
