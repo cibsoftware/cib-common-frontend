@@ -46,12 +46,12 @@
                   <small class="visually-hidden">{{ $t('table.selectColumns') }}</small>
                   <small class="mdi mdi-24px mdi-table-plus"></small>
               </button>
-              <ul class="dropdown-menu dropdown-menu-end" role="menu">
+              <ul class="dropdown-menu dropdown-menu-end">
                 <template v-for="column in toggleableColumns" :key="column.key">
                   <li v-if="column.groupSeparator === true"
                       class="dropdown-divider">
                   </li>
-                  <li :title="$t('table.toggleColumn', { column: $t(column.label) })" class="dropdown-item" role="menuitem">
+                  <li :title="$t('table.toggleColumn', { column: $t(column.label) })" class="dropdown-item">
                     <input type="checkbox" :id="column.key" tabindex="-1"
                       :checked="computedColumns.some(col => col.key === column.key)"
                       :aria-label="$t('table.toggleColumn', { column: $t(column.label) })"
