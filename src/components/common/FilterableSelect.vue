@@ -99,7 +99,7 @@ export default {
       let allElements = this.elements
       if (!Array.isArray(allElements)) allElements = Object.keys(allElements)
       return !this.noInvalidValues || !this.value ||
-        allElements.includes(element => { if (this.value === element.id) return true; else return false })
+        allElements.some(element => this.value === element.id)
     }
   },
   methods: {
