@@ -48,13 +48,12 @@ describe('debounce', () => {
     expect(fn).not.toHaveBeenCalled()
 
     vi.advanceTimersByTime(100)
-    expect(fn).toHaveBeenCalledOnce()
-    expect(fn).toHaveBeenCalledWith('second')
+    expect(fn).toHaveBeenCalledExactlyOnceWith('second')
   })
 
   it('preserves this context', () => {
     const ctx = { value: 42 }
-    const fn = vi.fn(function () { return this.value })
+    const fn = vi.fn(function() { return this.value })
     const debounced = debounce(100, fn)
 
     debounced.call(ctx)
