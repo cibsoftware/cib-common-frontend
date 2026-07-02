@@ -76,7 +76,7 @@ describe('CopyableActionButton', () => {
     })
 
     expect(wrapper.find('.mdi-content-copy').exists()).toBe(false)
-    await wrapper.find('button').trigger('mouseenter')
+    await wrapper.find('div').trigger('mouseenter')
     expect(wrapper.find('.mdi-content-copy').exists()).toBe(true)
   })
 
@@ -102,7 +102,19 @@ describe('CopyableActionButton', () => {
     const wrapper = mountWithDefaults(CopyableActionButton, {
       props: { displayValue: 'Display', copyValue: 'Secret' },
     })
-    await wrapper.find('button').trigger('mouseenter')
+    await wrapper.find('div').trigger('mouseenter')
+    await wrapper.find('.mdi-content-copy').trigger('click')
+    expect(wrapper.emitted('copy')).toEqual([['Secret']])
+  })
+
+  it('handleCopy emits copy when rendered as anchor in new tab mode', async () => {
+    const routerMock = createRouterMock()
+    const wrapper = mountWithDefaults(CopyableActionButton, {
+      props: { displayValue: 'Display', copyValue: 'Secret', to: '/path', newTab: true },
+      routerMock,
+    })
+
+    await wrapper.find('div').trigger('mouseenter')
     await wrapper.find('.mdi-content-copy').trigger('click')
     expect(wrapper.emitted('copy')).toEqual([['Secret']])
   })
@@ -111,7 +123,8 @@ describe('CopyableActionButton', () => {
     const wrapper = mountWithDefaults(CopyableActionButton, {
       props: { displayValue: 'Display' },
     })
-    wrapper.vm.handleCopy()
+    await wrapper.find('div').trigger('mouseenter')
+    await wrapper.find('.mdi-content-copy').trigger('click')
     expect(wrapper.emitted('copy')).toEqual([['Display']])
   })
 

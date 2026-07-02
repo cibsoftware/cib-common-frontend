@@ -17,24 +17,32 @@
 
 -->
 <template>
-  <component
+  <div
       v-if="valueToCopy"
-      :is="componentType"
-      v-bind="bindAttrs"
-      :class="containerClasses"
-      :title="title || displayValue"
+      class="position-relative w-100"
       @mouseenter="isHovered = true" @focusin="isHovered = true"
       @mouseleave="isHovered = false" @focusout="isHovered = false"
-      @click="handleClick"
   >
-    {{ displayValue }}
+    <component
+        :is="componentType"
+        v-bind="bindAttrs"
+        :class="containerClasses"
+        :title="title || displayValue"
+        @click="handleClick"
+    >
+      {{ displayValue }}
+    </component>
     <button
         v-if="isHovered"
+        type="button"
         @click.stop.prevent="handleCopy"
+        @keydown.enter.stop.prevent="handleCopy"
+        @keydown.space.stop.prevent="handleCopy"
         :title="$t('commons.copyValue') + ':\n' + valueToCopy"
-        class="btn btn-link p-0 m-0 bg-transparent mdi mdi-18px mdi-content-copy position-absolute end-0 text-secondary lh-sm"
+        :aria-label="$t('commons.copyValue')"
+        class="btn btn-link p-0 m-0 bg-transparent mdi mdi-18px mdi-content-copy position-absolute top-50 end-0 translate-middle-y text-secondary lh-sm"
     ></button>
-  </component>
+  </div>
 </template>
 
 <script>
@@ -107,7 +115,6 @@ export default {
       const baseClasses = {
         'text-truncate': true,
         'pe-4': this.isHovered,
-        'position-relative': true,
         'w-100': true,
       }
       if (this.to) {
