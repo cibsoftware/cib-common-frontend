@@ -45,6 +45,7 @@
     "@vitest/coverage-istanbul": "3.2.7",
     "@vitest/eslint-plugin": "1.6.16",
     "@vue/test-utils": "2.4.9",
+    "brace-expansion": "2.1.4",
     "eslint": "10.8.1",
     "eslint-plugin-vue": "10.10.0",
     "eslint-plugin-vuejs-accessibility": "2.6.0",
