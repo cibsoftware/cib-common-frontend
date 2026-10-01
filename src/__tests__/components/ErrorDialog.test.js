@@ -53,4 +53,30 @@ describe('ErrorDialog', () => {
 
     expect(wrapper.html()).toContain('<strong>myProcess</strong>')
   })
+
+  // A message may carry backend detail, so it is shown as written: angle
+  // brackets and quotes in it are characters, not markup.
+  it.each([
+    ['a bold tag', '<b>a label</b>'],
+    ['an image tag', '<img src="placeholder.png">'],
+    ['an attribute break-out', '"><b>'],
+  ])('renders %s in the message as text, not markup', async (_name, message) => {
+    const wrapper = mountWithDefaults(ErrorDialog)
+
+    wrapper.vm.message = message
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.element.querySelector('b, img')).toBeNull()
+    expect(wrapper.text()).toContain(message)
+  })
+
+  it('still bolds quoted words when the message also contains markup', async () => {
+    const wrapper = mountWithDefaults(ErrorDialog)
+
+    wrapper.vm.message = 'Error in "<b>myProcess</b>" failed'
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.html()).toContain('<strong>&lt;b&gt;myProcess&lt;/b&gt;</strong>')
+    expect(wrapper.element.querySelector('b')).toBeNull()
+  })
 })
