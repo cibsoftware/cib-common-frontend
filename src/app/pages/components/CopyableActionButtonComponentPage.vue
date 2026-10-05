@@ -44,6 +44,14 @@
               <li>Create clickable items with dual copy and action capabilities</li>
               <li>Open external links in new tabs while providing copy functionality</li>
               <li>Non-clickable text elements with copy-to-clipboard feature</li>
+              <li>Copy technical identifiers (process instance IDs, task IDs, correlation keys) from table cells without opening the detail view</li>
+              <li>Show a human-readable label while copying a machine-readable value (e.g. a user name that copies the user ID)</li>
+              <li>Copy a shareable deep link that differs from the navigation target</li>
+              <li>Open an internal route in a new tab using a route location object</li>
+              <li>Provide a custom tooltip describing what will be copied</li>
+              <li>Render lists of copyable values with <code>v-for</code> (tags, keys, references)</li>
+              <li>Copy values via the browser Clipboard API with a fallback for unsupported contexts</li>
+              <li>Safely render optional data: nothing is rendered when there is no value to display or copy</li>
             </ul>
 
             <h4>Integration</h4>
@@ -283,6 +291,203 @@
         </div>
 
         <div class="mb-4">
+          <h5>Identifier in a Table Cell</h5>
+          <p class="text-muted">Truncated technical ID that links to a detail view and copies the full ID</p>
+          <div class="bg-light p-3 rounded">
+            <pre><code>&lt;td v-for="instance in instances" :key="instance.id"&gt;
+  &lt;CopyableActionButton
+    :display-value="instance.id"
+    :to="{ name: 'TaskListComponent', params: { id: instance.id } }"
+    @copy="handleCopy"
+  /&gt;
+&lt;/td&gt;</code></pre>
+          </div>
+          <div class="mt-3">
+            <h6>Live Example:</h6>
+            <table class="table table-sm table-bordered" style="width: 360px;">
+              <thead>
+                <tr>
+                  <th>Instance ID</th>
+                  <th>State</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="instance in instances" :key="instance.id">
+                  <td style="max-width: 200px;">
+                    <CopyableActionButton
+                      :display-value="instance.id"
+                      :to="{ name: 'TaskListComponent' }"
+                      @copy="handleCopy"
+                    />
+                  </td>
+                  <td>{{ instance.state }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <h5>Label with Different Copy Value</h5>
+          <p class="text-muted">Show a readable name, copy the underlying user ID</p>
+          <div class="bg-light p-3 rounded">
+            <pre><code>&lt;CopyableActionButton
+  display-value="John Doe"
+  copy-value="user-7f3a9c12"
+  title="Copy user ID"
+  @click="handleEmailClick"
+  @copy="handleCopy"
+/&gt;</code></pre>
+          </div>
+          <div class="mt-3">
+            <h6>Live Example:</h6>
+            <div class="border p-0 rounded" style="width: 150px;">
+              <CopyableActionButton
+                display-value="John Doe"
+                copy-value="user-7f3a9c12"
+                title="Copy user ID"
+                @click="handleEmailClick"
+                @copy="handleCopy"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <h5>Shareable Deep Link</h5>
+          <p class="text-muted">Navigate within the app, but copy the absolute URL to share with colleagues</p>
+          <div class="bg-light p-3 rounded">
+            <pre><code>&lt;CopyableActionButton
+  display-value="Open task list"
+  :copy-value="profileUrl"
+  :to="{ name: 'TaskListComponent' }"
+  title="Open task list (copy link to share)"
+  @copy="handleCopy"
+/&gt;</code></pre>
+          </div>
+          <div class="mt-3">
+            <h6>Live Example:</h6>
+            <div class="border p-0 rounded" style="width: 150px;">
+              <CopyableActionButton
+                display-value="Open task list"
+                :copy-value="profileUrl"
+                :to="{ name: 'TaskListComponent' }"
+                title="Open task list (copy link to share)"
+                @copy="handleCopy"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <h5>Internal Route in New Tab</h5>
+          <p class="text-muted">Route location object opened in a new browser tab</p>
+          <div class="bg-light p-3 rounded">
+            <pre><code>&lt;CopyableActionButton
+  display-value="Task list (new tab)"
+  :to="{ name: 'TaskListComponent' }"
+  :new-tab="true"
+  @copy="handleCopy"
+/&gt;</code></pre>
+          </div>
+          <div class="mt-3">
+            <h6>Live Example:</h6>
+            <div class="border p-0 rounded" style="width: 150px;">
+              <CopyableActionButton
+                display-value="Task list (new tab)"
+                :to="{ name: 'TaskListComponent' }"
+                :new-tab="true"
+                @copy="handleCopy"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <h5>List of Copyable Values</h5>
+          <p class="text-muted">Render several copyable references with <code>v-for</code></p>
+          <div class="bg-light p-3 rounded">
+            <pre><code>&lt;ul class="list-unstyled"&gt;
+  &lt;li v-for="key in businessKeys" :key="key"&gt;
+    &lt;CopyableActionButton
+      :display-value="key"
+      :clickable="false"
+      @copy="handleCopy"
+    /&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+          </div>
+          <div class="mt-3">
+            <h6>Live Example:</h6>
+            <ul class="list-unstyled border p-2 rounded mb-0" style="width: 200px;">
+              <li v-for="key in businessKeys" :key="key">
+                <CopyableActionButton
+                  :display-value="key"
+                  :clickable="false"
+                  @copy="handleCopy"
+                />
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <h5>Optional Value (Renders Nothing)</h5>
+          <p class="text-muted">When both <code>displayValue</code> and <code>copyValue</code> are empty the component renders no markup, so no <code>v-if</code> is needed in the parent</p>
+          <div class="bg-light p-3 rounded">
+            <pre><code>&lt;CopyableActionButton
+  :display-value="instance.businessKey"
+  :clickable="false"
+  @copy="handleCopy"
+/&gt;</code></pre>
+          </div>
+          <div class="mt-3">
+            <h6>Live Example (businessKey is empty):</h6>
+            <div class="border p-2 rounded" style="width: 150px; min-height: 2.5rem;">
+              <CopyableActionButton
+                :display-value="emptyValue"
+                :clickable="false"
+                @copy="handleCopy"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <h5>Writing to the Clipboard</h5>
+          <p class="text-muted">The component only emits <code>copy</code>; the parent decides how to write to the clipboard and what feedback to show</p>
+          <div class="bg-light p-3 rounded">
+            <pre><code>&lt;CopyableActionButton
+  display-value="process-def-2:42:abc"
+  :clickable="false"
+  @copy="writeToClipboard"
+/&gt;
+
+methods: {
+  async writeToClipboard(value) {
+    try {
+      await navigator.clipboard.writeText(value)
+      this.copyMessage = `Copied: ${value}`
+    } catch {
+      this.copyMessage = 'Copy failed: clipboard not available'
+    }
+    setTimeout(() =&gt; { this.copyMessage = '' }, 2000)
+  }
+}</code></pre>
+          </div>
+          <div class="mt-3">
+            <h6>Live Example:</h6>
+            <div class="border p-0 rounded" style="width: 200px;">
+              <CopyableActionButton
+                display-value="process-def-2:42:abc"
+                :clickable="false"
+                @copy="writeToClipboard"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-4">
           <h5>Complete Implementation Example</h5>
           <p class="text-muted">Vue component with event handlers and copy functionality</p>
           <div class="bg-light p-3 rounded">
@@ -365,10 +570,28 @@ export default {
         email: 'john.doe@example.com'
       },
       copyMessage: '',
-      profileUrl: 'https://myapp.com/profiles/123'
+      profileUrl: 'https://myapp.com/profiles/123',
+      emptyValue: '',
+      instances: [
+        { id: '3f2b1c9e-8a47-4d1e-b6a2-91c0e5d7f401', state: 'ACTIVE' },
+        { id: '9a7d4e21-5c3b-4f08-8e6d-2b1a7c9d3e55', state: 'COMPLETED' },
+        { id: 'c41e8b70-2d96-4a3f-b0c5-6e7f1a2d9b38', state: 'SUSPENDED' }
+      ],
+      businessKeys: ['ORDER-2026-0001', 'ORDER-2026-0002', 'INVOICE-88412']
     }
   },
   methods: {
+    async writeToClipboard(value) {
+      try {
+        await navigator.clipboard.writeText(value)
+        this.handleCopy(value)
+      } catch {
+        this.copyMessage = 'Copy failed: clipboard not available'
+        setTimeout(() => {
+          this.copyMessage = ''
+        }, 2000)
+      }
+    },
     handleEmailClick() {
       alert('Email clicked: ' + this.user.email)
     },
