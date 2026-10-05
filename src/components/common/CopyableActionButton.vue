@@ -20,6 +20,7 @@
   <div
       v-if="valueToCopy"
       class="position-relative w-100"
+      role="presentation"
       @mouseenter="isHovered = true" @focusin="isHovered = true"
       @mouseleave="isHovered = false" @focusout="isHovered = false"
   >
