@@ -40,7 +40,7 @@
         @keydown.enter.stop.prevent="handleCopy"
         @keydown.space.stop.prevent="handleCopy"
         :title="$t('commons.copyValue') + ':\n' + valueToCopy"
-        :aria-label="$t('commons.copyValue')"
+        :aria-label="$t('commons.copyValue') + ': ' + valueToCopy"
         class="btn btn-link p-0 m-0 bg-transparent mdi mdi-18px mdi-content-copy position-absolute top-50 end-0 translate-middle-y text-secondary lh-sm"
     ></button>
   </div>
@@ -109,9 +109,6 @@ export default {
       }
       return this.clickable ? 'button' : 'div'
     },
-    routerTo() {
-      return this.to || undefined
-    },
     valueToCopy() {
       return this.copyValue || this.displayValue
     },
@@ -146,16 +143,16 @@ export default {
     },
     bindAttrs() {
       if (this.componentType === 'router-link') {
-        return { to: this.routerTo }
+        return { to: this.to }
       }
       if (this.componentType === 'a') {
         // For hash mode, we need to construct the full URL with hash
         let href
-        if (typeof this.routerTo === 'string') {
+        if (typeof this.to === 'string') {
           // If it's already a full URL, use it as is, otherwise add hash
-          href = this.routerTo.startsWith('http') ? this.routerTo : `#${this.routerTo}`
-        } else if (this.$router && this.routerTo) {
-          const resolved = this.$router.resolve(this.routerTo)
+          href = this.to.startsWith('http') ? this.to : `#${this.to}`
+        } else if (this.$router) {
+          const resolved = this.$router.resolve(this.to)
           // Get the base URL from current location, ensuring we include the context path
           const baseUrl = globalThis.location.origin + globalThis.location.pathname.split('#')[0]
           href = baseUrl + '#' + resolved.path + (resolved.query ? '?' + new URLSearchParams(resolved.query).toString() : '')

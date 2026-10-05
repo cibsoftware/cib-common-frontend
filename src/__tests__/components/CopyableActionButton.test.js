@@ -455,8 +455,24 @@ describe('CopyableActionButton', () => {
         await hover(wrapper)
         const btn = copyButton(wrapper)
         expect(btn.attributes('type')).toBe('button')
-        expect(btn.attributes('aria-label')).toBe('commons.copyValue')
+        expect(btn.attributes('aria-label')).toBe('commons.copyValue: Hidden')
         expect(btn.attributes('title')).toBe('commons.copyValue:\nHidden')
+      })
+
+      it('names the copy button after the displayed value so each cell is distinguishable', async () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'John Doe', copyValue: 'user-7f3a9c12' },
+        })
+        await hover(wrapper)
+        expect(copyButton(wrapper).attributes('aria-label')).toBe('commons.copyValue: user-7f3a9c12')
+      })
+
+      it('falls back to the copy value for the aria-label when nothing is displayed', async () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: '', copyValue: 'only-copy' },
+        })
+        await hover(wrapper)
+        expect(copyButton(wrapper).attributes('aria-label')).toBe('commons.copyValue: only-copy')
       })
 
       it.each(['enter', 'space'])('emits copy exactly once on keydown.%s without bubbling', async (key) => {
