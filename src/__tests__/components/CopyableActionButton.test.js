@@ -131,7 +131,7 @@ describe('CopyableActionButton', () => {
   it('bindAttrs resolves object route for anchor', () => {
     const routerMock = createRouterMock({
       router: {
-        resolve: (to) => ({ path: '/resolved', query: { q: '1' } }),
+        resolve: () => ({ path: '/resolved', query: { q: '1' } }),
       },
     })
     const wrapper = mountWithDefaults(CopyableActionButton, {

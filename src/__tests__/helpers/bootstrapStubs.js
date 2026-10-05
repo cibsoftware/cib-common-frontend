@@ -101,7 +101,7 @@ export const BDdStub = defineComponent({
   name: 'BDdStub',
   inheritAttrs: false,
   emits: ['shown', 'hidden', 'show', 'hide'],
-  setup(_, { slots, attrs, emit }) {
+  setup(_, { slots, attrs }) {
     return () => h('div', { ...attrs, 'data-stub': 'b-dd' }, [
       h('div', { 'data-stub': 'b-dd-toggle' }, slots['button-content']?.()),
       h('div', { 'data-stub': 'b-dd-menu' }, slots.default?.()),

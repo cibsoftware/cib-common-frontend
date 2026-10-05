@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { PagedScrollableContent } from '@/library'
 import { mountWithDefaults } from '../helpers/mountComponent.js'
 
@@ -24,7 +24,7 @@ function createScrollElement(overrides = {}) {
     scrollTop: 0,
     clientHeight: 500,
     scrollHeight: 1000,
-    addEventListener: vi.fn((event, handler, _opts) => { listeners[event] = handler }),
+    addEventListener: vi.fn((event, handler) => { listeners[event] = handler }),
     removeEventListener: vi.fn((event) => { delete listeners[event] }),
     triggerScroll() {
       listeners.scroll?.({ target: this })

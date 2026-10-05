@@ -29,6 +29,7 @@ export default mergeConfig(
         provider: 'istanbul',
         reporter: ['text', 'lcov', 'cobertura'], // 'text', 'html', 'lcov', 'cobertura'
         reportsDirectory: './target/coverage',
+        include: ['src/**'],
         exclude: [
           // Build artifacts and minified files
           'dist/**',
@@ -46,7 +47,7 @@ export default mergeConfig(
           '**/*.config.js', // Exclude all config files
 
           // Exclude Vite internals
-          '**/\0**', // Exclude Vite virtual modules
+          '\0*', // Exclude Vite virtual modules
         ],
         excludeNodeModules: true,
       },
