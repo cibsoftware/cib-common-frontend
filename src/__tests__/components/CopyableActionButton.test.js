@@ -141,4 +141,366 @@ describe('CopyableActionButton', () => {
     const href = wrapper.find('a').attributes('href')
     expect(href).toContain('#/resolved')
   })
+
+  describe('consumer use cases', () => {
+    const hover = (wrapper) => wrapper.find('div').trigger('mouseenter')
+    const copyButton = (wrapper) => wrapper.find('.mdi-content-copy')
+
+    describe('identifier in a table cell (to + title + @copy)', () => {
+      it('renders a router-link with a route location object', () => {
+        const to = { name: 'process', params: { processKey: 'p', versionIndex: 1 }, query: { tab: 'instances' } }
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'abc-123', title: 'Instance:\nabc-123', to },
+          routerMock: createRouterMock(),
+        })
+        const link = wrapper.find('[data-stub="router-link"]')
+        expect(link.exists()).toBe(true)
+        expect(link.text()).toBe('abc-123')
+        expect(link.attributes('title')).toBe('Instance:\nabc-123')
+        expect(wrapper.find('button').exists()).toBe(false)
+      })
+
+      it('does not emit click when a router-link is clicked', async () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'abc-123', to: { name: 'process' } },
+          routerMock: createRouterMock(),
+        })
+        await wrapper.find('[data-stub="router-link"]').trigger('click')
+        expect(wrapper.emitted('click')).toBeUndefined()
+      })
+
+      it('copies the full value when copy button is used next to a router-link', async () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'abc-123', to: '/path' },
+          routerMock: createRouterMock(),
+        })
+        await hover(wrapper)
+        await copyButton(wrapper).trigger('click')
+        expect(wrapper.emitted('copy')).toEqual([['abc-123']])
+        expect(wrapper.emitted('click')).toBeUndefined()
+      })
+    })
+
+    describe('label with a different copy value', () => {
+      it('displays displayValue and copies copyValue', async () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'John Doe', copyValue: 'user-7f3a9c12', title: 'Copy user ID' },
+        })
+        expect(wrapper.find('button').text()).toBe('John Doe')
+        expect(wrapper.find('button').attributes('title')).toBe('Copy user ID')
+        await hover(wrapper)
+        await copyButton(wrapper).trigger('click')
+        expect(wrapper.emitted('copy')).toEqual([['user-7f3a9c12']])
+      })
+
+      it('uses displayValue as title by default', () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Hello' },
+        })
+        expect(wrapper.find('button').attributes('title')).toBe('Hello')
+      })
+
+      it('renders when only copyValue is provided', async () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: '', copyValue: 'only-copy' },
+        })
+        expect(wrapper.find('button').exists()).toBe(true)
+        await hover(wrapper)
+        await copyButton(wrapper).trigger('click')
+        expect(wrapper.emitted('copy')).toEqual([['only-copy']])
+      })
+    })
+
+    describe('non-clickable copy element', () => {
+      it('renders a div instead of a button and never emits click', async () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'ABCDE', copyValue: '12345', clickable: false },
+        })
+        expect(wrapper.find('button').exists()).toBe(false)
+        await wrapper.find('.text-truncate').trigger('click')
+        expect(wrapper.emitted('click')).toBeUndefined()
+        await hover(wrapper)
+        await copyButton(wrapper).trigger('click')
+        expect(wrapper.emitted('copy')).toEqual([['12345']])
+      })
+
+      it('prefers the link over clickable=false when to is set', () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Link', clickable: false, to: '/path' },
+          routerMock: createRouterMock(),
+        })
+        expect(wrapper.find('[data-stub="router-link"]').exists()).toBe(true)
+      })
+    })
+
+    describe('clickable action with copy', () => {
+      it('emits click with the event and stops its propagation to the parent', async () => {
+        const parentClick = vi.fn()
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'john@example.com' },
+          attrs: { onClick: undefined },
+          attachTo: document.body,
+        })
+        wrapper.element.parentElement.addEventListener('click', parentClick)
+        await wrapper.find('button').trigger('click')
+        expect(wrapper.emitted('click')).toHaveLength(1)
+        expect(wrapper.emitted('click')[0][0]).toBeInstanceOf(Event)
+        expect(parentClick).not.toHaveBeenCalled()
+        wrapper.unmount()
+      })
+
+      it('copying does not emit click and does not bubble to the parent', async () => {
+        const parentClick = vi.fn()
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'john@example.com' },
+          attachTo: document.body,
+        })
+        wrapper.element.parentElement.addEventListener('click', parentClick)
+        await hover(wrapper)
+        await copyButton(wrapper).trigger('click')
+        expect(wrapper.emitted('copy')).toEqual([['john@example.com']])
+        expect(wrapper.emitted('click')).toBeUndefined()
+        expect(parentClick).not.toHaveBeenCalled()
+        wrapper.unmount()
+      })
+
+      it('renders a button for clickable=true and a non-button for clickable=false', async () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'File.pdf', clickable: true },
+        })
+        expect(wrapper.find('button.btn-link').exists()).toBe(true)
+        await wrapper.setProps({ clickable: false })
+        expect(wrapper.find('button.btn-link').exists()).toBe(false)
+      })
+    })
+
+    describe('link in new tab', () => {
+      it('renders an anchor with rel and target for an external URL', () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Docs', copyValue: 'https://docs.example.com', to: 'https://docs.example.com', newTab: true },
+          routerMock: createRouterMock(),
+        })
+        const a = wrapper.find('a')
+        expect(a.attributes('href')).toBe('https://docs.example.com')
+        expect(a.attributes('target')).toBe('_blank')
+        expect(a.attributes('rel')).toBe('noopener')
+      })
+
+      it('prefixes a plain internal path with # for hash mode', () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Internal', to: '/process/foo', newTab: true },
+          routerMock: createRouterMock(),
+        })
+        expect(wrapper.find('a').attributes('href')).toBe('#/process/foo')
+      })
+
+      it('resolves a route location object including its query', () => {
+        const routerMock = createRouterMock({
+          router: { resolve: () => ({ path: '/process/foo', query: { tab: 'jobs' } }) },
+        })
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Internal', to: { name: 'process' }, newTab: true },
+          routerMock,
+        })
+        expect(wrapper.find('a').attributes('href')).toContain('#/process/foo?tab=jobs')
+      })
+
+      it('renders a button when newTab is set without a destination', () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'No link', newTab: true },
+        })
+        expect(wrapper.find('button').exists()).toBe(true)
+        expect(wrapper.find('a').exists()).toBe(false)
+      })
+    })
+
+    describe('attribute fallthrough (regression for CIB7-1632)', () => {
+      it('passes target="_blank" to the router-link so navigation opens in a new tab', () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Definition', to: { name: 'process' } },
+          attrs: { target: '_blank' },
+          routerMock: createRouterMock(),
+        })
+        expect(wrapper.find('[data-stub="router-link"]').attributes('target')).toBe('_blank')
+        expect(wrapper.find('div.position-relative').attributes('target')).toBeUndefined()
+      })
+
+      it('passes class to the interactive element and not to the wrapper', () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Text', clickable: false },
+          attrs: { class: 'pt-2' },
+        })
+        expect(wrapper.find('.text-truncate').classes()).toContain('pt-2')
+        expect(wrapper.find('div.position-relative').classes()).not.toContain('pt-2')
+      })
+
+      it('keeps its own classes when a consumer adds classes to a clickable button', () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'File.pdf' },
+          attrs: { class: 'w-100 text-start' },
+        })
+        expect(wrapper.find('button').classes()).toEqual(expect.arrayContaining(['btn', 'btn-link', 'text-truncate', 'text-start', 'w-100']))
+      })
+
+      it('passes arbitrary attributes such as data-testid and id to the interactive element', () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Text' },
+          attrs: { 'data-testid': 'cell', id: 'my-id' },
+        })
+        expect(wrapper.find('button').attributes('data-testid')).toBe('cell')
+        expect(wrapper.find('button').attributes('id')).toBe('my-id')
+        expect(wrapper.find('div.position-relative').attributes('data-testid')).toBeUndefined()
+      })
+
+      it('does not let consumer attributes override the computed href of a new-tab anchor', () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Docs', to: 'https://docs.example.com', newTab: true },
+          attrs: { href: 'https://evil.example.com' },
+          routerMock: createRouterMock(),
+        })
+        expect(wrapper.find('a').attributes('href')).toBe('https://docs.example.com')
+      })
+    })
+
+    describe('list of copyable values (v-for)', () => {
+      it('tracks hover independently for every instance', async () => {
+        const wrapper = mountWithDefaults({
+          components: { CopyableActionButton },
+          template: '<ul><li v-for="k in keys" :key="k"><CopyableActionButton :display-value="k" :clickable="false" /></li></ul>',
+          data: () => ({ keys: ['ORDER-1', 'ORDER-2', 'INVOICE-3'] }),
+        })
+        expect(wrapper.findAll('.position-relative')).toHaveLength(3)
+        await wrapper.findAll('.position-relative')[1].trigger('mouseenter')
+        expect(wrapper.findAll('.mdi-content-copy')).toHaveLength(1)
+        expect(wrapper.findAll('li')[1].find('.mdi-content-copy').exists()).toBe(true)
+      })
+
+      it('emits the value of the instance that was copied', async () => {
+        const onCopy = vi.fn()
+        const wrapper = mountWithDefaults({
+          components: { CopyableActionButton },
+          template: '<ul><li v-for="k in keys" :key="k"><CopyableActionButton :display-value="k" :clickable="false" @copy="onCopy" /></li></ul>',
+          data: () => ({ keys: ['ORDER-1', 'ORDER-2'] }),
+          methods: { onCopy },
+        })
+        await wrapper.findAll('.position-relative')[1].trigger('mouseenter')
+        await wrapper.find('.mdi-content-copy').trigger('click')
+        expect(onCopy).toHaveBeenCalledExactlyOnceWith('ORDER-2')
+      })
+    })
+
+    describe('optional value', () => {
+      it.each([[''], [undefined]])('renders no markup for displayValue=%s without copyValue', (displayValue) => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue },
+        })
+        expect(wrapper.find('div').exists()).toBe(false)
+        expect(wrapper.html()).toBe('<!--v-if-->')
+      })
+
+      it('renders again once a value becomes available', async () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: '' },
+        })
+        await wrapper.setProps({ displayValue: 'late' })
+        expect(wrapper.find('button').text()).toBe('late')
+      })
+    })
+
+    describe('copy button behaviour and accessibility', () => {
+      it('is hidden until hover and hides again on mouseleave', async () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Hover' },
+        })
+        expect(copyButton(wrapper).exists()).toBe(false)
+        await hover(wrapper)
+        expect(copyButton(wrapper).exists()).toBe(true)
+        await wrapper.find('div').trigger('mouseleave')
+        expect(copyButton(wrapper).exists()).toBe(false)
+      })
+
+      it('is shown on keyboard focus and hidden on focus loss', async () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Focus' },
+        })
+        await wrapper.find('button').trigger('focusin')
+        expect(copyButton(wrapper).exists()).toBe(true)
+        await wrapper.find('div').trigger('focusout')
+        expect(copyButton(wrapper).exists()).toBe(false)
+      })
+
+      it('adds right padding to the main element while hovered', async () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Pad' },
+        })
+        expect(wrapper.find('button.btn-link').classes()).not.toContain('pe-4')
+        await hover(wrapper)
+        expect(wrapper.find('button.btn-link').classes()).toContain('pe-4')
+      })
+
+      it('is not nested inside the link or button it belongs to', async () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Nested?', to: '/path' },
+          routerMock: createRouterMock(),
+        })
+        await hover(wrapper)
+        expect(wrapper.find('a .mdi-content-copy').exists()).toBe(false)
+        expect(wrapper.find('button button').exists()).toBe(false)
+      })
+
+      it('has type=button, an aria-label and a tooltip containing the copied value', async () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Show', copyValue: 'Hidden' },
+        })
+        await hover(wrapper)
+        const btn = copyButton(wrapper)
+        expect(btn.attributes('type')).toBe('button')
+        expect(btn.attributes('aria-label')).toBe('commons.copyValue')
+        expect(btn.attributes('title')).toBe('commons.copyValue:\nHidden')
+      })
+
+      it.each(['enter', 'space'])('emits copy exactly once on keydown.%s without bubbling', async (key) => {
+        const parentKeydown = vi.fn()
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Key' },
+          attachTo: document.body,
+        })
+        wrapper.element.parentElement.addEventListener('keydown', parentKeydown)
+        await hover(wrapper)
+        await copyButton(wrapper).trigger(`keydown.${key}`)
+        expect(wrapper.emitted('copy')).toEqual([['Key']])
+        expect(parentKeydown).not.toHaveBeenCalled()
+        wrapper.unmount()
+      })
+
+      it('does not submit a surrounding form', async () => {
+        const onSubmit = vi.fn((e) => e.preventDefault())
+        const wrapper = mountWithDefaults({
+          components: { CopyableActionButton },
+          template: '<form @submit="onSubmit"><CopyableActionButton display-value="Form" /></form>',
+          methods: { onSubmit },
+        }, { attachTo: document.body })
+        await wrapper.find('.position-relative').trigger('mouseenter')
+        await wrapper.find('.mdi-content-copy').trigger('click')
+        expect(onSubmit).not.toHaveBeenCalled()
+        wrapper.unmount()
+      })
+    })
+
+    describe('consumer writes to the clipboard', () => {
+      it('passes the value to the parent handler which can call navigator.clipboard', async () => {
+        const writeText = vi.fn().mockResolvedValue()
+        vi.stubGlobal('navigator', { clipboard: { writeText } })
+        const wrapper = mountWithDefaults({
+          components: { CopyableActionButton },
+          template: '<CopyableActionButton display-value="process-def-2:42:abc" :clickable="false" @copy="write" />',
+          methods: { write(v) { return navigator.clipboard.writeText(v) } },
+        })
+        await wrapper.find('.position-relative').trigger('mouseenter')
+        await wrapper.find('.mdi-content-copy').trigger('click')
+        expect(writeText).toHaveBeenCalledExactlyOnceWith('process-def-2:42:abc')
+        vi.unstubAllGlobals()
+      })
+    })
+  })
 })

@@ -52,6 +52,10 @@
               <li>Render lists of copyable values with <code>v-for</code> (tags, keys, references)</li>
               <li>Copy values via the browser Clipboard API with a fallback for unsupported contexts</li>
               <li>Safely render optional data: nothing is rendered when there is no value to display or copy</li>
+              <li>Pass native attributes such as <code>target</code>, <code>class</code> or <code>data-*</code>; they are applied to the inner button, link or text element</li>
+              <li>Toggle <code>clickable</code> dynamically (e.g. only downloadable values are actions)</li>
+              <li>Render a list of clickable items, each with its own action and copy value</li>
+              <li>Use inside a <code>&lt;form&gt;</code> without submitting it when copying</li>
             </ul>
 
             <h4>Integration</h4>
@@ -488,6 +492,161 @@ methods: {
         </div>
 
         <div class="mb-4">
+          <h5>Passing Attributes (target, class, data-*)</h5>
+          <p class="text-muted">Undeclared attributes are applied to the inner button, link or text element, not to the hover wrapper. <code>target="_blank"</code> on a route link opens the route in a new tab</p>
+          <div class="bg-light p-3 rounded">
+            <pre><code>&lt;CopyableActionButton
+  display-value="Definition (target=_blank)"
+  :to="{ name: 'TaskListComponent' }"
+  target="_blank"
+  data-testid="definition-link"
+  @copy="handleCopy"
+/&gt;
+
+&lt;CopyableActionButton
+  display-value="With extra padding"
+  :clickable="false"
+  class="pt-2 fw-bold"
+  @copy="handleCopy"
+/&gt;</code></pre>
+          </div>
+          <div class="mt-3">
+            <h6>Live Example:</h6>
+            <div class="border p-0 rounded mb-2" style="width: 200px;">
+              <CopyableActionButton
+                display-value="Definition (target=_blank)"
+                :to="{ name: 'TaskListComponent' }"
+                target="_blank"
+                data-testid="definition-link"
+                @copy="handleCopy"
+              />
+            </div>
+            <div class="border p-0 rounded" style="width: 200px;">
+              <CopyableActionButton
+                display-value="With extra padding"
+                :clickable="false"
+                class="pt-2 fw-bold"
+                @copy="handleCopy"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <h5>Conditionally Clickable</h5>
+          <p class="text-muted">Bind <code>clickable</code> to a condition, for example only downloadable values trigger an action; everything stays copyable</p>
+          <div class="bg-light p-3 rounded">
+            <pre><code>&lt;CopyableActionButton
+  :display-value="variable.name"
+  :clickable="variable.downloadable"
+  :title="variable.name"
+  class="w-100 text-start"
+  @click="download(variable)"
+  @copy="handleCopy"
+/&gt;</code></pre>
+          </div>
+          <div class="mt-3">
+            <h6>Live Example:</h6>
+            <div class="form-check form-switch mb-2">
+              <input id="downloadable-switch" v-model="downloadable" class="form-check-input" type="checkbox">
+              <label class="form-check-label" for="downloadable-switch">downloadable</label>
+            </div>
+            <div class="border p-0 rounded" style="width: 200px;">
+              <CopyableActionButton
+                display-value="report-2026.pdf"
+                :clickable="downloadable"
+                title="report-2026.pdf"
+                class="w-100 text-start"
+                @click="handleDownload"
+                @copy="handleCopy"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <h5>List of Clickable Actions</h5>
+          <p class="text-muted">Several clickable items in one cell, each with its own action</p>
+          <div class="bg-light p-3 rounded">
+            <pre><code>&lt;div class="w-100"&gt;
+  &lt;CopyableActionButton
+    v-for="(act, index) in activities" :key="index"
+    :display-value="act.activityName"
+    :title="act.activityName"
+    @click="selectActivity(act)"
+    @copy="handleCopy"
+  /&gt;
+&lt;/div&gt;</code></pre>
+          </div>
+          <div class="mt-3">
+            <h6>Live Example:</h6>
+            <div class="border p-0 rounded" style="width: 200px;">
+              <div class="w-100">
+                <CopyableActionButton
+                  v-for="(act, index) in activities"
+                  :key="index"
+                  :display-value="act.activityName"
+                  :title="act.activityName"
+                  @click="handleActivityClick(act)"
+                  @copy="handleCopy"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <h5>Multi-line Tooltip</h5>
+          <p class="text-muted">A custom <code>title</code> can describe the value with a label and a line break</p>
+          <div class="bg-light p-3 rounded">
+            <pre><code>&lt;CopyableActionButton
+  :display-value="instanceId"
+  :title="'Called process instance:\n' + instanceId"
+  :to="{ name: 'TaskListComponent' }"
+  @copy="handleCopy"
+/&gt;</code></pre>
+          </div>
+          <div class="mt-3">
+            <h6>Live Example:</h6>
+            <div class="border p-0 rounded" style="width: 200px;">
+              <CopyableActionButton
+                :display-value="instances[0].id"
+                :title="'Called process instance:\n' + instances[0].id"
+                :to="{ name: 'TaskListComponent' }"
+                @copy="handleCopy"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <h5>Inside a Form</h5>
+          <p class="text-muted">The copy button has <code>type="button"</code>, so using it never submits the surrounding form</p>
+          <div class="bg-light p-3 rounded">
+            <pre><code>&lt;form @submit.prevent="formMessage = 'Form submitted'"&gt;
+  &lt;CopyableActionButton
+    display-value="form-field-value"
+    :clickable="false"
+    @copy="handleCopy"
+  /&gt;
+  &lt;button type="submit" class="btn btn-primary btn-sm mt-2"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+          </div>
+          <div class="mt-3">
+            <h6>Live Example:</h6>
+            <form class="border p-2 rounded" style="width: 200px;" @submit.prevent="formMessage = 'Form submitted'">
+              <CopyableActionButton
+                display-value="form-field-value"
+                :clickable="false"
+                @copy="handleCopy"
+              />
+              <button type="submit" class="btn btn-primary btn-sm mt-2">Submit</button>
+            </form>
+            <div v-if="formMessage" class="text-muted small mt-1">{{ formMessage }}</div>
+          </div>
+        </div>
+
+        <div class="mb-4">
           <h5>Complete Implementation Example</h5>
           <p class="text-muted">Vue component with event handlers and copy functionality</p>
           <div class="bg-light p-3 rounded">
@@ -572,6 +731,12 @@ export default {
       copyMessage: '',
       profileUrl: 'https://myapp.com/profiles/123',
       emptyValue: '',
+      downloadable: true,
+      formMessage: '',
+      activities: [
+        { activityId: 'approve', activityName: 'Approve invoice' },
+        { activityId: 'review', activityName: 'Review order' }
+      ],
       instances: [
         { id: '3f2b1c9e-8a47-4d1e-b6a2-91c0e5d7f401', state: 'ACTIVE' },
         { id: '9a7d4e21-5c3b-4f08-8e6d-2b1a7c9d3e55', state: 'COMPLETED' },
@@ -591,6 +756,12 @@ export default {
           this.copyMessage = ''
         }, 2000)
       }
+    },
+    handleDownload() {
+      alert('Download started')
+    },
+    handleActivityClick(activity) {
+      alert('Activity selected: ' + activity.activityId)
     },
     handleEmailClick() {
       alert('Email clicked: ' + this.user.email)

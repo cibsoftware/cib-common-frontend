@@ -25,7 +25,7 @@
   >
     <component
         :is="componentType"
-        v-bind="bindAttrs"
+        v-bind="{ ...$attrs, ...bindAttrs }"
         :class="containerClasses"
         :title="title || displayValue"
         @click="handleClick"
@@ -48,6 +48,9 @@
 <script>
 export default {
   name: 'CopyableActionButton',
+  // The wrapper div only provides hover/focus handling and positioning. Attributes such as
+  // target, class or data-* are meant for the interactive element (button, a, router-link).
+  inheritAttrs: false,
   props: {
     /**
      * The value to display in the button
