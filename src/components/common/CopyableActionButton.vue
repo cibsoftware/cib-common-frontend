@@ -156,17 +156,15 @@ export default {
         return { to: this.to }
       }
       if (this.componentType === 'a') {
-        // For hash mode, we need to construct the full URL with hash
         let href
-        if (typeof this.to === 'string') {
-          // If it's already a full URL, use it as is, otherwise add hash
-          href = this.to.startsWith('http') ? this.to : `#${this.to}`
+        if (typeof this.to === 'string' && /^https?:\/\//i.test(this.to)) {
+          // external URL, use it as is
+          href = this.to
         } else if (this.$router) {
+          // let the router build path and query; resolve against the current page so that the context path is kept
+          // and the result is absolute for both hash and web history
           const resolved = this.$router.resolve(this.to)
-          // Get the base URL from current location, ensuring we include the context path
-          const baseUrl = globalThis.location.origin + globalThis.location.pathname.split('#')[0]
-          const query = new URLSearchParams(resolved.query).toString()
-          href = baseUrl + '#' + resolved.path + (query ? '?' + query : '')
+          href = new URL(resolved.href, globalThis.location.origin + globalThis.location.pathname).href
         }
         return {
           href,

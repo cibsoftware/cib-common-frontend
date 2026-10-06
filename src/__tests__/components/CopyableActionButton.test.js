@@ -16,7 +16,12 @@
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { CopyableActionButton } from '@/library'
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import { mountWithDefaults, createRouterMock } from '../helpers/mountComponent.js'
+
+const routes = [{ path: '/process/:key', name: 'process', component: { render: () => null } }]
+const createRealRouterMock = (history) => ({ route: {}, router: createRouter({ history, routes }) })
+const pageUrl = () => globalThis.location.origin + globalThis.location.pathname
 
 describe('CopyableActionButton', () => {
   it('does not render when valueToCopy is empty', () => {
@@ -131,15 +136,14 @@ describe('CopyableActionButton', () => {
   it('bindAttrs resolves object route for anchor', () => {
     const routerMock = createRouterMock({
       router: {
-        resolve: () => ({ path: '/resolved', query: { q: '1' } }),
+        resolve: () => ({ href: '#/resolved?q=1' }),
       },
     })
     const wrapper = mountWithDefaults(CopyableActionButton, {
       props: { displayValue: 'Link', to: { path: '/foo' }, newTab: true },
       routerMock,
     })
-    const href = wrapper.find('a').attributes('href')
-    expect(href).toContain('#/resolved')
+    expect(wrapper.find('a').attributes('href')).toBe(pageUrl() + '#/resolved?q=1')
   })
 
   describe('consumer use cases', () => {
@@ -312,59 +316,66 @@ describe('CopyableActionButton', () => {
         expect(a.attributes('rel')).toBe('noopener')
       })
 
-      it('prefixes a plain internal path with # for hash mode', () => {
+      it('lets the router build the href of a plain internal path', () => {
         const wrapper = mountWithDefaults(CopyableActionButton, {
-          props: { displayValue: 'Internal', to: '/process/foo', newTab: true },
-          routerMock: createRouterMock(),
+          props: { displayValue: 'Internal', to: '/process/foo?x=1', newTab: true },
+          routerMock: createRealRouterMock(createWebHashHistory()),
         })
-        expect(wrapper.find('a').attributes('href')).toBe('#/process/foo')
+        expect(wrapper.find('a').attributes('href')).toBe(pageUrl() + '#/process/foo?x=1')
       })
 
-      it('resolves a route location object including its query', () => {
-        const routerMock = createRouterMock({
-          router: { resolve: () => ({ path: '/process/foo', query: { tab: 'jobs' } }) },
-        })
-        const wrapper = mountWithDefaults(CopyableActionButton, {
-          props: { displayValue: 'Internal', to: { name: 'process' }, newTab: true },
-          routerMock,
-        })
-        expect(wrapper.find('a').attributes('href')).toContain('#/process/foo?tab=jobs')
+      it('keeps http and https URLs as they are, regardless of case', () => {
+        for (const url of ['http://example.com/a?b=1', 'HTTPS://example.com/']) {
+          const wrapper = mountWithDefaults(CopyableActionButton, {
+            props: { displayValue: 'External', to: url, newTab: true },
+            routerMock: createRealRouterMock(createWebHashHistory()),
+          })
+          expect(wrapper.find('a').attributes('href')).toBe(url)
+        }
       })
 
-      it('omits the query string when the resolved route has no query', () => {
-        const routerMock = createRouterMock({
-          router: { resolve: () => ({ path: '/process/foo', query: undefined }) },
-        })
+      it('uses the query string built by the router for a route location object', () => {
         const wrapper = mountWithDefaults(CopyableActionButton, {
-          props: { displayValue: 'Internal', to: { name: 'process' }, newTab: true },
-          routerMock,
+          props: { displayValue: 'Internal', to: { name: 'process', params: { key: 'foo' }, query: { tab: 'jobs' } }, newTab: true },
+          routerMock: createRealRouterMock(createWebHashHistory()),
         })
-        const href = wrapper.find('a').attributes('href')
-        expect(href).toMatch(/#\/process\/foo$/)
-        expect(href).not.toContain('?')
+        expect(wrapper.find('a').attributes('href')).toBe(pageUrl() + '#/process/foo?tab=jobs')
       })
 
-      it('omits the trailing question mark when the resolved route has an empty query object', () => {
-        // vue-router always returns a query object, which is empty for routes without query parameters
-        const routerMock = createRouterMock({
-          router: { resolve: () => ({ path: '/process/foo', query: {} }) },
-        })
+      it('omits the question mark for a route without query parameters', () => {
         const wrapper = mountWithDefaults(CopyableActionButton, {
-          props: { displayValue: 'Internal', to: { name: 'process' }, newTab: true },
-          routerMock,
+          props: { displayValue: 'Internal', to: { name: 'process', params: { key: 'foo' } }, newTab: true },
+          routerMock: createRealRouterMock(createWebHashHistory()),
         })
-        expect(wrapper.find('a').attributes('href')).toMatch(/#\/process\/foo$/)
+        expect(wrapper.find('a').attributes('href')).toBe(pageUrl() + '#/process/foo')
       })
 
-      it('encodes multiple query parameters', () => {
-        const routerMock = createRouterMock({
-          router: { resolve: () => ({ path: '/process/foo', query: { tab: 'jobs', tenantId: 'a b' } }) },
-        })
+      it('writes array query values as repeated keys and null values as bare keys', () => {
         const wrapper = mountWithDefaults(CopyableActionButton, {
-          props: { displayValue: 'Internal', to: { name: 'process' }, newTab: true },
-          routerMock,
+          props: {
+            displayValue: 'Internal',
+            to: { name: 'process', params: { key: 'foo' }, query: { a: ['1', '2'], b: null, c: 'x y' } },
+            newTab: true,
+          },
+          routerMock: createRealRouterMock(createWebHashHistory()),
         })
-        expect(wrapper.find('a').attributes('href')).toMatch(/#\/process\/foo\?tab=jobs&tenantId=a\+b$/)
+        expect(wrapper.find('a').attributes('href')).toBe(pageUrl() + '#/process/foo?a=1&a=2&b&c=x+y')
+      })
+
+      it('keeps the hash of the route location', () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Internal', to: { name: 'process', params: { key: 'foo' }, hash: '#section' }, newTab: true },
+          routerMock: createRealRouterMock(createWebHashHistory()),
+        })
+        expect(wrapper.find('a').attributes('href')).toBe(pageUrl() + '#/process/foo#section')
+      })
+
+      it('builds an absolute URL for web history with a base path', () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Internal', to: { name: 'process', params: { key: 'foo' }, query: { x: '1' } }, newTab: true },
+          routerMock: createRealRouterMock(createWebHistory('/common-frontend/')),
+        })
+        expect(wrapper.find('a').attributes('href')).toBe(globalThis.location.origin + '/common-frontend/process/foo?x=1')
       })
 
       it('renders an anchor without href for a route location object when no router is available', () => {
@@ -375,6 +386,13 @@ describe('CopyableActionButton', () => {
         expect(a.exists()).toBe(true)
         expect(a.attributes('href')).toBeUndefined()
         expect(a.attributes('target')).toBe('_blank')
+      })
+
+      it('renders an anchor without href for an internal path when no router is available', () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Internal', to: '/process/foo', newTab: true },
+        })
+        expect(wrapper.find('a').attributes('href')).toBeUndefined()
       })
 
       it('renders a button when newTab is set without a destination', () => {
