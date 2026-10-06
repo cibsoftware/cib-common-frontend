@@ -21,8 +21,8 @@
       v-if="valueToCopy"
       class="position-relative w-100"
       role="presentation"
-      @mouseenter="isHovered = true" @focusin="isHovered = true"
-      @mouseleave="isHovered = false" @focusout="isHovered = false"
+      @mouseenter="hovered = true" @mouseleave="hovered = false"
+      @focusin="focused = true" @focusout="handleFocusOut"
   >
     <component
         :is="componentType"
@@ -34,7 +34,7 @@
       {{ displayValue }}
     </component>
     <button
-        v-if="isHovered"
+        v-if="showCopyButton"
         type="button"
         @click.stop.prevent="handleCopy"
         @keydown.enter.stop.prevent="handleCopy"
@@ -99,10 +99,14 @@ export default {
   emits: ['click', 'copy'],
   data() {
     return {
-      isHovered: false,
+      hovered: false,
+      focused: false,
     }
   },
   computed: {
+    showCopyButton() {
+      return this.hovered || this.focused
+    },
     componentType() {
       if (this.to) {
         return this.newTab ? 'a' : 'router-link'
@@ -115,7 +119,7 @@ export default {
     containerClasses() {
       const baseClasses = {
         'text-truncate': true,
-        'pe-4': this.isHovered,
+        'pe-4': this.showCopyButton,
         'w-100': true,
       }
       if (this.to) {
@@ -181,6 +185,13 @@ export default {
       // Only emit click event for buttons or non-router links
       if (this.clickable) {
         this.$emit('click', event)
+      }
+    },
+    handleFocusOut(event) {
+      // While focus moves between the main element and the copy button, the copy button must stay in the DOM:
+      // Vue re-renders between focusout and focusin, and a removed button cannot receive the focus.
+      if (!this.$el.contains(event.relatedTarget)) {
+        this.focused = false
       }
     },
     handleCopy() {

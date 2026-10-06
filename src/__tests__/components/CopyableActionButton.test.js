@@ -429,6 +429,64 @@ describe('CopyableActionButton', () => {
         expect(copyButton(wrapper).exists()).toBe(false)
       })
 
+      it('keeps the copy button while focus moves from the main element to it', async () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Tab' },
+        })
+        await wrapper.find('button').trigger('focusin')
+        const copy = copyButton(wrapper)
+        // the browser removes DOM nodes between focusout and focusin, so the copy button must survive focusout
+        await wrapper.find('button').trigger('focusout', { relatedTarget: copy.element })
+        expect(copyButton(wrapper).exists()).toBe(true)
+        await copy.trigger('focusin')
+        expect(copyButton(wrapper).exists()).toBe(true)
+      })
+
+      it('keeps the copy button while focus moves back from it to the main element', async () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Tab' },
+        })
+        await wrapper.find('button').trigger('focusin')
+        const copy = copyButton(wrapper)
+        await copy.trigger('focusin')
+        await copy.trigger('focusout', { relatedTarget: wrapper.find('button').element })
+        expect(copyButton(wrapper).exists()).toBe(true)
+      })
+
+      it('hides the copy button when focus leaves the component', async () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Tab' },
+          attachTo: document.body,
+        })
+        const outside = document.createElement('input')
+        document.body.appendChild(outside)
+        await wrapper.find('button').trigger('focusin')
+        await copyButton(wrapper).trigger('focusin')
+        await copyButton(wrapper).trigger('focusout', { relatedTarget: outside })
+        expect(copyButton(wrapper).exists()).toBe(false)
+        outside.remove()
+        wrapper.unmount()
+      })
+
+      it('keeps the copy button while it has focus even if the mouse pointer leaves', async () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Tab' },
+        })
+        await hover(wrapper)
+        await copyButton(wrapper).trigger('focusin')
+        await wrapper.find('div').trigger('mouseleave')
+        expect(copyButton(wrapper).exists()).toBe(true)
+      })
+
+      it('keeps the copy button while the mouse is over it after focus is lost', async () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Tab' },
+        })
+        await hover(wrapper)
+        await wrapper.find('div').trigger('focusout')
+        expect(copyButton(wrapper).exists()).toBe(true)
+      })
+
       it('adds right padding to the main element while hovered', async () => {
         const wrapper = mountWithDefaults(CopyableActionButton, {
           props: { displayValue: 'Pad' },
