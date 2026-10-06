@@ -45,6 +45,22 @@ describe('ErrorDialog', () => {
     expect(wrapper.vm.message).toBe('translated:errors.notFound:{"id":1}')
   })
 
+  it('uses the translated title', () => {
+    const wrapper = mountWithDefaults(ErrorDialog, {
+      mocks: { $t: key => key === 'error.title' ? 'Fehler' : key },
+    })
+
+    expect(wrapper.find('[data-stub="b-modal"]').attributes('title')).toBe('Fehler')
+  })
+
+  it('falls back to a default title when the translation is empty', () => {
+    const wrapper = mountWithDefaults(ErrorDialog, {
+      mocks: { $t: key => key === 'error.title' ? '' : key },
+    })
+
+    expect(wrapper.find('[data-stub="b-modal"]').attributes('title')).toBe('Error')
+  })
+
   it('wraps quoted words in strong tags', async () => {
     const wrapper = mountWithDefaults(ErrorDialog)
 
