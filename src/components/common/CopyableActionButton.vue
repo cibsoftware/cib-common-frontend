@@ -36,9 +36,8 @@
     <button
         v-if="showCopyButton"
         type="button"
-        @click.stop.prevent="handleCopy"
-        @keydown.enter.stop.prevent="handleCopy"
-        @keydown.space.stop.prevent="handleCopy"
+        @click.stop="handleCopy"
+        @keydown.enter.space.stop
         :title="$t('commons.copyValue') + ':\n' + valueToCopy"
         :aria-label="$t('commons.copyValue') + ': ' + valueToCopy"
         class="btn btn-link p-0 m-0 bg-transparent mdi mdi-18px position-absolute top-50 end-0 translate-middle-y text-secondary lh-sm"

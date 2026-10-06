@@ -667,7 +667,16 @@ describe('CopyableActionButton', () => {
         expect(copyButton(wrapper).attributes('aria-label')).toBe('commons.copyValue: only-copy')
       })
 
-      it.each(['enter', 'space'])('emits copy exactly once on keydown.%s without bubbling', async (key) => {
+      it.each(['enter', 'space'])('does not emit copy on keydown.%s itself, the native button turns the key into a click', async (key) => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Key' },
+        })
+        await hover(wrapper)
+        await copyButton(wrapper).trigger(`keydown.${key}`)
+        expect(wrapper.emitted('copy')).toBeUndefined()
+      })
+
+      it.each(['enter', 'space'])('keeps keydown.%s from bubbling to parent elements', async (key) => {
         const parentKeydown = vi.fn()
         const wrapper = mountWithDefaults(CopyableActionButton, {
           props: { displayValue: 'Key' },
@@ -676,8 +685,37 @@ describe('CopyableActionButton', () => {
         wrapper.element.parentElement.addEventListener('keydown', parentKeydown)
         await hover(wrapper)
         await copyButton(wrapper).trigger(`keydown.${key}`)
-        expect(wrapper.emitted('copy')).toEqual([['Key']])
         expect(parentKeydown).not.toHaveBeenCalled()
+        wrapper.unmount()
+      })
+
+      it('lets other keys bubble so that global shortcuts keep working', async () => {
+        const parentKeydown = vi.fn()
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Key' },
+          attachTo: document.body,
+        })
+        wrapper.element.parentElement.addEventListener('keydown', parentKeydown)
+        await hover(wrapper)
+        await copyButton(wrapper).trigger('keydown', { key: 'p', ctrlKey: true, altKey: true })
+        await copyButton(wrapper).trigger('keydown', { key: 'Tab' })
+        expect(parentKeydown).toHaveBeenCalledTimes(2)
+        wrapper.unmount()
+      })
+
+      it('stops the click from reaching parents but does not prevent its default action', async () => {
+        const parentClick = vi.fn()
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Key' },
+          attachTo: document.body,
+        })
+        wrapper.element.parentElement.addEventListener('click', parentClick)
+        await hover(wrapper)
+        const click = new MouseEvent('click', { bubbles: true, cancelable: true })
+        copyButton(wrapper).element.dispatchEvent(click)
+        expect(wrapper.emitted('copy')).toEqual([['Key']])
+        expect(parentClick).not.toHaveBeenCalled()
+        expect(click.defaultPrevented).toBe(false)
         wrapper.unmount()
       })
 
@@ -827,7 +865,7 @@ describe('CopyableActionButton', () => {
         })
         await wrapper.find('button').trigger('focusin')
         await copyButton(wrapper).trigger('focusin')
-        await copyButton(wrapper).trigger('keydown.enter')
+        await copyButton(wrapper).trigger('click')
         expect(wrapper.find('.mdi-check').exists()).toBe(true)
         await vi.advanceTimersByTimeAsync(2000)
         expect(copyButton(wrapper).exists()).toBe(true)
