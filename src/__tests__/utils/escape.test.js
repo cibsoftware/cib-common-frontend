@@ -75,6 +75,25 @@ describe('escapeRegExp', () => {
     ])('returns an empty string for %s', (_label, input) => {
       expect(escapeRegExp(input)).toBe('')
     })
+
+    it('returns an empty string for an empty string', () => {
+      expect(escapeRegExp('')).toBe('')
+    })
+
+    it.each([
+      ['zero', 0, '0'],
+      ['false', false, 'false'],
+    ])('keeps %s instead of treating it as missing', (_label, input, literal) => {
+      expect(new RegExp(`^${escapeRegExp(input)}$`).test(literal)).toBe(true)
+    })
+
+    it('matches a term made of every metacharacter only literally', () => {
+      const term = '.*+?^${}()|[]\\'
+      const regex = new RegExp(`^${escapeRegExp(term)}$`)
+
+      expect(regex.test(term)).toBe(true)
+      expect(regex.test('anything else')).toBe(false)
+    })
   })
 
   it('delegates to the built-in when the engine has one', () => {

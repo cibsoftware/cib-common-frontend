@@ -79,4 +79,68 @@ describe('ErrorDialog', () => {
     expect(wrapper.html()).toContain('<strong>&lt;b&gt;myProcess&lt;/b&gt;</strong>')
     expect(wrapper.element.querySelector('b')).toBeNull()
   })
+
+  it('bolds every quoted word on a line and keeps the quotes as text', async () => {
+    const wrapper = mountWithDefaults(ErrorDialog)
+
+    wrapper.vm.message = 'Task "Review" of process "Invoice" failed'
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.findAll('strong').map(strong => strong.text())).toEqual(['Review', 'Invoice'])
+    expect(wrapper.text()).toContain('Task "Review" of process "Invoice" failed')
+  })
+
+  it('bolds quoted words on every line of a multiline message', async () => {
+    const wrapper = mountWithDefaults(ErrorDialog)
+
+    wrapper.vm.message = 'Process "first" failed\nRetry "second" later'
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.findAll('p')).toHaveLength(2)
+    expect(wrapper.findAll('strong').map(strong => strong.text())).toEqual(['first', 'second'])
+  })
+
+  it('leaves an unmatched quote as plain text', async () => {
+    const wrapper = mountWithDefaults(ErrorDialog)
+
+    wrapper.vm.message = 'Value "unterminated is invalid'
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.find('strong').exists()).toBe(false)
+    expect(wrapper.text()).toContain('Value "unterminated is invalid')
+  })
+
+  it('does not pair quotes across lines', async () => {
+    const wrapper = mountWithDefaults(ErrorDialog)
+
+    wrapper.vm.message = 'Opened "here\nclosed" there'
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.find('strong').exists()).toBe(false)
+  })
+
+  describe('quotedParts', () => {
+    it.each([
+      ['a line without quotes', 'plain text', [
+        { text: 'plain text', strong: false },
+      ]],
+      ['a quoted word in the middle', 'a "b" c', [
+        { text: 'a ', strong: false },
+        { text: '"', strong: false },
+        { text: 'b', strong: true },
+        { text: '"', strong: false },
+        { text: ' c', strong: false },
+      ]],
+      ['a line that is only a quoted word', '"b"', [
+        { text: '"', strong: false },
+        { text: 'b', strong: true },
+        { text: '"', strong: false },
+      ]],
+      ['an empty line', '', []],
+    ])('splits %s', (_name, line, expected) => {
+      const wrapper = mountWithDefaults(ErrorDialog)
+
+      expect(wrapper.vm.quotedParts(line)).toEqual(expected)
+    })
+  })
 })
