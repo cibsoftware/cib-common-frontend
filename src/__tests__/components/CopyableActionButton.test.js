@@ -608,7 +608,7 @@ describe('CopyableActionButton', () => {
           props: { displayValue: 'Value' },
         })
         await copy(wrapper)
-        await vi.advanceTimersByTimeAsync(1999)
+        await vi.advanceTimersByTimeAsync(1249)
         expect(wrapper.find('.mdi-check').exists()).toBe(true)
         await vi.advanceTimersByTimeAsync(1)
         expect(wrapper.find('.mdi-check').exists()).toBe(false)
@@ -622,11 +622,11 @@ describe('CopyableActionButton', () => {
           props: { displayValue: 'Value' },
         })
         await copy(wrapper)
-        await vi.advanceTimersByTimeAsync(1500)
+        await vi.advanceTimersByTimeAsync(1000)
         await wrapper.find('.mdi-check').trigger('click')
-        await vi.advanceTimersByTimeAsync(1500)
+        await vi.advanceTimersByTimeAsync(50)
         expect(wrapper.find('.mdi-check').exists()).toBe(true)
-        await vi.advanceTimersByTimeAsync(500)
+        await vi.advanceTimersByTimeAsync(1200)
         expect(wrapper.find('.mdi-check').exists()).toBe(false)
         expect(vi.getTimerCount()).toBe(0)
       })
