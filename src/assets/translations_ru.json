@@ -1,6 +1,7 @@
 {
 	"commons": {
 		"copyValue": "Копировать значение",
+		"copied": "Скопировано",
 		"loading": "Загрузка...",
 		"noMoreResults": "Больше нет результатов",
 		"loadMore": {

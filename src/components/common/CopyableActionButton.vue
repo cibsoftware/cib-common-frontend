@@ -17,29 +17,44 @@
 
 -->
 <template>
-  <component
+  <div
       v-if="valueToCopy"
-      :is="componentType"
-      v-bind="bindAttrs"
-      :class="containerClasses"
-      :title="title || displayValue"
-      @mouseenter="isHovered = true" @focusin="isHovered = true"
-      @mouseleave="isHovered = false" @focusout="isHovered = false"
-      @click="handleClick"
+      class="position-relative w-100"
+      role="presentation"
+      @mouseenter="hovered = true" @mouseleave="hovered = false"
+      @focusin="handleFocusIn" @focusout="handleFocusOut" @keydown="handleKeydown"
   >
-    {{ displayValue }}
+    <component
+        :is="componentType"
+        v-bind="{ ...$attrs, ...bindAttrs }"
+        :class="containerClasses"
+        :title="title || displayValue"
+        @click="handleClick"
+    >
+      {{ displayValue }}
+    </component>
     <button
-        v-if="isHovered"
-        @click.stop.prevent="handleCopy"
+        v-if="showCopyButton"
+        type="button"
+        @click.stop="handleCopy"
+        @keydown.enter.space.stop
         :title="$t('commons.copyValue') + ':\n' + valueToCopy"
-        class="btn btn-link p-0 m-0 bg-transparent mdi mdi-18px mdi-content-copy position-absolute end-0 text-secondary lh-sm"
+        :aria-label="$t('commons.copyValue') + ': ' + valueToCopy"
+        class="btn btn-link p-0 m-0 bg-transparent mdi mdi-18px position-absolute top-50 end-0 translate-middle-y text-secondary lh-sm"
+        :class="copied ? 'mdi-check' : 'mdi-content-copy'"
     ></button>
-  </component>
+    <span class="visually-hidden" aria-live="polite">{{ copied ? $t('commons.copied') : '' }}</span>
+  </div>
 </template>
 
 <script>
+const COPIED_FEEDBACK_MS = 1250
+
 export default {
   name: 'CopyableActionButton',
+  // The wrapper div only provides hover/focus handling and positioning. Attributes such as
+  // target, class or data-* are meant for the interactive element (button, a, router-link).
+  inheritAttrs: false,
   props: {
     /**
      * The value to display in the button
@@ -87,18 +102,21 @@ export default {
   emits: ['click', 'copy'],
   data() {
     return {
-      isHovered: false,
+      hovered: false,
+      focused: false,
+      copied: false,
     }
   },
   computed: {
+    showCopyButton() {
+      // stay visible while the "copied" feedback is shown, even if the pointer already left
+      return this.hovered || this.focused || this.copied
+    },
     componentType() {
       if (this.to) {
         return this.newTab ? 'a' : 'router-link'
       }
       return this.clickable ? 'button' : 'div'
-    },
-    routerTo() {
-      return this.to || undefined
     },
     valueToCopy() {
       return this.copyValue || this.displayValue
@@ -106,8 +124,7 @@ export default {
     containerClasses() {
       const baseClasses = {
         'text-truncate': true,
-        'pe-4': this.isHovered,
-        'position-relative': true,
+        'pe-4': this.showCopyButton,
         'w-100': true,
       }
       if (this.to) {
@@ -135,19 +152,18 @@ export default {
     },
     bindAttrs() {
       if (this.componentType === 'router-link') {
-        return { to: this.routerTo }
+        return { to: this.to }
       }
       if (this.componentType === 'a') {
-        // For hash mode, we need to construct the full URL with hash
         let href
-        if (typeof this.routerTo === 'string') {
-          // If it's already a full URL, use it as is, otherwise add hash
-          href = this.routerTo.startsWith('http') ? this.routerTo : `#${this.routerTo}`
-        } else if (this.$router && this.routerTo) {
-          const resolved = this.$router.resolve(this.routerTo)
-          // Get the base URL from current location, ensuring we include the context path
-          const baseUrl = globalThis.location.origin + globalThis.location.pathname.split('#')[0]
-          href = baseUrl + '#' + resolved.path + (resolved.query ? '?' + new URLSearchParams(resolved.query).toString() : '')
+        if (typeof this.to === 'string' && /^https?:\/\//i.test(this.to)) {
+          // external URL, use it as is
+          href = this.to
+        } else if (this.$router) {
+          // let the router build path and query; resolve against the current page so that the context path is kept
+          // and the result is absolute for both hash and web history
+          const resolved = this.$router.resolve(this.to)
+          href = new URL(resolved.href, globalThis.location.origin + globalThis.location.pathname).href
         }
         return {
           href,
@@ -175,9 +191,54 @@ export default {
         this.$emit('click', event)
       }
     },
+    handleFocusIn(event) {
+      // Only keyboard focus keeps the copy button visible. A mouse click also focuses the button,
+      // and that focus would keep it visible after the pointer has left.
+      this.focused = this.isFocusVisible(event.target)
+    },
+    handleKeydown(event) {
+      // An element focused with the mouse becomes :focus-visible once the user starts using the keyboard,
+      // but no focusin is fired for that, so the copy button would be skipped by Tab.
+      if (!this.focused && this.isFocusVisible(event.target)) {
+        this.focused = true
+      }
+    },
+    isFocusVisible(element) {
+      try {
+        return element.matches(':focus-visible')
+      } catch {
+        return true // browsers without :focus-visible support
+      }
+    },
+    handleFocusOut(event) {
+      // While focus moves between the main element and the copy button, the copy button must stay in the DOM:
+      // Vue re-renders between focusout and focusin, and a removed button cannot receive the focus.
+      if (!this.$el.contains(event.relatedTarget)) {
+        this.focused = false
+      }
+    },
     handleCopy() {
       this.$emit('copy', this.valueToCopy)
+      this.showCopiedFeedback()
     },
+    showCopiedFeedback() {
+      clearTimeout(this.copiedTimer)
+      this.copied = true
+      this.copiedTimer = setTimeout(this.resetCopiedFeedback, COPIED_FEEDBACK_MS)
+    },
+    resetCopiedFeedback() {
+      clearTimeout(this.copiedTimer)
+      this.copied = false
+    },
+  },
+  watch: {
+    valueToCopy() {
+      // the instance may be reused for another row, so the feedback must not stick to the new value
+      this.resetCopiedFeedback()
+    },
+  },
+  beforeUnmount() {
+    clearTimeout(this.copiedTimer)
   },
 }
 </script>
