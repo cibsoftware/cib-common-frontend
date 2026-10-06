@@ -249,6 +249,14 @@ describe('CopyableActionButton', () => {
         wrapper.unmount()
       })
 
+      it('handles a programmatic call without an event', () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Click' },
+        })
+        expect(() => wrapper.vm.handleClick()).not.toThrow()
+        expect(wrapper.emitted('click')).toEqual([[undefined]])
+      })
+
       it('copying does not emit click and does not bubble to the parent', async () => {
         const parentClick = vi.fn()
         const wrapper = mountWithDefaults(CopyableActionButton, {
@@ -303,6 +311,29 @@ describe('CopyableActionButton', () => {
           routerMock,
         })
         expect(wrapper.find('a').attributes('href')).toContain('#/process/foo?tab=jobs')
+      })
+
+      it('omits the query string when the resolved route has no query', () => {
+        const routerMock = createRouterMock({
+          router: { resolve: () => ({ path: '/process/foo', query: undefined }) },
+        })
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Internal', to: { name: 'process' }, newTab: true },
+          routerMock,
+        })
+        const href = wrapper.find('a').attributes('href')
+        expect(href).toMatch(/#\/process\/foo$/)
+        expect(href).not.toContain('?')
+      })
+
+      it('renders an anchor without href for a route location object when no router is available', () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Internal', to: { name: 'process' }, newTab: true },
+        })
+        const a = wrapper.find('a')
+        expect(a.exists()).toBe(true)
+        expect(a.attributes('href')).toBeUndefined()
+        expect(a.attributes('target')).toBe('_blank')
       })
 
       it('renders a button when newTab is set without a destination', () => {
