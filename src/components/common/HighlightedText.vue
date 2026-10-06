@@ -17,10 +17,12 @@
 
 -->
 <template>
-  <span v-html="highlightedText"></span>
+  <span><template v-for="(part, index) in parts" :key="index"><mark v-if="part.highlighted" class="p-0">{{ part.text }}</mark><template v-else>{{ part.text }}</template></template></span>
 </template>
 
 <script>
+import { escapeRegExp } from '../../utils/escape.js'
+
 export default {
   name: 'HighlightedText',
   props: {
@@ -34,15 +36,26 @@ export default {
     }
   },
   computed: {
-    highlightedText() {
-      if (!this.text) return ''
+    /**
+     * Splits the text into the segments that match the keyword and the segments
+     * around them. The segments are rendered as text nodes, so the markup this
+     * component emits is only the <mark> element in the template - the text
+     * itself is never turned into HTML and so needs no escaping.
+     */
+    parts() {
+      if (!this.text) return []
 
-      if (!this.keyword) return this.text
+      if (!this.keyword) return [{ text: this.text, highlighted: false }]
 
-      // Create a regular expression to match the keyword
-      const regex = new RegExp(`(${this.keyword})`, 'gi')
-      // Replace the matched keyword with a span element
-      return this.text.replace(regex, '<mark class="p-0">$1</mark>')
+      // The keyword is quoted so its regex metacharacters are matched
+      // literally, instead of making the RegExp constructor throw.
+      const regex = new RegExp(`(${escapeRegExp(this.keyword)})`, 'gi')
+
+      // Splitting on a pattern with one capturing group keeps the matches in
+      // the result, at the odd positions.
+      return this.text.split(regex)
+        .map((segment, index) => ({ text: segment, highlighted: index % 2 === 1 }))
+        .filter(part => part.text !== '')
     }
   }
 }

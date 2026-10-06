@@ -68,13 +68,15 @@ const registerComponents = function(app) {
       // Check if the block's height is smaller than the text content height. If so
           // add an ellipsis replacing the last word
         while (el.clientHeight < el.scrollHeight) {
-        el.innerHTML = el.innerHTML.replace(/\W*\s(\S)*$/, '...')
+        el.textContent = el.textContent.replace(/\W*\s(\S)*$/, '...')
         }
       },
     update(el, binding) {
-      el.innerHTML = binding.value.text
+      // The bound value is plain text to truncate, so it is assigned as text:
+      // this directive never needs to interpret it as markup.
+      el.textContent = binding.value.text
       while (el.clientHeight < el.scrollHeight) {
-        el.innerHTML = el.innerHTML.replace(/\W*\s(\S)*$/, '...')
+        el.textContent = el.textContent.replace(/\W*\s(\S)*$/, '...')
         }
     }
   })
