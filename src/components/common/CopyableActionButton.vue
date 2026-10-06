@@ -22,7 +22,7 @@
       class="position-relative w-100"
       role="presentation"
       @mouseenter="hovered = true" @mouseleave="hovered = false"
-      @focusin="focused = true" @focusout="handleFocusOut"
+      @focusin="handleFocusIn" @focusout="handleFocusOut" @keydown="handleKeydown"
   >
     <component
         :is="componentType"
@@ -192,6 +192,25 @@ export default {
       // Only emit click event for buttons or non-router links
       if (this.clickable) {
         this.$emit('click', event)
+      }
+    },
+    handleFocusIn(event) {
+      // Only keyboard focus keeps the copy button visible. A mouse click also focuses the button,
+      // and that focus would keep it visible after the pointer has left.
+      this.focused = this.isFocusVisible(event.target)
+    },
+    handleKeydown(event) {
+      // An element focused with the mouse becomes :focus-visible once the user starts using the keyboard,
+      // but no focusin is fired for that, so the copy button would be skipped by Tab.
+      if (!this.focused && this.isFocusVisible(event.target)) {
+        this.focused = true
+      }
+    },
+    isFocusVisible(element) {
+      try {
+        return element.matches(':focus-visible')
+      } catch {
+        return true // browsers without :focus-visible support
       }
     },
     handleFocusOut(event) {

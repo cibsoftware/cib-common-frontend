@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import { describe, it, expect, vi, afterEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { CopyableActionButton } from '@/library'
 import { mountWithDefaults, createRouterMock } from '../helpers/mountComponent.js'
 
@@ -143,6 +143,24 @@ describe('CopyableActionButton', () => {
   })
 
   describe('consumer use cases', () => {
+    // jsdom never matches :focus-visible, so emulate a browser: keyboard focus by default
+    const nativeMatches = Element.prototype.matches
+    const stubFocusVisible = (value) => vi.spyOn(Element.prototype, 'matches').mockImplementation(function(selector) {
+      if (selector === ':focus-visible') {
+        if (value instanceof Error) throw value
+        return value
+      }
+      return nativeMatches.call(this, selector)
+    })
+
+    beforeEach(() => {
+      stubFocusVisible(true)
+    })
+
+    afterEach(() => {
+      vi.restoreAllMocks()
+    })
+
     const hover = (wrapper) => wrapper.find('div').trigger('mouseenter')
     const copyButton = (wrapper) => wrapper.find('.mdi-content-copy')
 
@@ -541,6 +559,50 @@ describe('CopyableActionButton', () => {
         expect(copyButton(wrapper).exists()).toBe(true)
       })
 
+      it('does not show the copy button for focus caused by a mouse click', async () => {
+        vi.restoreAllMocks()
+        stubFocusVisible(false)
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Mouse' },
+        })
+        await wrapper.find('button').trigger('focusin')
+        expect(copyButton(wrapper).exists()).toBe(false)
+      })
+
+      it('shows the copy button when the user starts using the keyboard on an element focused by mouse', async () => {
+        vi.restoreAllMocks()
+        const focusVisible = stubFocusVisible(false)
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Mouse then keyboard' },
+        })
+        await wrapper.find('button').trigger('focusin')
+        expect(copyButton(wrapper).exists()).toBe(false)
+        focusVisible.mockRestore()
+        stubFocusVisible(true) // the browser now treats the focused element as :focus-visible
+        await wrapper.find('button').trigger('keydown', { key: 'Tab' })
+        expect(copyButton(wrapper).exists()).toBe(true)
+      })
+
+      it('does not show the copy button on a key press while the focus is not keyboard focus', async () => {
+        vi.restoreAllMocks()
+        stubFocusVisible(false)
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Mouse' },
+        })
+        await wrapper.find('button').trigger('keydown', { key: 'a' })
+        expect(copyButton(wrapper).exists()).toBe(false)
+      })
+
+      it('treats focus as keyboard focus when :focus-visible is not supported', async () => {
+        vi.restoreAllMocks()
+        stubFocusVisible(new SyntaxError('unsupported selector'))
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Old browser' },
+        })
+        await wrapper.find('button').trigger('focusin')
+        expect(copyButton(wrapper).exists()).toBe(true)
+      })
+
       it('adds right padding to the main element while hovered', async () => {
         const wrapper = mountWithDefaults(CopyableActionButton, {
           props: { displayValue: 'Pad' },
@@ -721,6 +783,36 @@ describe('CopyableActionButton', () => {
         expect(first.find('.mdi-check').exists()).toBe(true)
         expect(second.find('.mdi-check').exists()).toBe(false)
         expect(second.find('[aria-live="polite"]').text()).toBe('')
+      })
+
+      it('hides the copy button after the feedback when it was clicked with the mouse and the pointer left', async () => {
+        vi.useFakeTimers()
+        vi.restoreAllMocks()
+        stubFocusVisible(false) // a mouse click focuses the button without :focus-visible
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Value' },
+        })
+        await hover(wrapper)
+        await copyButton(wrapper).trigger('focusin')
+        await copyButton(wrapper).trigger('click')
+        await wrapper.find('div').trigger('mouseleave')
+        expect(wrapper.find('.mdi-check').exists()).toBe(true)
+        await vi.advanceTimersByTimeAsync(2000)
+        expect(wrapper.find('.mdi-check').exists()).toBe(false)
+        expect(copyButton(wrapper).exists()).toBe(false)
+      })
+
+      it('keeps the copy button after the feedback while it has keyboard focus', async () => {
+        vi.useFakeTimers()
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Value' },
+        })
+        await wrapper.find('button').trigger('focusin')
+        await copyButton(wrapper).trigger('focusin')
+        await copyButton(wrapper).trigger('keydown.enter')
+        expect(wrapper.find('.mdi-check').exists()).toBe(true)
+        await vi.advanceTimersByTimeAsync(2000)
+        expect(copyButton(wrapper).exists()).toBe(true)
       })
 
       it('clears the pending timer when unmounted', async () => {
