@@ -73,17 +73,48 @@
 
       <!-- Examples Tab -->
       <div v-show="activeTab === 'examples'">
-        <div class="py-5 text-muted">
-          <p>One span</p>
-          <highlighted-text text="This is a simple example." keyword="simple"></highlighted-text>
-          <p class="mt-4">Multiple spans</p>
-          <highlighted-text text="Highlighting multiple instances of the word highlight in this highlight example." keyword="highlight"></highlighted-text>
-          <p class="mt-4">Case insensitive</p>
-          <highlighted-text text="This HighlightedText component highlights keywords." keyword="highlight"></highlighted-text>
-          <p class="mt-4">No keyword match</p>
-          <highlighted-text text="This text does not contain the search term." keyword="absent"></highlighted-text>
-          <p class="mt-4">Empty keyword</p>
-          <highlighted-text text="This text remains unchanged when the keyword is empty." keyword=""></highlighted-text>
+        <div class="mb-4">
+          <h5>Playground</h5>
+          <p class="text-muted">Type a text and a search term to see what gets highlighted</p>
+          <div class="row g-3">
+            <div class="col-md-8">
+              <label for="playground-text" class="form-label">Text</label>
+              <input id="playground-text" v-model="playgroundText" class="form-control">
+            </div>
+            <div class="col-md-4">
+              <label for="playground-keyword" class="form-label">Keyword</label>
+              <input id="playground-keyword" v-model="playgroundKeyword" class="form-control">
+            </div>
+          </div>
+          <div class="mt-3">
+            <h6>Live Example:</h6>
+            <div class="border p-3 rounded">
+              <HighlightedText :text="playgroundText" :keyword="playgroundKeyword" />
+            </div>
+          </div>
+        </div>
+
+        <div v-for="group in exampleGroups" :key="group.title" class="mb-4">
+          <h5>{{ group.title }}</h5>
+          <p class="text-muted">{{ group.description }}</p>
+          <table class="table table-sm align-middle">
+            <thead>
+              <tr>
+                <th style="width: 20%">Use case</th>
+                <th style="width: 30%">text</th>
+                <th style="width: 15%">keyword</th>
+                <th>Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="example in group.examples" :key="example.name">
+                <td>{{ example.name }}</td>
+                <td><code>{{ example.text }}</code></td>
+                <td><code>{{ example.keyword }}</code></td>
+                <td><HighlightedText :text="example.text" :keyword="example.keyword" /></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -100,7 +131,58 @@ export default {
   },
   data() {
     return {
-      activeTab: 'overview'
+      activeTab: 'overview',
+      playgroundText: 'Approve invoice <b>INV-2026</b> for "ACME (Germany)"',
+      playgroundKeyword: 'inv',
+      exampleGroups: [
+        {
+          title: 'Basic Matching',
+          description: 'Every occurrence of the keyword is highlighted, ignoring case',
+          examples: [
+            { name: 'One match', text: 'This is a simple example.', keyword: 'simple' },
+            { name: 'Multiple matches', text: 'Highlighting multiple instances of the word highlight in this highlight example.', keyword: 'highlight' },
+            { name: 'Case insensitive', text: 'This HighlightedText component highlights keywords.', keyword: 'HIGHLIGHT' },
+            { name: 'Several words', text: 'Approve the invoice before Friday.', keyword: 'the invoice' },
+            { name: 'Whole text', text: 'Invoice', keyword: 'invoice' },
+            { name: 'Adjacent matches', text: 'aaa', keyword: 'a' },
+            { name: 'Overlapping matches', text: 'aaa', keyword: 'aa' },
+            { name: 'Non-ASCII letters', text: 'Ärger mit der Prüfung', keyword: 'ä' }
+          ]
+        },
+        {
+          title: 'Nothing to Highlight',
+          description: 'The text is shown unchanged',
+          examples: [
+            { name: 'No match', text: 'This text does not contain the search term.', keyword: 'absent' },
+            { name: 'Empty keyword', text: 'This text remains unchanged when the keyword is empty.', keyword: '' },
+            { name: 'Keyword longer than text', text: 'Inv', keyword: 'Invoice' }
+          ]
+        },
+        {
+          title: 'Special Characters in the Keyword',
+          description: 'Regular expression characters in a search term are matched literally instead of breaking the search',
+          examples: [
+            { name: 'Parenthesis', text: 'Order (draft) created', keyword: '(' },
+            { name: 'Square bracket', text: 'Tags: [urgent] [review]', keyword: '[urgent]' },
+            { name: 'Asterisk', text: 'Fields marked with * are required', keyword: '*' },
+            { name: 'Dot is not a wildcard', text: 'Version 1.0 or 100', keyword: '1.0' },
+            { name: 'Backslash', text: String.raw`C:\Users\demo`, keyword: '\\' },
+            { name: 'Dollar and caret', text: 'Price: $100 ^ tax', keyword: '$1' }
+          ]
+        },
+        {
+          title: 'Markup in the Text',
+          description: 'Task and process names are business data: angle brackets, quotes and ampersands are shown as typed and never rendered as HTML',
+          examples: [
+            { name: 'Bold tag', text: '<b>a label</b>', keyword: '' },
+            { name: 'Image tag', text: 'Logo <img src="placeholder.png"> here', keyword: 'logo' },
+            { name: 'Attribute break-out', text: '"><span>name', keyword: 'name' },
+            { name: 'Keyword matching markup', text: 'a <b> c', keyword: '<b>' },
+            { name: 'Keyword inside an entity name', text: 'Tom & Jerry < Garfield', keyword: 'amp' },
+            { name: 'Ampersand itself', text: 'Tom & Jerry', keyword: '&' }
+          ]
+        }
+      ]
     }
   }
 }

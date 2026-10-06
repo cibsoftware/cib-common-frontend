@@ -110,4 +110,155 @@ describe('HighlightedText', () => {
     expect(wrapper.text()).toBe('')
     expect(wrapper.html()).not.toContain('<mark')
   })
+
+  // Task and process names are business data, so they are shown as written:
+  // angle brackets and quotes in a name are characters, not markup, with and
+  // without an active search term.
+  const MARKUP_INPUTS = [
+    ['a nested element', 'a <div style="height: 100vh"><img src="placeholder.png">b</div>'],
+    ['a bold tag', '<b>a label</b>'],
+    ['an attribute break-out', '"><span>'],
+    ['an anchor', '<a href="#">click</a>'],
+  ]
+
+  it.each(MARKUP_INPUTS)('renders %s as text, not markup, without a keyword', (_name, text) => {
+    const wrapper = mount(HighlightedText, { props: { text, keyword: '' } })
+
+    expect(wrapper.element.querySelectorAll('*')).toHaveLength(0)
+    expect(wrapper.text()).toBe(text)
+  })
+
+  it.each(MARKUP_INPUTS)('renders %s as text, not markup, while highlighting', (_name, text) => {
+    const wrapper = mount(HighlightedText, { props: { text, keyword: 'a' } })
+
+    // the generated <mark> is the only element this component may emit
+    const elements = [...wrapper.element.querySelectorAll('*')]
+    expect(elements.length).toBeGreaterThan(0)
+    expect(elements.every(el => el.tagName === 'MARK')).toBe(true)
+    expect(wrapper.text()).toBe(text)
+  })
+
+  it.each([
+    ['an opening parenthesis', '('],
+    ['an unterminated character class', '['],
+    ['a dangling quantifier', '*'],
+    ['a backslash', '\\'],
+  ])('treats %s in the keyword as a literal instead of throwing', (_name, keyword) => {
+    const text = `a ${keyword} b`
+    const wrapper = mount(HighlightedText, { props: { text, keyword } })
+
+    expect(wrapper.text()).toBe(text)
+    expect(wrapper.html()).toContain('<mark class="p-0">')
+  })
+
+  it('still highlights a keyword that matches markup in the text', () => {
+    const wrapper = mount(HighlightedText, { props: { text: 'a <b> c', keyword: '<b>' } })
+
+    expect(wrapper.text()).toBe('a <b> c')
+    expect(wrapper.html()).toContain('<mark class="p-0">&lt;b&gt;</mark>')
+    expect(wrapper.element.querySelector('b')).toBeNull()
+  })
+
+  // The keyword is matched against the text the user actually sees. Matching it
+  // against an escaped copy instead would let a keyword hit the inside of an
+  // HTML entity ('l' inside '&lt;'), splitting it and showing the raw entity.
+  it.each([
+    ['a keyword inside the entity for <', 'a < b', 'l'],
+    ['a keyword inside the entity for &', 'a & b', 'amp'],
+    ['a keyword inside the entity for a quote', 'a " b', 'quot'],
+    ['a keyword inside the entity for >', 'a > b', 'gt'],
+  ])('does not match %s', (_name, text, keyword) => {
+    const wrapper = mount(HighlightedText, { props: { text, keyword } })
+
+    expect(wrapper.text()).toBe(text)
+    expect(wrapper.html()).not.toContain('<mark')
+  })
+
+  it('highlights the character itself when the keyword is the character', () => {
+    const wrapper = mount(HighlightedText, { props: { text: 'a < b', keyword: '<' } })
+
+    expect(wrapper.text()).toBe('a < b')
+    expect(wrapper.html()).toContain('<mark class="p-0">&lt;</mark>')
+  })
+
+  it('highlights the whole text when the keyword equals it', () => {
+    const wrapper = mount(HighlightedText, { props: { text: 'Invoice', keyword: 'invoice' } })
+
+    expect(wrapper.html()).toContain('<mark class="p-0">Invoice</mark>')
+    expect(wrapper.findAll('mark')).toHaveLength(1)
+  })
+
+  it('does not highlight a keyword longer than the text', () => {
+    const wrapper = mount(HighlightedText, { props: { text: 'Inv', keyword: 'Invoice' } })
+
+    expect(wrapper.text()).toBe('Inv')
+    expect(wrapper.find('mark').exists()).toBe(false)
+  })
+
+  it('highlights adjacent matches separately', () => {
+    const wrapper = mount(HighlightedText, { props: { text: 'aaa', keyword: 'a' } })
+
+    expect(wrapper.findAll('mark').map(mark => mark.text())).toEqual(['a', 'a', 'a'])
+    expect(wrapper.text()).toBe('aaa')
+  })
+
+  it('does not overlap matches', () => {
+    const wrapper = mount(HighlightedText, { props: { text: 'aaa', keyword: 'aa' } })
+
+    expect(wrapper.findAll('mark').map(mark => mark.text())).toEqual(['aa'])
+    expect(wrapper.text()).toBe('aaa')
+  })
+
+  it('keeps the casing of each match as written in the text', () => {
+    const wrapper = mount(HighlightedText, { props: { text: 'Task TASK task', keyword: 'tAsK' } })
+
+    expect(wrapper.findAll('mark').map(mark => mark.text())).toEqual(['Task', 'TASK', 'task'])
+  })
+
+  it('matches non-ASCII letters case insensitively', () => {
+    const wrapper = mount(HighlightedText, { props: { text: 'Ärger mit der Prüfung', keyword: 'äRGER' } })
+
+    expect(wrapper.html()).toContain('<mark class="p-0">Ärger</mark>')
+  })
+
+  it('highlights a keyword made of several words', () => {
+    const wrapper = mount(HighlightedText, { props: { text: 'Approve the invoice now', keyword: 'the invoice' } })
+
+    expect(wrapper.html()).toContain('<mark class="p-0">the invoice</mark>')
+  })
+
+  it('does not treat a dot in the keyword as a wildcard', () => {
+    const wrapper = mount(HighlightedText, { props: { text: 'abc', keyword: '.' } })
+
+    expect(wrapper.find('mark').exists()).toBe(false)
+  })
+
+  it('keeps the whitespace around a match', () => {
+    const text = '  leading and trailing  '
+    const wrapper = mount(HighlightedText, { props: { text, keyword: 'and' } })
+
+    expect(wrapper.element.textContent).toBe(text)
+  })
+
+  it('updates the highlighting when the keyword changes', async () => {
+    const wrapper = mount(HighlightedText, { props: { text: 'Review the order', keyword: 'review' } })
+    expect(wrapper.findAll('mark').map(mark => mark.text())).toEqual(['Review'])
+
+    await wrapper.setProps({ keyword: 'order' })
+    expect(wrapper.findAll('mark').map(mark => mark.text())).toEqual(['order'])
+
+    await wrapper.setProps({ keyword: '' })
+    expect(wrapper.find('mark').exists()).toBe(false)
+    expect(wrapper.text()).toBe('Review the order')
+  })
+
+  it('updates the highlighting when the text changes', async () => {
+    const wrapper = mount(HighlightedText, { props: { text: 'first <b>', keyword: 'b' } })
+
+    await wrapper.setProps({ text: 'second <i>b</i>' })
+
+    expect(wrapper.text()).toBe('second <i>b</i>')
+    expect(wrapper.element.querySelector('i')).toBeNull()
+    expect(wrapper.findAll('mark')).toHaveLength(1)
+  })
 })
