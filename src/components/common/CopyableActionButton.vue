@@ -165,7 +165,8 @@ export default {
           const resolved = this.$router.resolve(this.to)
           // Get the base URL from current location, ensuring we include the context path
           const baseUrl = globalThis.location.origin + globalThis.location.pathname.split('#')[0]
-          href = baseUrl + '#' + resolved.path + (resolved.query ? '?' + new URLSearchParams(resolved.query).toString() : '')
+          const query = new URLSearchParams(resolved.query).toString()
+          href = baseUrl + '#' + resolved.path + (query ? '?' + query : '')
         }
         return {
           href,

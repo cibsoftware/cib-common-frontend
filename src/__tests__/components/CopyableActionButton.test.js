@@ -326,6 +326,29 @@ describe('CopyableActionButton', () => {
         expect(href).not.toContain('?')
       })
 
+      it('omits the trailing question mark when the resolved route has an empty query object', () => {
+        // vue-router always returns a query object, which is empty for routes without query parameters
+        const routerMock = createRouterMock({
+          router: { resolve: () => ({ path: '/process/foo', query: {} }) },
+        })
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Internal', to: { name: 'process' }, newTab: true },
+          routerMock,
+        })
+        expect(wrapper.find('a').attributes('href')).toMatch(/#\/process\/foo$/)
+      })
+
+      it('encodes multiple query parameters', () => {
+        const routerMock = createRouterMock({
+          router: { resolve: () => ({ path: '/process/foo', query: { tab: 'jobs', tenantId: 'a b' } }) },
+        })
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Internal', to: { name: 'process' }, newTab: true },
+          routerMock,
+        })
+        expect(wrapper.find('a').attributes('href')).toMatch(/#\/process\/foo\?tab=jobs&tenantId=a\+b$/)
+      })
+
       it('renders an anchor without href for a route location object when no router is available', () => {
         const wrapper = mountWithDefaults(CopyableActionButton, {
           props: { displayValue: 'Internal', to: { name: 'process' }, newTab: true },
