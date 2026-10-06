@@ -34,7 +34,7 @@
         <div class="row">
           <div class="col-12">
             <h4>Purpose</h4>
-            <p>CopyableActionButton combines clickable actions with copy-to-clipboard functionality, supporting both navigation and data copying in a single component. It dynamically renders as a button, router-link, or anchor tag based on configuration, and shows a copy icon on hover.</p>
+            <p>CopyableActionButton combines clickable actions with copy-to-clipboard functionality, supporting both navigation and data copying in a single component. It dynamically renders as a button, router-link, or anchor tag based on configuration, and shows a copy icon on hover or keyboard focus. After the copy icon is activated it turns into a check mark for near two seconds and a screen-reader announcement (<code>commons.copied</code>) is made.</p>
 
             <h4>Use Cases</h4>
             <ul>
@@ -153,7 +153,7 @@
               <tr>
                 <td><code>@copy</code></td>
                 <td><code>value</code></td>
-                <td>Emitted when copy action is triggered, passes the value that should be copied</td>
+                <td>Emitted when copy action is triggered, passes the value that should be copied. The component does not write to the clipboard itself, so the parent must do that. The check mark feedback is shown whenever this event is emitted</td>
               </tr>
             </tbody>
           </table>

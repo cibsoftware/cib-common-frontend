@@ -41,12 +41,16 @@
         @keydown.space.stop.prevent="handleCopy"
         :title="$t('commons.copyValue') + ':\n' + valueToCopy"
         :aria-label="$t('commons.copyValue') + ': ' + valueToCopy"
-        class="btn btn-link p-0 m-0 bg-transparent mdi mdi-18px mdi-content-copy position-absolute top-50 end-0 translate-middle-y text-secondary lh-sm"
+        class="btn btn-link p-0 m-0 bg-transparent mdi mdi-18px position-absolute top-50 end-0 translate-middle-y text-secondary lh-sm"
+        :class="copied ? 'mdi-check' : 'mdi-content-copy'"
     ></button>
+    <span class="visually-hidden" aria-live="polite">{{ copied ? $t('commons.copied') : '' }}</span>
   </div>
 </template>
 
 <script>
+const COPIED_FEEDBACK_MS = 1250
+
 export default {
   name: 'CopyableActionButton',
   // The wrapper div only provides hover/focus handling and positioning. Attributes such as
@@ -101,11 +105,13 @@ export default {
     return {
       hovered: false,
       focused: false,
+      copied: false,
     }
   },
   computed: {
     showCopyButton() {
-      return this.hovered || this.focused
+      // stay visible while the "copied" feedback is shown, even if the pointer already left
+      return this.hovered || this.focused || this.copied
     },
     componentType() {
       if (this.to) {
@@ -196,7 +202,26 @@ export default {
     },
     handleCopy() {
       this.$emit('copy', this.valueToCopy)
+      this.showCopiedFeedback()
     },
+    showCopiedFeedback() {
+      clearTimeout(this.copiedTimer)
+      this.copied = true
+      this.copiedTimer = setTimeout(this.resetCopiedFeedback, COPIED_FEEDBACK_MS)
+    },
+    resetCopiedFeedback() {
+      clearTimeout(this.copiedTimer)
+      this.copied = false
+    },
+  },
+  watch: {
+    valueToCopy() {
+      // the instance may be reused for another row, so the feedback must not stick to the new value
+      this.resetCopiedFeedback()
+    },
+  },
+  beforeUnmount() {
+    clearTimeout(this.copiedTimer)
   },
 }
 </script>

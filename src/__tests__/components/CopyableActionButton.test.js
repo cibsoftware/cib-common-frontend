@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, afterEach } from 'vitest'
 import { CopyableActionButton } from '@/library'
 import { mountWithDefaults, createRouterMock } from '../helpers/mountComponent.js'
 
@@ -558,6 +558,126 @@ describe('CopyableActionButton', () => {
         await wrapper.find('.mdi-content-copy').trigger('click')
         expect(onSubmit).not.toHaveBeenCalled()
         wrapper.unmount()
+      })
+    })
+
+    describe('copied feedback', () => {
+      afterEach(() => {
+        vi.useRealTimers()
+      })
+
+      const copy = async (wrapper) => {
+        await hover(wrapper)
+        await copyButton(wrapper).trigger('click')
+      }
+
+      it('shows the copy icon and an empty live region before anything was copied', async () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Value' },
+        })
+        await hover(wrapper)
+        expect(wrapper.find('.mdi-content-copy').exists()).toBe(true)
+        expect(wrapper.find('.mdi-check').exists()).toBe(false)
+        const live = wrapper.find('[aria-live="polite"]')
+        expect(live.exists()).toBe(true)
+        expect(live.classes()).toContain('visually-hidden')
+        expect(live.text()).toBe('')
+      })
+
+      it('switches to a check icon and announces "copied" after copying', async () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Value' },
+        })
+        await copy(wrapper)
+        expect(wrapper.find('.mdi-check').exists()).toBe(true)
+        expect(wrapper.find('.mdi-content-copy').exists()).toBe(false)
+        expect(wrapper.find('[aria-live="polite"]').text()).toBe('commons.copied')
+      })
+
+      it('still emits copy exactly once', async () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Value', copyValue: 'Secret' },
+        })
+        await copy(wrapper)
+        expect(wrapper.emitted('copy')).toEqual([['Secret']])
+      })
+
+      it('restores the copy icon and clears the announcement after approx. 2 seconds', async () => {
+        vi.useFakeTimers()
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Value' },
+        })
+        await copy(wrapper)
+        await vi.advanceTimersByTimeAsync(1999)
+        expect(wrapper.find('.mdi-check').exists()).toBe(true)
+        await vi.advanceTimersByTimeAsync(1)
+        expect(wrapper.find('.mdi-check').exists()).toBe(false)
+        expect(wrapper.find('.mdi-content-copy').exists()).toBe(true)
+        expect(wrapper.find('[aria-live="polite"]').text()).toBe('')
+      })
+
+      it('restarts the 2 second period when copying again', async () => {
+        vi.useFakeTimers()
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Value' },
+        })
+        await copy(wrapper)
+        await vi.advanceTimersByTimeAsync(1500)
+        await wrapper.find('.mdi-check').trigger('click')
+        await vi.advanceTimersByTimeAsync(1500)
+        expect(wrapper.find('.mdi-check').exists()).toBe(true)
+        await vi.advanceTimersByTimeAsync(500)
+        expect(wrapper.find('.mdi-check').exists()).toBe(false)
+        expect(vi.getTimerCount()).toBe(0)
+      })
+
+      it('keeps the check icon visible after the pointer left, then hides the button', async () => {
+        vi.useFakeTimers()
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Value' },
+        })
+        await copy(wrapper)
+        await wrapper.find('div').trigger('mouseleave')
+        expect(wrapper.find('.mdi-check').exists()).toBe(true)
+        await vi.advanceTimersByTimeAsync(2000)
+        expect(copyButton(wrapper).exists()).toBe(false)
+        expect(wrapper.find('.mdi-check').exists()).toBe(false)
+      })
+
+      it('resets the feedback when the instance is reused for another value', async () => {
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'First' },
+        })
+        await copy(wrapper)
+        expect(wrapper.find('.mdi-check').exists()).toBe(true)
+        await wrapper.setProps({ displayValue: 'Second' })
+        expect(wrapper.find('.mdi-check').exists()).toBe(false)
+        expect(wrapper.find('[aria-live="polite"]').text()).toBe('')
+      })
+
+      it('gives every copy button its own feedback in a list', async () => {
+        const wrapper = mountWithDefaults({
+          components: { CopyableActionButton },
+          template: '<div><CopyableActionButton v-for="k in keys" :key="k" :display-value="k" :clickable="false" /></div>',
+          data: () => ({ keys: ['A', 'B'] }),
+        })
+        const [first, second] = wrapper.findAll('.position-relative')
+        await first.trigger('mouseenter')
+        await first.find('.mdi-content-copy').trigger('click')
+        expect(first.find('.mdi-check').exists()).toBe(true)
+        expect(second.find('.mdi-check').exists()).toBe(false)
+        expect(second.find('[aria-live="polite"]').text()).toBe('')
+      })
+
+      it('clears the pending timer when unmounted', async () => {
+        vi.useFakeTimers()
+        const wrapper = mountWithDefaults(CopyableActionButton, {
+          props: { displayValue: 'Value' },
+        })
+        await copy(wrapper)
+        expect(vi.getTimerCount()).toBe(1)
+        wrapper.unmount()
+        expect(vi.getTimerCount()).toBe(0)
       })
     })
 

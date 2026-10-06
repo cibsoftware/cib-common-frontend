@@ -1,6 +1,7 @@
 {
 	"commons": {
 		"copyValue": "Wert kopieren",
+		"copied": "Kopiert",
 		"loading": "Wird geladen...",
 		"noMoreResults": "Keine weiteren Ergebnisse",
 		"loadMore": {
