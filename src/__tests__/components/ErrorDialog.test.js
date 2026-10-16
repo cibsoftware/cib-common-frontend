@@ -159,4 +159,11 @@ describe('ErrorDialog', () => {
       expect(wrapper.vm.quotedParts(line)).toEqual(expected)
     })
   })
+
+  // CIB7-1107: the icon only decorates the message, so screen readers must not stop on it
+  it('hides the error icon from screen readers', () => {
+    const wrapper = mountWithDefaults(ErrorDialog)
+
+    expect(wrapper.find('.mdi-alert-octagon-outline').attributes('aria-hidden')).toBe('true')
+  })
 })
