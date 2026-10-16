@@ -86,9 +86,78 @@ describe('SidebarsFlow', () => {
 
   it('emits update:rightOpen when right sidebar close clicked', async () => {
     const wrapper = mountSidebars({ rightOpen: true })
-    const rightCloseBtn = wrapper.findAll('[data-stub="b-button"]').find(b => b.text().includes('Details'))
+    const rightCloseBtn = wrapper.findAll('[data-stub="b-button"]').find(b => b.attributes('aria-label') === 'Details')
     await rightCloseBtn.trigger('click')
     expect(wrapper.emitted('update:rightOpen')).toEqual([[false]])
+  })
+
+  // CIB7-1104: the headers were buttons holding the heading and, through leftIcon, the caller's
+  // own buttons. A button may contain neither, and screen readers could not reach the inner ones.
+  describe('headers', () => {
+    const buttons = (wrapper) => wrapper.findAll('[data-stub="b-button"]')
+
+    function mountWithActions() {
+      return mountWithDefaults(SidebarsFlow, {
+        props: { ...defaultProps, rightOpen: true },
+        slots: {
+          left: '<div>Left</div>',
+          right: '<div>Right</div>',
+          leftActions: '<button class="caller-action" type="button">Expand</button>',
+        },
+      })
+    }
+
+    it('keeps headings and other buttons out of every button', () => {
+      const wrapper = mountWithActions()
+
+      expect(wrapper.findAll('[data-stub="b-button"] h2')).toHaveLength(0)
+      expect(wrapper.findAll('[data-stub="b-button"] [data-stub="b-button"], [data-stub="b-button"] button')).toHaveLength(0)
+      expect(wrapper.findAll('h2').map(h => h.text())).toEqual(['Tasks5', 'Details'])
+    })
+
+    it('renders the caller actions next to the left toggle, not inside it', () => {
+      const wrapper = mountWithActions()
+      const action = wrapper.find('.caller-action')
+
+      expect(action.exists()).toBe(true)
+      expect(action.element.closest('[data-stub="b-button"]')).toBeNull()
+    })
+
+    it('names the toggles and tells whether their panel is open', () => {
+      const wrapper = mountWithActions()
+      const left = buttons(wrapper).find(b => b.attributes('aria-label')?.startsWith('Tasks'))
+      const right = buttons(wrapper).find(b => b.attributes('aria-label') === 'Details')
+
+      expect(left.attributes('aria-expanded')).toBe('true')
+      expect(right.attributes('aria-expanded')).toBe('true')
+      expect(left.find('.mdi').attributes('aria-hidden')).toBe('true')
+    })
+
+    // Tab reaches the header first, as when it was one button, then the caller's controls
+    it('puts the left toggle before the caller actions in the tab order', () => {
+      const wrapper = mountWithActions()
+      const toggle = buttons(wrapper).find(b => b.attributes('aria-label')?.startsWith('Tasks')).element
+      const action = wrapper.find('.caller-action').element
+
+      expect(toggle.compareDocumentPosition(action) & Node.DOCUMENT_POSITION_FOLLOWING).toBe(Node.DOCUMENT_POSITION_FOLLOWING)
+    })
+
+    // Callers put their own icon in leftIcon, which stays the content of the toggle
+    it('shows the leftIcon slot inside the left toggle', () => {
+      const wrapper = mountWithDefaults(SidebarsFlow, {
+        props: defaultProps,
+        slots: { leftIcon: '<span class="caller-icon" aria-hidden="true"></span>' },
+      })
+
+      expect(wrapper.find('.caller-icon').element.closest('[data-stub="b-button"]')).not.toBeNull()
+    })
+
+    // The webclient focuses the header through this ref when moving between regions
+    it('keeps the leftSidebar ref on the focusable toggle', () => {
+      const wrapper = mountSidebars()
+
+      expect(wrapper.vm.$refs.leftSidebar.$el.getAttribute('aria-expanded')).toBe('true')
+    })
   })
 
   describe('colClasses', () => {

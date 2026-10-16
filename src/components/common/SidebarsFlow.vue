@@ -20,12 +20,24 @@
   <div class="row g-0 position-relative h-100 bg-light">
     <transition name="slide-left"> <!-- In a fixed component the margin-top must be applied right in the component -->
       <div v-show="leftOpen" class="position-absolute border-end bg-white" :class="colClasses(leftSize)" style="top: 0; left: 0; bottom: 0; z-index: 0">
-        <b-button v-if="leftCaption" ref="leftSidebar" :aria-label="leftCaption + (number ? number + ' ' + $t('sidebars.tasks', number) : '')" :aria-expanded="String(leftOpen)" variant="light" style="min-height: 40px; line-height: 20px;" :block="true" class="rounded-0 border-bottom text-start" @click="$emit('update:leftOpen', false)">
-          <slot name="leftIcon">
-            <span class="mdi mdi-18px mdi-chevron-left float-end"></span>
-          </slot>
-          <h2 class="h5 m-0 w-75" style="word-wrap: break-word">{{ leftCaption }}<span v-if="number != null" class="h5 ps-2"><b-badge pill variant="light" :title="numberTooltip">{{ number }}</b-badge></span></h2>
-        </b-button>
+        <!-- The header holds the heading and one toggle; a button may contain neither a heading nor
+             other buttons. The toggle stretches over the header, so clicking anywhere still closes it -->
+        <div v-if="leftCaption" class="sidebars-header btn btn-light rounded-0 border-bottom text-start d-flex align-items-center position-relative w-100" style="min-height: 40px; line-height: 20px;">
+          <!-- First in the tab order, as the header was before; order-last keeps it at the end on screen -->
+          <b-button ref="leftSidebar" :aria-label="leftCaption + (number ? ' ' + number + ' ' + $t('sidebars.tasks', number) : '')" :aria-expanded="String(leftOpen)"
+            variant="link" size="sm" class="stretched-link order-last border-0 p-0 text-reset" @click="$emit('update:leftOpen', false)">
+            <slot name="leftIcon">
+              <span class="mdi mdi-18px mdi-chevron-left" aria-hidden="true"></span>
+            </slot>
+          </b-button>
+          <h2 class="h5 m-0 flex-fill" style="word-wrap: break-word">{{ leftCaption }}<span v-if="number != null" class="h5 ps-2"><b-badge pill variant="light" :title="numberTooltip">{{ number }}</b-badge></span></h2>
+          <!-- Controls of the caller sit next to the toggle, never inside it. They join the header row
+               (order-first puts one before the heading), and absolutely positioned ones are placed
+               against the header -->
+          <div v-if="$slots.leftActions" class="sidebars-header-actions">
+            <slot name="leftActions"></slot>
+          </div>
+        </div>
         <div :style="{ height: leftCaption ? 'calc(100% - ' + headerCalc + ')' : '100%' }">
           <slot name="left"></slot>
         </div>
@@ -48,10 +60,13 @@
 
     <transition name="slide-right"> <!-- In a fixed component the margin-top must be applied right in the component -->
       <div v-show="rightOpen" class="border position-absolute border-top-0" :class="colClasses(rightSize)" style="top: 0; right: 0; bottom: 0">
-        <b-button v-if="rightCaption" variant="light" style="min-height: 40px; line-height: 20px;" :block="true" class="rounded-0 border-bottom border-end" @click="$emit('update:rightOpen', false)">
-          <span class="mdi mdi-18px mdi-chevron-right float-start"></span>
-          <h2 class="h5 m-0 w-100">{{ rightCaption }}</h2>
-        </b-button>
+        <div v-if="rightCaption" class="sidebars-header btn btn-light rounded-0 border-bottom border-end d-flex align-items-center position-relative w-100" style="min-height: 40px; line-height: 20px;">
+          <b-button :aria-label="rightCaption" :aria-expanded="String(rightOpen)" variant="link" size="sm"
+            class="stretched-link border-0 p-0 text-reset" @click="$emit('update:rightOpen', false)">
+            <span class="mdi mdi-18px mdi-chevron-right" aria-hidden="true"></span>
+          </b-button>
+          <h2 class="h5 m-0 flex-fill">{{ rightCaption }}</h2>
+        </div>
         <div :style="{ height: rightCaption ? 'calc(100% - ' + headerCalc + ')' : '100%' }">
           <slot name="right"></slot>
         </div>
@@ -119,3 +134,35 @@ export default {
   }
 }
 </script>
+
+<style lang="css" scoped>
+/* The toggle is small, but its click area covers the header: show its focus on the whole header */
+.sidebars-header .stretched-link:focus-visible {
+  outline: none;
+}
+.sidebars-header .stretched-link:focus-visible::after {
+  outline: 2px solid var(--bs-focus-ring-color, currentColor);
+  outline-offset: -2px;
+}
+/* Hovering the header highlights the header, as when it was one button; the toggle adds no box of its own */
+.sidebars-header .stretched-link:hover,
+.sidebars-header .stretched-link:active {
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+/* Bootstrap lifts the stretched area to z-index 1, which would cover what a caller positions over
+   the header from further down the page (the task list's refresh button); at 0 it stays below that */
+.sidebars-header .stretched-link::after {
+  z-index: 0;
+}
+/* The wrapper takes no box of its own, so the caller's controls are items of the header row */
+.sidebars-header-actions {
+  display: contents;
+}
+/* Above the stretched toggle, so they stay clickable; a caller's own position-absolute still wins */
+.sidebars-header-actions :slotted(*) {
+  position: relative;
+  z-index: 1;
+}
+</style>
