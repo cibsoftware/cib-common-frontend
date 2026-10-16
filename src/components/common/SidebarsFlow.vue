@@ -23,14 +23,16 @@
         <!-- The header holds the heading and one toggle; a button may contain neither a heading nor
              other buttons. The toggle stretches over the header, so clicking anywhere still closes it -->
         <div v-if="leftCaption" class="sidebars-header btn btn-light rounded-0 border-bottom text-start d-flex align-items-center position-relative w-100" style="min-height: 40px; line-height: 20px;">
-          <!-- First in the tab order, as the header was before; order-last keeps it at the end on screen -->
-          <b-button ref="leftSidebar" :aria-label="leftCaption + (number ? ' ' + number + ' ' + $t('sidebars.tasks', number) : '')" :aria-expanded="String(leftOpen)"
-            variant="link" size="sm" class="stretched-link order-last border-0 p-0 text-reset" @click="$emit('update:leftOpen', false)">
+          <!-- First in the tab order, as the header was before; order-last and ms-auto keep it at the right end on screen -->
+          <b-button ref="leftSidebar" :aria-label="leftCaption + (number != null ? ' ' + number + ' ' + $t('sidebars.tasks', number) : '')" :aria-expanded="String(leftOpen)"
+            variant="link" size="sm" class="stretched-link order-last ms-auto border-0 p-0 text-reset" @click="$emit('update:leftOpen', false)">
+            <!-- Decorative only, as it renders inside the toggle: controls go in leftActions -->
             <slot name="leftIcon">
               <span class="mdi mdi-18px mdi-chevron-left" aria-hidden="true"></span>
             </slot>
           </b-button>
-          <h2 class="h5 m-0 flex-fill" style="word-wrap: break-word">{{ leftCaption }}<span v-if="number != null" class="h5 ps-2"><b-badge pill variant="light" :title="numberTooltip">{{ number }}</b-badge></span></h2>
+          <!-- w-75 leaves the right of the header to controls a caller positions over it -->
+          <h2 class="h5 m-0 w-75" style="word-wrap: break-word">{{ leftCaption }}<span v-if="number != null" class="h5 ps-2"><b-badge pill variant="light" :title="numberTooltip">{{ number }}</b-badge></span></h2>
           <!-- Controls of the caller sit next to the toggle, never inside it. They join the header row
                (order-first puts one before the heading), and absolutely positioned ones are placed
                against the header -->
@@ -141,8 +143,7 @@ export default {
   outline: none;
 }
 .sidebars-header .stretched-link:focus-visible::after {
-  outline: 2px solid var(--bs-focus-ring-color, currentColor);
-  outline-offset: -2px;
+  box-shadow: inset 0 0 0 0.25rem rgba(var(--bs-btn-focus-shadow-rgb, 108, 117, 125), .5);
 }
 /* Hovering the header highlights the header, as when it was one button; the toggle adds no box of its own */
 .sidebars-header .stretched-link:hover,

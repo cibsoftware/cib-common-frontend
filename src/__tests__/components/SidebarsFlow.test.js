@@ -133,6 +133,14 @@ describe('SidebarsFlow', () => {
       expect(left.find('.mdi').attributes('aria-hidden')).toBe('true')
     })
 
+    // The badge shows a count of 0, so the name has to say it too
+    it('names a count of 0 in the left toggle', () => {
+      const wrapper = mountSidebars({ number: 0 })
+      const left = buttons(wrapper).find(b => b.attributes('aria-label')?.startsWith('Tasks'))
+
+      expect(left.attributes('aria-label')).toMatch(/^Tasks 0 /)
+    })
+
     // Tab reaches the header first, as when it was one button, then the caller's controls
     it('puts the left toggle before the caller actions in the tab order', () => {
       const wrapper = mountWithActions()
