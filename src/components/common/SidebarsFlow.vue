@@ -138,14 +138,14 @@ export default {
 </script>
 
 <style lang="css" scoped>
-/* The focus ring of buttons (2px line, 2px gap) on the whole header, which the toggle's click area
-   covers; inside its edge, as the header spans the sidebar. !important beats the theme's button rule */
+/* The focus ring of buttons (2px line) on the whole header, which the toggle's click area covers;
+   just inside its edge, as the header spans the sidebar. !important beats the theme's button rule */
 .sidebars-header .stretched-link:focus-visible {
   outline: none !important;
 }
 .sidebars-header .stretched-link:focus-visible::after {
   outline: 2px solid var(--bs-body-color);
-  outline-offset: -4px;
+  outline-offset: -1px;
 }
 /* Below elements laid over the header, such as the task list's refresh button */
 .sidebars-header .stretched-link::after {
