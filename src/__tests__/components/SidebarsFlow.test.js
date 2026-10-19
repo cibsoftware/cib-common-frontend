@@ -65,7 +65,7 @@ describe('SidebarsFlow', () => {
 
   it('emits update:leftOpen false when close button clicked', async () => {
     const wrapper = mountSidebars({ leftOpen: true })
-    const closeBtn = wrapper.findAll('[data-stub="b-button"]')[0]
+    const closeBtn = wrapper.find('button[aria-label^="Tasks"]')
     await closeBtn.trigger('click')
     expect(wrapper.emitted('update:leftOpen')).toEqual([[false]])
   })
@@ -86,7 +86,7 @@ describe('SidebarsFlow', () => {
 
   it('emits update:rightOpen when right sidebar close clicked', async () => {
     const wrapper = mountSidebars({ rightOpen: true })
-    const rightCloseBtn = wrapper.findAll('[data-stub="b-button"]').find(b => b.attributes('aria-label') === 'Details')
+    const rightCloseBtn = wrapper.find('button[aria-label="Details"]')
     await rightCloseBtn.trigger('click')
     expect(wrapper.emitted('update:rightOpen')).toEqual([[false]])
   })
@@ -94,7 +94,7 @@ describe('SidebarsFlow', () => {
   // CIB7-1104: the headers were buttons holding the heading and, through leftIcon, the caller's
   // own buttons. A button may contain neither, and screen readers could not reach the inner ones.
   describe('headers', () => {
-    const buttons = (wrapper) => wrapper.findAll('[data-stub="b-button"]')
+    const buttons = (wrapper) => wrapper.findAll('button')
 
     function mountWithActions() {
       return mountWithDefaults(SidebarsFlow, {
@@ -110,8 +110,8 @@ describe('SidebarsFlow', () => {
     it('keeps headings and other buttons out of every button', () => {
       const wrapper = mountWithActions()
 
-      expect(wrapper.findAll('[data-stub="b-button"] h2')).toHaveLength(0)
-      expect(wrapper.findAll('[data-stub="b-button"] [data-stub="b-button"], [data-stub="b-button"] button')).toHaveLength(0)
+      expect(wrapper.findAll('button h2, [data-stub="b-button"] h2')).toHaveLength(0)
+      expect(wrapper.findAll('button button, button [data-stub="b-button"]')).toHaveLength(0)
       expect(wrapper.findAll('h2').map(h => h.text())).toEqual(['Tasks5', 'Details'])
     })
 
@@ -120,7 +120,7 @@ describe('SidebarsFlow', () => {
       const action = wrapper.find('.caller-action')
 
       expect(action.exists()).toBe(true)
-      expect(action.element.closest('[data-stub="b-button"]')).toBeNull()
+      expect(action.element.parentElement.closest('button')).toBeNull()
     })
 
     it('names the toggles and tells whether their panel is open', () => {
@@ -157,14 +157,16 @@ describe('SidebarsFlow', () => {
         slots: { leftIcon: '<span class="caller-icon" aria-hidden="true"></span>' },
       })
 
-      expect(wrapper.find('.caller-icon').element.closest('[data-stub="b-button"]')).not.toBeNull()
+      expect(wrapper.find('.caller-icon').element.closest('button')).not.toBeNull()
     })
 
     // The webclient focuses the header through this ref when moving between regions
     it('keeps the leftSidebar ref on the focusable toggle', () => {
       const wrapper = mountSidebars()
+      const toggle = wrapper.vm.$refs.leftSidebar
 
-      expect(wrapper.vm.$refs.leftSidebar.$el.getAttribute('aria-expanded')).toBe('true')
+      expect(toggle).toBeInstanceOf(HTMLButtonElement)
+      expect(toggle.getAttribute('aria-expanded')).toBe('true')
     })
   })
 

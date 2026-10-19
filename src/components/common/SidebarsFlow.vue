@@ -24,13 +24,13 @@
              other buttons. The toggle stretches over the header, so clicking anywhere still closes it -->
         <div v-if="leftCaption" class="sidebars-header btn btn-light rounded-0 border-bottom text-start d-flex align-items-center position-relative w-100" style="min-height: 40px; line-height: 20px;">
           <!-- First in the tab order, as the header was before; order-last and ms-auto keep it at the right end on screen -->
-          <b-button ref="leftSidebar" :aria-label="leftCaption + (number != null ? ' ' + number + ' ' + $t('sidebars.tasks', number) : '')" :aria-expanded="String(leftOpen)"
-            variant="link" size="sm" class="stretched-link order-last ms-auto border-0 p-0 text-reset" @click="$emit('update:leftOpen', false)">
+          <button ref="leftSidebar" type="button" :aria-label="leftCaption + (number != null ? ' ' + number + ' ' + $t('sidebars.tasks', number) : '')" :aria-expanded="String(leftOpen)"
+            class="stretched-link order-last ms-auto border-0 p-0 bg-transparent text-reset" @click="$emit('update:leftOpen', false)">
             <!-- Decorative only, as it renders inside the toggle: controls go in leftActions -->
             <slot name="leftIcon">
               <span class="mdi mdi-18px mdi-chevron-left" aria-hidden="true"></span>
             </slot>
-          </b-button>
+          </button>
           <!-- w-75 leaves the right of the header to controls a caller positions over it -->
           <h2 class="h5 m-0 w-75" style="word-wrap: break-word">{{ leftCaption }}<span v-if="number != null" class="h5 ps-2"><b-badge pill variant="light" :title="numberTooltip">{{ number }}</b-badge></span></h2>
           <!-- Controls of the caller sit next to the toggle, never inside it. They join the header row
@@ -63,10 +63,10 @@
     <transition name="slide-right"> <!-- In a fixed component the margin-top must be applied right in the component -->
       <div v-show="rightOpen" class="border position-absolute border-top-0" :class="colClasses(rightSize)" style="top: 0; right: 0; bottom: 0">
         <div v-if="rightCaption" class="sidebars-header btn btn-light rounded-0 border-bottom border-end d-flex align-items-center position-relative w-100" style="min-height: 40px; line-height: 20px;">
-          <b-button :aria-label="rightCaption" :aria-expanded="String(rightOpen)" variant="link" size="sm"
-            class="stretched-link border-0 p-0 text-reset" @click="$emit('update:rightOpen', false)">
+          <button type="button" :aria-label="rightCaption" :aria-expanded="String(rightOpen)"
+            class="stretched-link border-0 p-0 bg-transparent text-reset" @click="$emit('update:rightOpen', false)">
             <span class="mdi mdi-18px mdi-chevron-right" aria-hidden="true"></span>
-          </b-button>
+          </button>
           <h2 class="h5 m-0 flex-fill">{{ rightCaption }}</h2>
         </div>
         <div :style="{ height: rightCaption ? 'calc(100% - ' + headerCalc + ')' : '100%' }">
@@ -138,30 +138,24 @@ export default {
 </script>
 
 <style lang="css" scoped>
-/* The toggle is small, but its click area covers the header: show its focus on the whole header */
+/* The focus ring of buttons (2px line, 2px gap) on the whole header, which the toggle's click area
+   covers; inside its edge, as the header spans the sidebar. !important beats the theme's button rule */
 .sidebars-header .stretched-link:focus-visible {
-  outline: none;
+  outline: none !important;
 }
 .sidebars-header .stretched-link:focus-visible::after {
-  box-shadow: inset 0 0 0 0.25rem rgba(var(--bs-btn-focus-shadow-rgb, 108, 117, 125), .5);
+  outline: 2px solid var(--bs-body-color);
+  outline-offset: -4px;
 }
-/* Hovering the header highlights the header, as when it was one button; the toggle adds no box of its own */
-.sidebars-header .stretched-link:hover,
-.sidebars-header .stretched-link:active {
-  background-color: transparent;
-  border-color: transparent;
-  box-shadow: none;
-}
-/* Bootstrap lifts the stretched area to z-index 1, which would cover what a caller positions over
-   the header from further down the page (the task list's refresh button); at 0 it stays below that */
+/* Below elements laid over the header, such as the task list's refresh button */
 .sidebars-header .stretched-link::after {
   z-index: 0;
 }
-/* The wrapper takes no box of its own, so the caller's controls are items of the header row */
+/* The caller's controls are items of the header row */
 .sidebars-header-actions {
   display: contents;
 }
-/* Above the stretched toggle, so they stay clickable; a caller's own position-absolute still wins */
+/* Clickable above the toggle's click area */
 .sidebars-header-actions :slotted(*) {
   position: relative;
   z-index: 1;
