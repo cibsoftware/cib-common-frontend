@@ -24,6 +24,8 @@ import translationsEs from '../assets/translations_es.json'
 import translationsIt from '../assets/translations_it.json'
 import translationsRu from '../assets/translations_ru.json'
 import translationsUa from '../assets/translations_ua.json'
+import translationsZh from '../assets/translations_zh.json'
+import translationsZhTw from '../assets/translations_zh-tw.json'
 
 // Create and export i18n instance
 export const i18n = createI18n({
@@ -35,7 +37,9 @@ export const i18n = createI18n({
     es: translationsEs,
     it: translationsIt,
     ru: translationsRu,
-    ua: translationsUa
+    ua: translationsUa,
+    zh: translationsZh,
+    'zh-tw': translationsZhTw
   }
 })
 
