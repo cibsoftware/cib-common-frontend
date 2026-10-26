@@ -33,5 +33,9 @@
 	},
 	"filterableSelect": {
 		"userIdLabel": "ID de usuario"
+	},
+	"file-area": {
+		"titleBelowSingle": "Arrastrar documento aquí o hacer click para seleccionar",
+		"titleBelowMultiple": "Arrastrar documentos aquí o hacer click para seleccionar"
 	}
 }

@@ -21,3 +21,23 @@ export function debounce(delay, fn) {
       timeoutID = setTimeout(() => fn.apply(this, args), delay)
     }
 }
+
+// Like debounce, but calls fn at the latest maxWait ms after the first call of a burst,
+// so continuous calls (e.g. while typing or scrolling) still produce regular updates.
+export function debounceWithMaxWait(delay, maxWait, fn) {
+    let timeoutID = null
+    let firstCall = 0
+    return function(...args) {
+      if (!firstCall) firstCall = Date.now()
+      clearTimeout(timeoutID)
+      if (firstCall + maxWait < Date.now()) {
+        firstCall = 0
+        fn.apply(this, args)
+      } else {
+        timeoutID = setTimeout(() => {
+          firstCall = 0
+          fn.apply(this, args)
+        }, delay)
+      }
+    }
+}

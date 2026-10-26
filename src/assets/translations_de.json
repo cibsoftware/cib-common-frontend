@@ -33,5 +33,9 @@
 	},
 	"filterableSelect": {
 		"userIdLabel": "Benutzer-ID"
+	},
+	"file-area": {
+		"titleBelowSingle": "Dokument hier ablegen oder klicken zum Hochladen",
+		"titleBelowMultiple": "Dokumente hier ablegen oder klicken zum Hochladen"
 	}
 }

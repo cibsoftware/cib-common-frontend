@@ -33,5 +33,9 @@
 	},
 	"filterableSelect": {
 		"userIdLabel": "ID utente"
+	},
+	"file-area": {
+		"titleBelowSingle": "Trascina qui il documento o fai clic per caricarlo",
+		"titleBelowMultiple": "Trascina qui i documenti o fai clic per caricarli"
 	}
 }
