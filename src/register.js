@@ -20,6 +20,7 @@ import ConfirmDialog from './components/common/ConfirmDialog.vue'
 import ContentBlock from './components/common/ContentBlock.vue'
 import CopyableActionButton from './components/common/CopyableActionButton.vue'
 import ErrorDialog from './components/common/ErrorDialog.vue'
+import FileArea from './components/common/FileArea.vue'
 import FilterableSelect from './components/common/FilterableSelect.vue'
 import FlowTable from './components/common/FlowTable.vue'
 import GenericTabs from './components/common/GenericTabs.vue'
@@ -31,6 +32,7 @@ import SidebarsFlow from './components/common/SidebarsFlow.vue'
 import SuccessAlert from './components/common/SuccessAlert.vue'
 import TranslationsDownload from './components/common/TranslationsDownload.vue'
 import TaskPopper from './components/common/TaskPopper.vue'
+import { clickOutside } from './directives/clickOutside.js'
 
 const registerComponents = function(app) {
 
@@ -50,6 +52,7 @@ const registerComponents = function(app) {
   app.component('ContentBlock', ContentBlock)
   app.component('CopyableActionButton', CopyableActionButton)
   app.component('ErrorDialog', ErrorDialog)
+  app.component('FileArea', FileArea)
   app.component('FilterableSelect', FilterableSelect)
   app.component('FlowTable', FlowTable)
   app.component('GenericTabs', GenericTabs)
@@ -63,6 +66,7 @@ const registerComponents = function(app) {
   app.component('TranslationsDownload', TranslationsDownload)
 
   // Register local directives
+  app.directive('click-outside', clickOutside)
   app.directive('block-truncate', {
       inserted(el) {
       // Check if the block's height is smaller than the text content height. If so

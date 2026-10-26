@@ -33,5 +33,9 @@
 	},
 	"filterableSelect": {
 		"userIdLabel": "ID користувача"
+	},
+	"file-area": {
+		"titleBelowSingle": "Перетягніть сюди документ або натисніть, щоб завантажити",
+		"titleBelowMultiple": "Перетягніть сюди документи або натисніть, щоб завантажити"
 	}
 }

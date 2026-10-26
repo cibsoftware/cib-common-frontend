@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { debounce } from '../utils/debounce.js'
+import { debounce, debounceWithMaxWait } from '../utils/debounce.js'
 
 describe('debounce', () => {
   beforeEach(() => {
@@ -55,6 +55,69 @@ describe('debounce', () => {
     const ctx = { value: 42 }
     const fn = vi.fn(function() { return this.value })
     const debounced = debounce(100, fn)
+
+    debounced.call(ctx)
+    vi.advanceTimersByTime(100)
+    expect(fn.mock.instances[0]).toBe(ctx)
+  })
+})
+
+describe('debounceWithMaxWait', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
+  it('behaves like debounce for a short burst', () => {
+    const fn = vi.fn()
+    const debounced = debounceWithMaxWait(300, 1000, fn)
+
+    debounced('first')
+    vi.advanceTimersByTime(200)
+    debounced('second')
+    vi.advanceTimersByTime(300)
+
+    expect(fn).toHaveBeenCalledExactlyOnceWith('second')
+  })
+
+  it('calls the function once maxWait is exceeded during continuous calls', () => {
+    const fn = vi.fn()
+    const debounced = debounceWithMaxWait(300, 1000, fn)
+
+    // a call every 200 ms never lets the 300 ms delay expire
+    for (let i = 0; i < 6; i++) {
+      debounced(i)
+      vi.advanceTimersByTime(200)
+    }
+    expect(fn).not.toHaveBeenCalled()
+
+    debounced('late')
+    expect(fn).toHaveBeenCalledExactlyOnceWith('late')
+  })
+
+  it('starts a new maxWait window after calling the function', () => {
+    const fn = vi.fn()
+    const debounced = debounceWithMaxWait(300, 1000, fn)
+
+    debounced('a')
+    vi.advanceTimersByTime(300)
+    expect(fn).toHaveBeenCalledTimes(1)
+
+    debounced('b')
+    vi.advanceTimersByTime(200)
+    debounced('c')
+    expect(fn).toHaveBeenCalledTimes(1)
+    vi.advanceTimersByTime(300)
+    expect(fn).toHaveBeenLastCalledWith('c')
+  })
+
+  it('preserves this context', () => {
+    const ctx = { value: 42 }
+    const fn = vi.fn(function() { return this.value })
+    const debounced = debounceWithMaxWait(100, 1000, fn)
 
     debounced.call(ctx)
     vi.advanceTimersByTime(100)

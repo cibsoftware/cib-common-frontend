@@ -33,5 +33,9 @@
 	},
 	"filterableSelect": {
 		"userIdLabel": "User ID"
+	},
+	"file-area": {
+		"titleBelowSingle": "Drag your document here or click to upload",
+		"titleBelowMultiple": "Drag your documents here or click to upload"
 	}
 }

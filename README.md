@@ -45,6 +45,7 @@ npm install @cib/common-frontend
 - **ContentBlock** - Reusable content block component for structured layouts
 - **CopyableActionButton** - Button component with copy-to-clipboard functionality
 - **ErrorDialog** - Error display dialog with collapsible technical details
+- **FileArea** - Drop zone / click area to select files, filtered by an `accept` list (MIME types or file endings); emits `select`
 - **FlowTable** - Advanced data table with sorting, filtering, pagination, and search
 - **GenericTabs** - Flexible tab component for organizing content
 - **HighlightedText** - Text component with highlighting capabilities
@@ -115,6 +116,14 @@ npm install @cib/common-frontend
 
 - **BToggle** - Bootstrap toggle directive for collapsible elements
 - **BDPopover** - Bootstrap popover directive
+- **v-click-outside** (`clickOutside`) - Calls a handler on a click or touch outside the element, registered by `registerComponents`:
+  `v-click-outside="onOutside"` or `v-click-outside="{ handler: 'hide', exclude: ['searchInput'] }"`. `handler` is a function or a method name, `exclude` lists template refs that do not count as outside.
+
+### Utilities
+
+- **debounce(delay, fn)** - Calls `fn` once the calls have stopped for `delay` ms
+- **debounceWithMaxWait(delay, maxWait, fn)** - Like `debounce`, but calls `fn` at the latest `maxWait` ms after the first call of a burst
+- **TaskPool(limit)** - Runs promise-returning tasks with at most `limit` in parallel: `add(func, params, id)`, `addPrio(func, params, id)`, `clear()`
 
 ## Usage
 
