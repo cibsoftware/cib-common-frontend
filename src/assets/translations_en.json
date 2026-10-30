@@ -23,11 +23,6 @@
 	"task-popper": {
 		"close": "Close"
 	},
-	"bcomponents": {
-		"ariaSortAsc": "Ascending",
-		"ariaSortDesc": "Descending",
-		"ariaSortNone": "None"
-	},
 	"sidebars": {
 		"tasks": "task | tasks"
 	},

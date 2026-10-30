@@ -313,10 +313,11 @@ export default {
       }
     },
     getAriaSort(field) {
+      if (field.sortable === false) return null
       if (this.isSortedByField(field)) {
-        return this.isSortedByFieldAscending(field) ? this.$t('bcomponents.ariaSortAsc') : this.$t('bcomponents.ariaSortDesc')
+        return this.isSortedByFieldAscending(field) ? 'ascending' : 'descending'
       }
-      return this.$t('bcomponents.ariaSortNone')
+      return 'none'
     },
     getRowClass(item) {
       return typeof this.tbodyTrClass === 'function' ? this.tbodyTrClass(item) : this.tbodyTrClass
