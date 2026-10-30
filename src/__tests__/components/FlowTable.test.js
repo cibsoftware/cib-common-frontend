@@ -173,10 +173,13 @@ describe('FlowTable', () => {
       expect(wrapper.vm.getSortClass(fields[2])).toBe('')
     })
 
-    it('getAriaSort returns translated values', () => {
+    it('renders valid aria-sort tokens and omits aria-sort on non-sortable columns', async () => {
       const wrapper = mountTable({ sortBy: 'name', sortDesc: false, externalSort: true })
-      expect(wrapper.vm.getAriaSort(fields[0])).toBe('bcomponents.ariaSortAsc')
-      expect(wrapper.vm.getAriaSort(fields[1])).toBe('bcomponents.ariaSortNone')
+      const headers = () => wrapper.findAll('th').map(th => th.attributes('aria-sort'))
+      expect(headers()).toEqual(['ascending', 'none', undefined])
+
+      await wrapper.setProps({ sortDesc: true })
+      expect(headers()).toEqual(['descending', 'none', undefined])
     })
 
     it('getRowClass handles function and string', async () => {
