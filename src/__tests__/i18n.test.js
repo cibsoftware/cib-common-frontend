@@ -26,7 +26,7 @@ import {
 import { createI18n } from 'vue-i18n'
 import { mergeLocaleMessage } from '@/library.js'
 
-const languages = ['de', 'en', 'es', 'it', 'ru', 'ua']
+const languages = ['de', 'en', 'es', 'it', 'ru', 'ua', 'zh', 'zh-tw']
 
 function getTranslation(lang) {
   // eslint-disable-next-line no-undef
@@ -100,6 +100,10 @@ function skipValue(value, lang) {
     'ua': [
     ],
     'ru': [
+    ],
+    'zh': [
+    ],
+    'zh-tw': [
     ]
   }
 
