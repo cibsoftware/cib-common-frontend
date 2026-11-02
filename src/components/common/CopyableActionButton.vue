@@ -31,7 +31,7 @@
         :title="title || displayValue"
         @click="handleClick"
     >
-      {{ displayValue }}
+      <slot>{{ displayValue }}</slot>
     </component>
     <button
         v-if="showCopyButton"

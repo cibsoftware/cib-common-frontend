@@ -56,6 +56,7 @@
               <li>Toggle <code>clickable</code> dynamically (e.g. only downloadable values are actions)</li>
               <li>Render a list of clickable items, each with its own action and copy value</li>
               <li>Use inside a <code>&lt;form&gt;</code> without submitting it when copying</li>
+              <li>Render custom content such as an icon next to the value via the default slot</li>
             </ul>
 
             <h4>Integration</h4>
@@ -91,7 +92,7 @@
                 <td><span class="badge bg-info">String</span></td>
                 <td><code>''</code></td>
                 <td><span class="badge bg-success">No</span></td>
-                <td>The text value to display in the button/element</td>
+                <td>The text value to display in the button/element; can be replaced by the default slot</td>
               </tr>
               <tr>
                 <td><code>copyValue</code></td>
@@ -162,8 +163,21 @@
 
       <!-- Slots Tab -->
       <div v-show="activeTab === 'slots'" class="tab-pane" :class="{ 'active show': activeTab === 'slots' }">
-        <div class="text-center py-5 text-muted">
-          This component does not define any slots. Content is provided via the displayValue prop.
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>default</code></td>
+                <td>Custom content of the button, link or text element, e.g. an icon followed by the value. Defaults to <code>displayValue</code>. <code>displayValue</code> is still used for the tooltip, the copied value and to decide whether anything is rendered, so it must be set as well</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
@@ -432,6 +446,32 @@
                 />
               </li>
             </ul>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <h5>Custom Content (Slot)</h5>
+          <p class="text-muted">Use the default slot to render an icon next to the value; <code>displayValue</code> is still needed for the tooltip and the copied value. <code>UserNameCell</code> is a ready-made variant of this for user names</p>
+          <div class="bg-light p-3 rounded">
+            <pre><code>&lt;CopyableActionButton
+  display-value="john.doe"
+  :clickable="false"
+  @copy="handleCopy"
+&gt;
+  &lt;span class="mdi mdi-account me-1" aria-hidden="true"&gt;&lt;/span&gt;john.doe
+&lt;/CopyableActionButton&gt;</code></pre>
+          </div>
+          <div class="mt-3">
+            <h6>Live Example:</h6>
+            <div class="border p-0 rounded" style="width: 150px;">
+              <CopyableActionButton
+                display-value="john.doe"
+                :clickable="false"
+                @copy="handleCopy"
+              >
+                <span class="mdi mdi-account me-1" aria-hidden="true"></span>john.doe
+              </CopyableActionButton>
+            </div>
           </div>
         </div>
 

@@ -176,6 +176,14 @@ export default {
           description: 'Button with copy-to-clipboard functionality and navigation support',
           icon: 'mdi-content-copy'
         },
+		{
+		  name: 'UserNameCell',
+		  type: 'vue',
+		  fileName: 'UserNameCell.vue',
+		  category: 'Text',
+		  description: 'Table cell showing a user name with an account icon',
+		  icon: 'mdi-account'
+		},
         {
           name: 'GenericTabs',
           type: 'vue',
@@ -283,6 +291,8 @@ export default {
         'TaskList': 'task-list',
         'TaskPopper': 'task-popper',
         'TranslationsDownload': 'translations-download',
+        'TempTest': 'temp-test',
+        'UserNameCell': 'user-name-cell',
       }
       return routeMap[componentName]
     },
