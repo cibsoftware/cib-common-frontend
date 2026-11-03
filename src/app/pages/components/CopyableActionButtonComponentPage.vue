@@ -451,7 +451,7 @@
 
         <div class="mb-4">
           <h5>Custom Content (Slot)</h5>
-          <p class="text-muted">Use the default slot to render an icon next to the value; <code>displayValue</code> is still needed for the tooltip and the copied value. <code>UserNameCell</code> is a ready-made variant of this for user names</p>
+          <p class="text-muted">Use the default slot to render an icon next to the value; <code>displayValue</code> is still needed for the tooltip and the copied value. <code>UserNameDisplay</code> is a ready-made variant of this for user names</p>
           <div class="bg-light p-3 rounded">
             <pre><code>&lt;CopyableActionButton
   display-value="john.doe"

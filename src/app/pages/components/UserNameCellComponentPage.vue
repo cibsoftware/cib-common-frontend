@@ -21,10 +21,10 @@
     <ComponentPageHeader
       v-model:active-tab="activeTab"
       icon="mdi-account"
-      component-name="UserNameCell"
-      description="Table cell showing a user name with an account icon and copy-to-clipboard support"
+      component-name="UserNameDisplay"
+      description="Component showing a user name with an account icon and copy-to-clipboard support. Can be used as a table cell"
       category="Text"
-      file-name="UserNameCell.vue"
+      file-name="UserNameDisplay.vue"
     />
 
     <!-- Tab Content -->
@@ -34,7 +34,7 @@
         <div class="row">
           <div class="col-12">
             <h4>Purpose</h4>
-            <p>UserNameCell is the shared way to show a user name in a table cell across all webclients. It renders a leading person icon followed by the name, like the "Modified by" column in the modeler. On hover or keyboard focus it offers a copy button, the same way <code>CopyableActionButton</code> does, and emits <code>copy</code> with the plain user name so the consumer can write it to the clipboard and show its <code>SuccessAlert</code>.</p>
+            <p>UserNameDisplay is the shared way to show a user name in a table cell across all webclients. It renders a leading person icon followed by the name, like the "Modified by" column in the modeler. On hover or keyboard focus it offers a copy button, the same way <code>CopyableActionButton</code> does, and emits <code>copy</code> with the plain user name so the consumer can write it to the clipboard and show its <code>SuccessAlert</code>. Can also be used outside of tables</p>
 
             <h4>Use Cases</h4>
             <ul>
@@ -60,11 +60,11 @@
             <h4>Integration</h4>
             <div class="bg-light p-3 rounded">
               <h6>Import Statement:</h6>
-              <pre><code>import { UserNameCell } from '@cib/common-frontend'</code></pre>
+              <pre><code>import { UserNameDisplay } from '@cib/common-frontend'</code></pre>
 
               <h6 class="mt-3">Component Registration:</h6>
               <pre><code>components: {
-  UserNameCell
+  UserNameDisplay
 }</code></pre>
             </div>
           </div>
@@ -135,7 +135,7 @@
           <h5>Basic User Name</h5>
           <p class="text-muted">Person icon followed by the name; hover or focus the cell to copy the name</p>
           <div class="bg-light p-3 rounded">
-            <pre><code>&lt;UserNameCell
+            <pre><code>&lt;UserNameDisplay
   name="john.doe"
   @copy="handleCopy"
 /&gt;</code></pre>
@@ -143,7 +143,7 @@
           <div class="mt-3">
             <h6>Live Example:</h6>
             <div class="border p-1 rounded" style="width: 200px;">
-              <UserNameCell
+              <UserNameDisplay
                 name="john.doe"
                 @copy="handleCopy"
               />
@@ -158,7 +158,7 @@
             <pre><code>&lt;tr v-for="file in files" :key="file.name"&gt;
   &lt;td&gt;&#123;&#123; file.name &#125;&#125;&lt;/td&gt;
   &lt;td&gt;
-    &lt;UserNameCell :name="file.updatedBy" @copy="handleCopy" /&gt;
+    &lt;UserNameDisplay :name="file.updatedBy" @copy="handleCopy" /&gt;
   &lt;/td&gt;
 &lt;/tr&gt;</code></pre>
           </div>
@@ -175,7 +175,7 @@
                 <tr v-for="file in files" :key="file.name">
                   <td>{{ file.name }}</td>
                   <td>
-                    <UserNameCell :name="file.updatedBy" @copy="handleCopy" />
+                    <UserNameDisplay :name="file.updatedBy" @copy="handleCopy" />
                   </td>
                 </tr>
               </tbody>
@@ -187,7 +187,7 @@
           <h5>Long Name (Truncated)</h5>
           <p class="text-muted">Long names are cut off with an ellipsis; the full name is shown as tooltip and copied in full</p>
           <div class="bg-light p-3 rounded">
-            <pre><code>&lt;UserNameCell
+            <pre><code>&lt;UserNameDisplay
   name="maximilian.mustermann-schmidt@example.com"
   @copy="handleCopy"
 /&gt;</code></pre>
@@ -195,7 +195,7 @@
           <div class="mt-3">
             <h6>Live Example:</h6>
             <div class="border p-1 rounded" style="width: 150px;">
-              <UserNameCell
+              <UserNameDisplay
                 name="maximilian.mustermann-schmidt@example.com"
                 @copy="handleCopy"
               />
@@ -207,7 +207,7 @@
           <h5>Empty Name (Renders Nothing)</h5>
           <p class="text-muted">When <code>name</code> is empty (e.g. an unassigned task) the component renders no markup, so no <code>v-if</code> is needed in the parent</p>
           <div class="bg-light p-3 rounded">
-            <pre><code>&lt;UserNameCell
+            <pre><code>&lt;UserNameDisplay
   :name="task.assignee"
   @copy="handleCopy"
 /&gt;</code></pre>
@@ -215,7 +215,7 @@
           <div class="mt-3">
             <h6>Live Example (assignee is empty):</h6>
             <div class="border p-1 rounded" style="width: 150px; min-height: 2.5rem;">
-              <UserNameCell
+              <UserNameDisplay
                 :name="emptyValue"
                 @copy="handleCopy"
               />
@@ -230,7 +230,7 @@
             <pre><code>&lt;td&gt;
   &lt;div class="d-flex align-items-center gap-1"&gt;
     &lt;div class="flex-grow-1" style="min-width: 0;"&gt;
-      &lt;UserNameCell :name="task.assignee" @copy="handleCopy" /&gt;
+      &lt;UserNameDisplay :name="task.assignee" @copy="handleCopy" /&gt;
     &lt;/div&gt;
     &lt;button v-if="!task.assignee" type="button" class="btn btn-sm btn-link p-0" @click="claim(task)"&gt;
       Claim
@@ -253,7 +253,7 @@
                   <td>
                     <div class="d-flex align-items-center gap-1">
                       <div class="flex-grow-1" style="min-width: 0;">
-                        <UserNameCell :name="task.assignee" @copy="handleCopy" />
+                        <UserNameDisplay :name="task.assignee" @copy="handleCopy" />
                       </div>
                       <button v-if="!task.assignee" type="button" class="btn btn-sm btn-link p-0" @click="claim(task)">
                         Claim
@@ -270,7 +270,7 @@
           <h5>Writing to the Clipboard</h5>
           <p class="text-muted">The component only emits <code>copy</code>; the parent decides how to write to the clipboard and what feedback to show</p>
           <div class="bg-light p-3 rounded">
-            <pre><code>&lt;UserNameCell
+            <pre><code>&lt;UserNameDisplay
   name="jane.smith"
   @copy="writeToClipboard"
 /&gt;
@@ -290,7 +290,7 @@ methods: {
           <div class="mt-3">
             <h6>Live Example:</h6>
             <div class="border p-1 rounded" style="width: 200px;">
-              <UserNameCell
+              <UserNameDisplay
                 name="jane.smith"
                 @copy="writeToClipboard"
               />
@@ -303,13 +303,13 @@ methods: {
 </template>
 
 <script>
-import UserNameCell from '../../../components/common/UserNameCell.vue'
+import UserNameDisplay from '../../../components/common/UserNameDisplay.vue'
 import ComponentPageHeader from '../ComponentPageHeader.vue'
 
 export default {
-  name: 'UserNameCellComponentPage',
+  name: 'UserNameDisplayComponentPage',
   components: {
-    UserNameCell,
+    UserNameDisplay,
     ComponentPageHeader
   },
   data() {

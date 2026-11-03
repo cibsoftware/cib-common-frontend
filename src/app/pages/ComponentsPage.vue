@@ -177,11 +177,11 @@ export default {
           icon: 'mdi-content-copy'
         },
 		{
-		  name: 'UserNameCell',
+		  name: 'UserNameDisplay',
 		  type: 'vue',
-		  fileName: 'UserNameCell.vue',
+		  fileName: 'UserNameDisplay.vue',
 		  category: 'Text',
-		  description: 'Table cell showing a user name with an account icon',
+		  description: 'Component with copy-to-clipboard functionality showing a user name and an account icon',
 		  icon: 'mdi-account'
 		},
         {
@@ -292,7 +292,7 @@ export default {
         'TaskPopper': 'task-popper',
         'TranslationsDownload': 'translations-download',
         'TempTest': 'temp-test',
-        'UserNameCell': 'user-name-cell',
+        'UserNameDisplay': 'user-name-cell',
       }
       return routeMap[componentName]
     },

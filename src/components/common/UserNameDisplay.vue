@@ -36,7 +36,7 @@
 import CopyableActionButton from './CopyableActionButton.vue'
 
 export default {
-  name: 'UserNameCell',
+  name: 'UserNameDisplay',
   components: { CopyableActionButton },
   props: {
     name: {

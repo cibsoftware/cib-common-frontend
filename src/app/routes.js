@@ -34,7 +34,7 @@ import SuccessAlertComponentPage from './pages/components/SuccessAlertComponentP
 import TaskListComponentPage from './pages/components/TaskListComponentPage.vue'
 import TaskPopperComponentPage from './pages/components/TaskPopperComponentPage.vue'
 import TranslationsDownloadComponentPage from './pages/components/TranslationsDownloadComponentPage.vue'
-import UserNameCellComponentPage from './pages/components/UserNameCellComponentPage.vue'
+import UserNameDisplayComponentPage from './pages/components/UserNameDisplayComponentPage.vue'
 
 const routes = [
   {
@@ -147,9 +147,9 @@ const routes = [
       },
       {
         path: 'user-name-cell',
-        name: 'UserNameCellComponent',
-        component: UserNameCellComponentPage,
-        meta: { title: 'UserNameCell Component' }
+        name: 'UserNameDisplayComponent',
+        component: UserNameDisplayComponentPage,
+        meta: { title: 'UserNameDisplay Component' }
       },
     ]
   }

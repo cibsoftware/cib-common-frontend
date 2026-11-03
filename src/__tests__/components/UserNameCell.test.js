@@ -15,21 +15,21 @@
  *  limitations under the License.
  */
 import { describe, it, expect, vi } from 'vitest'
-import { UserNameCell } from '@/library'
+import { UserNameDisplay } from '@/library'
 import { mountWithDefaults } from '../helpers/mountComponent.js'
 
 const mainElement = (wrapper) => wrapper.find('div.text-truncate')
 const hover = (wrapper) => wrapper.find('.position-relative').trigger('mouseenter')
 const copyButton = (wrapper) => wrapper.find('.mdi-content-copy')
 
-describe('UserNameCell', () => {
+describe('UserNameDisplay', () => {
   it.each([[''], [undefined]])('renders no markup for name=%s', (name) => {
-    const wrapper = mountWithDefaults(UserNameCell, { props: { name } })
+    const wrapper = mountWithDefaults(UserNameDisplay, { props: { name } })
     expect(wrapper.html()).toBe('<!--v-if-->')
   })
 
   it('renders a decorative account icon followed by the name', () => {
-    const wrapper = mountWithDefaults(UserNameCell, { props: { name: 'john.doe' } })
+    const wrapper = mountWithDefaults(UserNameDisplay, { props: { name: 'john.doe' } })
     const icon = mainElement(wrapper).find('.mdi-account')
     expect(icon.attributes('aria-hidden')).toBe('true')
     expect(mainElement(wrapper).text()).toBe('john.doe')
@@ -37,18 +37,18 @@ describe('UserNameCell', () => {
 
   it('is not clickable and shows the full name as tooltip', () => {
     const name = 'maximilian.mustermann-schmidt@example.com'
-    const wrapper = mountWithDefaults(UserNameCell, { props: { name } })
+    const wrapper = mountWithDefaults(UserNameDisplay, { props: { name } })
     expect(wrapper.find('button').exists()).toBe(false)
     expect(mainElement(wrapper).attributes('title')).toBe(name)
   })
 
   it('is focusable so the copy button can be reached with the keyboard', () => {
-    const wrapper = mountWithDefaults(UserNameCell, { props: { name: 'john.doe' } })
+    const wrapper = mountWithDefaults(UserNameDisplay, { props: { name: 'john.doe' } })
     expect(mainElement(wrapper).attributes('tabindex')).toBe('0')
   })
 
   it('emits copy with the plain name', async () => {
-    const wrapper = mountWithDefaults(UserNameCell, { props: { name: 'john.doe' } })
+    const wrapper = mountWithDefaults(UserNameDisplay, { props: { name: 'john.doe' } })
     await hover(wrapper)
     await copyButton(wrapper).trigger('click')
     expect(wrapper.emitted('copy')).toEqual([['john.doe']])
@@ -57,8 +57,8 @@ describe('UserNameCell', () => {
   it('emits the name of the cell that was copied in a list', async () => {
     const onCopy = vi.fn()
     const wrapper = mountWithDefaults({
-      components: { UserNameCell },
-      template: '<div><UserNameCell v-for="n in names" :key="n" :name="n" @copy="onCopy" /></div>',
+      components: { UserNameDisplay },
+      template: '<div><UserNameDisplay v-for="n in names" :key="n" :name="n" @copy="onCopy" /></div>',
       data: () => ({ names: ['john.doe', 'jane.smith'] }),
       methods: { onCopy },
     })
