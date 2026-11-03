@@ -32,6 +32,7 @@ export { default as SidebarsFlow } from './components/common/SidebarsFlow.vue'
 export { default as SuccessAlert } from './components/common/SuccessAlert.vue'
 export { default as TranslationsDownload } from './components/common/TranslationsDownload.vue'
 export { default as TaskPopper } from './components/common/TaskPopper.vue'
+export { default as UserNameDisplay } from './components/common/UserNameDisplay.vue'
 
 export { default as registerComponents } from './register.js'
 

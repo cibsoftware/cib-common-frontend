@@ -31,6 +31,7 @@ import SidebarsFlow from './components/common/SidebarsFlow.vue'
 import SuccessAlert from './components/common/SuccessAlert.vue'
 import TranslationsDownload from './components/common/TranslationsDownload.vue'
 import TaskPopper from './components/common/TaskPopper.vue'
+import UserNameDisplay from './components/common/UserNameDisplay.vue'
 
 const registerComponents = function(app) {
 
@@ -61,6 +62,7 @@ const registerComponents = function(app) {
   app.component('SuccessAlert', SuccessAlert)
   app.component('TaskPopper', TaskPopper)
   app.component('TranslationsDownload', TranslationsDownload)
+  app.component('UserNameDisplay', UserNameDisplay)
 
   // Register local directives
   app.directive('block-truncate', {
