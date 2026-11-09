@@ -1,0 +1,37 @@
+{
+	"commons": {
+		"copyValue": "複製值",
+		"copied": "已複製",
+		"loading": "載入中...",
+		"noMoreResults": "沒有更多結果",
+		"loadMore": {
+			"title": "載入更多",
+			"tooltip": "點擊載入接下來的 {chunkSize} 筆記錄"
+		}
+	},
+	"error": {
+		"title": "錯誤"
+	},
+	"confirm": {
+		"title": "請確認"
+	},
+	"table": {
+		"resizeColumn": "調整欄寬",
+		"selectColumns": "顯示欄位",
+		"toggleColumn": "切換「{column}」欄"
+	},
+	"task-popper": {
+		"close": "關閉"
+	},
+	"bcomponents": {
+		"ariaSortAsc": "升冪",
+		"ariaSortDesc": "降冪",
+		"ariaSortNone": "無"
+	},
+	"sidebars": {
+		"tasks": "任務 | 任務"
+	},
+	"filterableSelect": {
+		"userIdLabel": "使用者 ID"
+	}
+}
