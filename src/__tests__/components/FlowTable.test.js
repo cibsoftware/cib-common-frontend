@@ -234,6 +234,164 @@ describe('FlowTable', () => {
     })
   })
 
+  describe('container resize (CIB7-2688)', () => {
+    let observerCallback
+
+    beforeEach(() => {
+      observerCallback = null
+      vi.stubGlobal('ResizeObserver', class {
+        constructor(callback) { observerCallback = callback }
+        observe() {}
+        disconnect() {}
+      })
+    })
+
+    async function mountResizable() {
+      const wrapper = mountTable({ resizable: true })
+      await wrapper.vm.$nextTick()
+      const container = wrapper.vm.$refs.table.parentElement
+      const setContainerWidth = (width) =>
+        Object.defineProperty(container, 'clientWidth', { configurable: true, value: width })
+      const restart = vi.spyOn(wrapper.vm, 'restartColumnWidths')
+      return { wrapper, setContainerWidth, restart }
+    }
+
+    function drag(wrapper, fromX, toX) {
+      wrapper.vm.columnWidths = ['200px', '200px', '200px']
+      wrapper.vm.startResize(0, { clientX: fromX })
+      document.dispatchEvent(new MouseEvent('mousemove', { clientX: toX }))
+    }
+
+    it('keeps the column widths when only the container height changes', async () => {
+      const { wrapper, restart } = await mountResizable()
+      wrapper.vm.columnWidths = ['100px', '300px', '200px']
+
+      observerCallback()
+
+      expect(restart).not.toHaveBeenCalled()
+      expect(wrapper.vm.columnWidths).toEqual(['100px', '300px', '200px'])
+    })
+
+    it('recalculates the column widths when the container width changes', async () => {
+      const { setContainerWidth, restart } = await mountResizable()
+
+      setContainerWidth(800)
+      observerCallback()
+      observerCallback()
+
+      expect(restart).toHaveBeenCalledTimes(1)
+    })
+
+    it('ignores container size changes while a column is being dragged', async () => {
+      const { wrapper, setContainerWidth, restart } = await mountResizable()
+      drag(wrapper, 300, 210)
+
+      setContainerWidth(780)
+      observerCallback()
+
+      expect(restart).not.toHaveBeenCalled()
+      expect(wrapper.vm.columnWidths).toEqual(['110px', '290px', '200px'])
+      document.dispatchEvent(new MouseEvent('mouseup'))
+    })
+
+    it('keeps the dragged widths after release and takes the current container width as reference', async () => {
+      const { wrapper, setContainerWidth, restart } = await mountResizable()
+      drag(wrapper, 300, 210)
+      setContainerWidth(780)
+      document.dispatchEvent(new MouseEvent('mouseup'))
+
+      observerCallback()
+
+      expect(restart).not.toHaveBeenCalled()
+      expect(wrapper.vm.resizing).toBe(false)
+      expect(wrapper.vm.columnWidths).toEqual(['110px', '290px', '200px'])
+
+      setContainerWidth(900)
+      observerCallback()
+      expect(restart).toHaveBeenCalledTimes(1)
+    })
+
+    it('keeps the column widths when the window changes only its height', async () => {
+      const { wrapper } = await mountResizable()
+      wrapper.vm.columnWidths = ['100px', '300px', '200px']
+
+      globalThis.dispatchEvent(new Event('resize'))
+
+      expect(wrapper.vm.columnWidths).toEqual(['100px', '300px', '200px'])
+    })
+
+    it('keeps the dragged widths when the window is resized during a drag', async () => {
+      const { wrapper, setContainerWidth } = await mountResizable()
+      drag(wrapper, 300, 210)
+
+      setContainerWidth(780)
+      globalThis.dispatchEvent(new Event('resize'))
+
+      expect(wrapper.vm.columnWidths).toEqual(['110px', '290px', '200px'])
+      document.dispatchEvent(new MouseEvent('mouseup'))
+    })
+
+    it('recalculates the column widths when the window changes the container width', async () => {
+      const { wrapper, setContainerWidth } = await mountResizable()
+      wrapper.vm.columnWidths = ['100px', '300px', '200px']
+
+      setContainerWidth(800)
+      globalThis.dispatchEvent(new Event('resize'))
+
+      expect(wrapper.vm.columnWidths).not.toEqual(['100px', '300px', '200px'])
+    })
+
+    it('stops listening to window resize after unmount', async () => {
+      const { wrapper, setContainerWidth } = await mountResizable()
+      const restart = vi.spyOn(wrapper.vm, 'restartColumnWidths')
+      wrapper.unmount()
+
+      setContainerWidth(800)
+      globalThis.dispatchEvent(new Event('resize'))
+
+      expect(restart).not.toHaveBeenCalled()
+    })
+
+    it('recalculates the column widths when the columns change', async () => {
+      const { wrapper } = await mountResizable()
+      expect(wrapper.vm.columnWidths).toHaveLength(3)
+
+      await wrapper.setProps({ fields: [...fields, { key: 'role', label: 'table.role' }] })
+      await wrapper.vm.$nextTick()
+
+      expect(wrapper.vm.columnWidths).toHaveLength(4)
+    })
+
+    it('recalculates the column widths when a column is toggled', async () => {
+      const wrapper = mountTable({ resizable: true, fields: [], columns: ['name', 'age', 'status'], columnDefinitions })
+      await wrapper.vm.$nextTick()
+      expect(wrapper.vm.columnWidths).toHaveLength(3)
+
+      wrapper.vm.toggleColumn({ key: 'age', label: 'table.age' })
+      await wrapper.vm.$nextTick()
+      await wrapper.vm.$nextTick()
+
+      expect(wrapper.vm.columnWidths).toHaveLength(2)
+    })
+
+    it('keeps the column widths when the same columns are passed again', async () => {
+      const { wrapper, restart } = await mountResizable()
+
+      await wrapper.setProps({ fields: fields.map(field => ({ ...field })) })
+      await wrapper.vm.$nextTick()
+
+      expect(restart).not.toHaveBeenCalled()
+    })
+
+    it('does not narrow a column below the 75 px minimum', async () => {
+      const { wrapper } = await mountResizable()
+      drag(wrapper, 300, 150)
+
+      expect(wrapper.vm.columnWidths).toEqual(['200px', '200px', '200px'])
+      document.dispatchEvent(new MouseEvent('mouseup'))
+    })
+  })
+
   describe('mounted lifecycle', () => {
     it('ignores invalid localStorage JSON', () => {
       const key = `cibseven:table:columnVisibility:FlowTable:${columnDefinitions.length}`
