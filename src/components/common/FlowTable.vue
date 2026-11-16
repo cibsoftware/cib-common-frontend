@@ -241,6 +241,17 @@ export default {
     },
     isResizableFlex() {
       return this.resizable && !this.nativeLayout
+    },
+    columnKeys() {
+      return this.computedColumns.map(col => col.key).join('|')
+    }
+  },
+  watch: {
+    // A different set of columns needs new widths even if the container size does not change
+    columnKeys() {
+      this.$nextTick(() => {
+        this.restartColumnWidths()
+      })
     }
   },
   methods: {
@@ -400,9 +411,6 @@ export default {
       const visible = this.computedColumns.some(col => col.key === column.key)
       this.columnVisibility[column.key] = !visible
       localStorage.setItem(this.localStorageKey, JSON.stringify(this.columnVisibility))
-      this.$nextTick(() => {
-        this.restartColumnWidths()
-      })
     },
     onRowClick(item) {
       // Only emit click if no text is selected
@@ -441,10 +449,10 @@ export default {
         }
       })
     }
-    globalThis.addEventListener('resize', this.restartColumnWidths)
+    globalThis.addEventListener('resize', this.onContainerResize)
   },
   beforeUnmount() {
-    globalThis.removeEventListener('resize', this.restartColumnWidths)
+    globalThis.removeEventListener('resize', this.onContainerResize)
     if (this.resizeObserver) {
       this.resizeObserver.disconnect()
       this.resizeObserver = null

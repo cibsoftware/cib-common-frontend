@@ -311,6 +311,78 @@ describe('FlowTable', () => {
       expect(restart).toHaveBeenCalledTimes(1)
     })
 
+    it('keeps the column widths when the window changes only its height', async () => {
+      const { wrapper } = await mountResizable()
+      wrapper.vm.columnWidths = ['100px', '300px', '200px']
+
+      globalThis.dispatchEvent(new Event('resize'))
+
+      expect(wrapper.vm.columnWidths).toEqual(['100px', '300px', '200px'])
+    })
+
+    it('keeps the dragged widths when the window is resized during a drag', async () => {
+      const { wrapper, setContainerWidth } = await mountResizable()
+      drag(wrapper, 300, 210)
+
+      setContainerWidth(780)
+      globalThis.dispatchEvent(new Event('resize'))
+
+      expect(wrapper.vm.columnWidths).toEqual(['110px', '290px', '200px'])
+      document.dispatchEvent(new MouseEvent('mouseup'))
+    })
+
+    it('recalculates the column widths when the window changes the container width', async () => {
+      const { wrapper, setContainerWidth } = await mountResizable()
+      wrapper.vm.columnWidths = ['100px', '300px', '200px']
+
+      setContainerWidth(800)
+      globalThis.dispatchEvent(new Event('resize'))
+
+      expect(wrapper.vm.columnWidths).not.toEqual(['100px', '300px', '200px'])
+    })
+
+    it('stops listening to window resize after unmount', async () => {
+      const { wrapper, setContainerWidth } = await mountResizable()
+      const restart = vi.spyOn(wrapper.vm, 'restartColumnWidths')
+      wrapper.unmount()
+
+      setContainerWidth(800)
+      globalThis.dispatchEvent(new Event('resize'))
+
+      expect(restart).not.toHaveBeenCalled()
+    })
+
+    it('recalculates the column widths when the columns change', async () => {
+      const { wrapper } = await mountResizable()
+      expect(wrapper.vm.columnWidths).toHaveLength(3)
+
+      await wrapper.setProps({ fields: [...fields, { key: 'role', label: 'table.role' }] })
+      await wrapper.vm.$nextTick()
+
+      expect(wrapper.vm.columnWidths).toHaveLength(4)
+    })
+
+    it('recalculates the column widths when a column is toggled', async () => {
+      const wrapper = mountTable({ resizable: true, fields: [], columns: ['name', 'age', 'status'], columnDefinitions })
+      await wrapper.vm.$nextTick()
+      expect(wrapper.vm.columnWidths).toHaveLength(3)
+
+      wrapper.vm.toggleColumn({ key: 'age', label: 'table.age' })
+      await wrapper.vm.$nextTick()
+      await wrapper.vm.$nextTick()
+
+      expect(wrapper.vm.columnWidths).toHaveLength(2)
+    })
+
+    it('keeps the column widths when the same columns are passed again', async () => {
+      const { wrapper, restart } = await mountResizable()
+
+      await wrapper.setProps({ fields: fields.map(field => ({ ...field })) })
+      await wrapper.vm.$nextTick()
+
+      expect(restart).not.toHaveBeenCalled()
+    })
+
     it('does not narrow a column below the 75 px minimum', async () => {
       const { wrapper } = await mountResizable()
       drag(wrapper, 300, 150)
