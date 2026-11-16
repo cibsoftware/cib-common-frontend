@@ -180,7 +180,8 @@ export default {
       sortOrder: this.sortDesc ? -1 : 1,
       columnWidths: [],
       skipClick: false,
-      resizeObserver: null
+      resizeObserver: null,
+      observedContainerWidth: null
     }
   },
   computed: {
@@ -346,6 +347,8 @@ export default {
 
       const onMouseUp = () => {
         this.resizing = false
+        // Accept the size reached during the drag without resetting the new widths
+        this.observedContainerWidth = this.getContainerWidth()
         this.skipClick = true
         setTimeout(() => {
           this.skipClick = false
@@ -357,6 +360,17 @@ export default {
 
       document.addEventListener('mousemove', onMouseMove)
       document.addEventListener('mouseup', onMouseUp)
+    },
+    getContainerWidth() {
+      return this.$refs.table?.parentElement?.clientWidth ?? null
+    },
+    onContainerResize() {
+      // Only a width change resets the columns, not a height change (e.g. a wrapping header)
+      if (this.resizing) return
+      const width = this.getContainerWidth()
+      if (width === this.observedContainerWidth) return
+      this.observedContainerWidth = width
+      this.restartColumnWidths()
     },
     restartColumnWidths() {
       if (this.resizable && this.$refs.table) {
@@ -415,9 +429,10 @@ export default {
       this.$nextTick(() => {
         const ths = this.$refs.table.querySelectorAll('th')
         this.columnWidths = Array.from(ths).map(th => `${th.offsetWidth}px`)
+        this.observedContainerWidth = this.getContainerWidth()
         if (globalThis.ResizeObserver) {
           this.resizeObserver = new ResizeObserver(() => {
-            this.restartColumnWidths()
+            this.onContainerResize()
           })
           const tableContainer = this.$refs.table.parentElement
           if (tableContainer) {
