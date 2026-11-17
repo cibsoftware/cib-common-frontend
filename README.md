@@ -10,9 +10,9 @@ This library contains common Vue.js components that can be shared across multipl
 
 ### Prerequisites
 
-- Node.js 16+
-- npm or yarn
-- Vue 3.x
+- Node.js 20.19+ or 22.13+ (required by the build and test tooling)
+- npm
+- Vue 3.5+
 
 ### Install from Public Registry
 
@@ -23,9 +23,9 @@ npm install @cib/common-frontend
 ### Development Setup
 
 1. Clone the repository
-2. Install dependencies:
+2. Install dependencies (the registry is set in `.npmrc`):
    ```bash
-   npm install --registry https://nexus.cib.de
+   npm install
    ```
 3. Start the development server:
    ```bash
@@ -319,6 +319,8 @@ This creates:
 - `npm run dev` - Start development server
 - `npm run build` - Build library for production
 - `npm run preview` - Preview production build
+- `npm test` - Run the unit tests with Vitest
+- `npm run test:coverage` - Run the unit tests with coverage
 - `npm run lint` - Run ESLint
 - `npm run format` - Format code with ESLint
 
@@ -383,21 +385,27 @@ This creates:
 
 ## License
 
-This project is proprietary software for internal use.
+This project is licensed under the Apache License 2.0, see [LICENSE](LICENSE).
 
 ## Dependencies
 
 ### Runtime Dependencies
-- @cib/bootstrap-components 1.0+
-- Vue 3.3+
-- Bootstrap 5.3+
-- Vue Router 4.2+
-- Vue i18n 9.2+
+- @cib/bootstrap-components 1.1.0
+- @mdi/font 7.4.47
+- @popperjs/core 2.11.8
+
+### Peer Dependencies
+- Vue 3.5.42+
+- Bootstrap 5.3.8+
+- Vue Router 5.0.6+
+- Vue i18n 11.4.14+
+
+The peer dependencies are pinned as development dependencies to the same versions that `@cib/bootstrap-components` and the CIB seven webclient use (Vue 3.5.42, Bootstrap 5.3.8, Vue Router 5.0.6, Vue i18n 11.4.14), so the tests run against the versions the applications ship.
 
 ### Development Dependencies
-- Vite 6.0+
-- ESLint 9.18+
-- Vitest 3.1+
+- Vite 6.4
+- ESLint 10
+- Vitest 4.1
 
 ## Notes
 
