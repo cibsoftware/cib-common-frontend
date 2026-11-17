@@ -40,8 +40,10 @@
     "vue-router": "^5.0.6"
   },
   "devDependencies": {
+    "bootstrap": "5.3.8",
     "vue": "3.5.42",
     "vue-i18n": "11.4.14",
+    "vue-router": "5.0.6",
     "@eslint/js": "10.0.1",
     "@vitejs/plugin-vue": "6.0.6",
     "@vitest/coverage-istanbul": "4.1.12",
