@@ -133,6 +133,36 @@ describe('CopyableActionButton', () => {
     expect(wrapper.emitted('copy')).toEqual([['Display']])
   })
 
+  describe('default slot', () => {
+    it('renders the slot content instead of displayValue', () => {
+      const wrapper = mountWithDefaults(CopyableActionButton, {
+        props: { displayValue: 'john.doe', clickable: false },
+        slots: { default: '<span class="mdi mdi-account"></span>Custom' },
+      })
+      expect(wrapper.find('.text-truncate .mdi-account').exists()).toBe(true)
+      expect(wrapper.find('.text-truncate').text()).toBe('Custom')
+    })
+
+    it('still uses displayValue for title and copy when a slot is given', async () => {
+      const wrapper = mountWithDefaults(CopyableActionButton, {
+        props: { displayValue: 'john.doe', clickable: false },
+        slots: { default: 'Custom' },
+      })
+      expect(wrapper.find('.text-truncate').attributes('title')).toBe('john.doe')
+      await wrapper.find('.position-relative').trigger('mouseenter')
+      await wrapper.find('.mdi-content-copy').trigger('click')
+      expect(wrapper.emitted('copy')).toEqual([['john.doe']])
+    })
+
+    it('renders nothing when displayValue is empty, even with slot content', () => {
+      const wrapper = mountWithDefaults(CopyableActionButton, {
+        props: { displayValue: '' },
+        slots: { default: 'Custom' },
+      })
+      expect(wrapper.html()).toBe('<!--v-if-->')
+    })
+  })
+
   it('bindAttrs resolves object route for anchor', () => {
     const routerMock = createRouterMock({
       router: {
