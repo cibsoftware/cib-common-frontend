@@ -11,6 +11,9 @@
     "dist",
     "src"
   ],
+  "publishConfig": {
+    "tag": "hotfix1-1.0.4"
+  },
   "exports": {
     ".": {
       "import": "./dist/common-frontend.es.js",
