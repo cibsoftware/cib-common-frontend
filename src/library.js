@@ -50,13 +50,19 @@ import es from './assets/translations_es.json'
 import it from './assets/translations_it.json'
 import ru from './assets/translations_ru.json'
 import ua from './assets/translations_ua.json'
+import zh from './assets/translations_zh.json'
+import zhTw from './assets/translations_zh-tw.json'
+import { normalizeLanguage } from './utils/language.js'
 
 export function mergeLocaleMessage(i18n, lang) {
-  bootstrapMergeLocaleMessage(i18n, lang)
+  // The consumer may pass a full tag such as "zh-TW"; the resources are keyed by
+  // the normalized code, so both end up in the same messages entry.
+  const locale = normalizeLanguage(lang)
+  bootstrapMergeLocaleMessage(i18n, locale)
 
-  const translations = { en, de, es, it, ru, ua }
-  const messages = translations[lang] || en
-  i18n.global.mergeLocaleMessage(lang, messages)
+  const translations = { en, de, es, it, ru, ua, zh, 'zh-tw': zhTw }
+  const messages = translations[locale] || en
+  i18n.global.mergeLocaleMessage(locale, messages)
 }
 
 export * from '@cib/bootstrap-components'

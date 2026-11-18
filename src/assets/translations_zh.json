@@ -1,0 +1,37 @@
+{
+	"commons": {
+		"copyValue": "复制值",
+		"copied": "已复制",
+		"loading": "加载中...",
+		"noMoreResults": "没有更多结果",
+		"loadMore": {
+			"title": "加载更多",
+			"tooltip": "点击加载接下来的 {chunkSize} 条记录"
+		}
+	},
+	"error": {
+		"title": "错误"
+	},
+	"confirm": {
+		"title": "请确认"
+	},
+	"table": {
+		"resizeColumn": "调整列宽",
+		"selectColumns": "显示列",
+		"toggleColumn": "切换“{column}”列"
+	},
+	"task-popper": {
+		"close": "关闭"
+	},
+	"bcomponents": {
+		"ariaSortAsc": "升序",
+		"ariaSortDesc": "降序",
+		"ariaSortNone": "无"
+	},
+	"sidebars": {
+		"tasks": "任务 | 任务"
+	},
+	"filterableSelect": {
+		"userIdLabel": "用户 ID"
+	}
+}
